@@ -35,7 +35,7 @@ const NpcList = () => {
                     justifyContent: "flex-end",
                     alignItems: "flex-start",
                 }}>
-                    <Button variant="contained" onClick={createNewNpc}>New</Button>
+                    <Button variant="outlined" onClick={createNewNpc}>New</Button>
                 </Stack>
             </div>
             <div class="tactical-game-list">

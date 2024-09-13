@@ -1,19 +1,21 @@
 import React from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
+import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 
 const NpcViewActions = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { npcId } = useParams();
-    const game = location.state?.game;
+    const npc = location.state?.npc;
 
     const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
 
@@ -52,18 +54,20 @@ const NpcViewActions = () => {
                 justifyContent: "flex-end",
                 alignItems: "flex-start",
             }}>
-                <Button variant="contained" onClick={handleEditClick}>Edit</Button>
-                <Button variant="contained" onClick={handleDeleteClick}>Delete</Button>
+                <Button variant="outlined" onClick={handleEditClick}>Edit</Button>
+                <IconButton variant="outlined" onClick={handleDeleteClick}>
+                    <DeleteIcon />
+                </IconButton>
                 <Dialog
                     open={deleteDialogOpen}
                     onClose={handleDialogDeleteClose}
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <DialogTitle id="alert-dialog-title">{"Delete NPC?"}</DialogTitle>
+                    <DialogTitle id="alert-dialog-title">{"NPC delete confirmation"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            Lorem ipsum
+                            Are you sure you want to remove '{npc.name}'? This action cannot be undone
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
