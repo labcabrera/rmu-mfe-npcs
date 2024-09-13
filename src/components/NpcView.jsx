@@ -5,11 +5,13 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
 import NpcViewActions from './NpcViewActions';
+import NpcViewItems from './NpcViewItems';
+import NpcViewSkills from './NpcViewSkills';
 
 const NpcView = () => {
     const { gameId } = useParams();
     const location = useLocation();
-    const game = location.state?.game;
+    const npc = location.state?.npc;
 
     return (
         <div class="tactical-game-view">
@@ -23,7 +25,7 @@ const NpcView = () => {
                     <TextField
                         label="Name"
                         name="name"
-                        value={game.name}
+                        value={npc.name}
                         slotProps={{
                             input: {
                                 readOnly: true,
@@ -32,35 +34,46 @@ const NpcView = () => {
                 </div>
                 <div>
                     <TextField
-                        label="Description"
-                        name="description"
-                        value={game.description}
-                    ></TextField>
+                        label="Realm"
+                        name="realm"
+                        value={npc.realm} />
                 </div>
                 <div>
                     <TextField
-                        label="Realm"
-                        name="realm"
-                        value={game.realm}
-                    ></TextField>
+                        label="Race"
+                        name="race"
+                        value={npc.race} />
                 </div>
                 <div>
                     <TextField
                         label="Level"
                         name="level"
-                        value={game.level}
-                    ></TextField>
+                        value={npc.level} />
+                </div>
+                <div>
+                    <TextField
+                        label="Armor Type"
+                        name="armorType"
+                        value={npc.armorType} />
                 </div>
                 <div>
                     <TextField
                         label="Hit points"
                         name="hp"
-                        value={game.hp}
+                        value={npc.hp}
                     ></TextField>
                 </div>
+                <div>
+                    <TextField
+                        label="Description"
+                        name="description"
+                        value={npc.description} />
+                </div>
             </Box >
+            <NpcViewSkills />
+            <NpcViewItems />
             <pre>
-                {JSON.stringify(game, null, 2)}
+                {JSON.stringify(npc, null, 2)}
             </pre>
             <pre>
                 {JSON.stringify(location.state, null, 2)}

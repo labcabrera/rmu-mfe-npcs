@@ -8,11 +8,15 @@ import ListItemText from '@mui/material/ListItemText';
 
 import witchKing from '../assets/witch-king.jpg';
 
-const NpcListItem = ({ game }) => {
+const NpcListItem = ({ npc }) => {
     const navigate = useNavigate();
 
     const handleGameClick = () => {
-        navigate(`view/${game._id}`, { state: { game: game } });
+        navigate(`view/${npc._id}`, { state: { npc: npc } });
+    }
+
+    const getDescription = (npc) => {
+        return npc.realm + " - " + npc.race + " - " + npc.level;
     }
 
     return (
@@ -22,7 +26,7 @@ const NpcListItem = ({ game }) => {
                     <Avatar src={witchKing}>
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={game.name} secondary={game.user} />
+                <ListItemText primary={npc.name} secondary={getDescription(npc)} />
             </ListItemButton>
         </div>
     );

@@ -9,22 +9,22 @@ import NpcListItem from "./NpcListItem";
 
 const NpcList = () => {
     const navigate = useNavigate();
-    const [games, setGames] = useState([]);
+    const [npcs, setNpcs] = useState([]);
 
-    const getGames = async () => {
+    const getNpcs = async () => {
         const response = await fetch("http://localhost:3002/v1/npcs", {
             method: "GET",
         });
         const data = await response.json();
-        setGames(data);
+        setNpcs(data);
     };
 
-    const createNewGame = async () => {
-        navigate("/tactical/creation");
+    const createNewNpc = async () => {
+        navigate("/npc/creation");
     }
 
     useEffect(() => {
-        getGames();
+        getNpcs();
     }, []);
 
 
@@ -35,13 +35,13 @@ const NpcList = () => {
                     justifyContent: "flex-end",
                     alignItems: "flex-start",
                 }}>
-                    <Button variant="contained" onClick={createNewGame}>New</Button>
+                    <Button variant="contained" onClick={createNewNpc}>New</Button>
                 </Stack>
             </div>
             <div class="tactical-game-list">
-                <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                    {games.map((item) => (
-                        <NpcListItem key={item.id} game={item} />
+                <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                    {npcs.map((item) => (
+                        <NpcListItem key={item.id} npc={item} />
                     ))}
                 </List>
             </div>

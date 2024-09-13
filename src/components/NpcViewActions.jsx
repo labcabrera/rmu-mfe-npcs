@@ -39,8 +39,6 @@ const NpcViewActions = () => {
             }}>
                 <Button variant="contained" onClick={handleEditClick}>Edit</Button>
                 <Button variant="contained" onClick={handleDeleteClick}>Delete</Button>
-                <Button variant="contained">Close</Button>
-                <Button variant="contained">Start game</Button>
             </Stack>
         </div>
     );
