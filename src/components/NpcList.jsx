@@ -12,7 +12,7 @@ const NpcList = () => {
     const [npcs, setNpcs] = useState([]);
 
     const getNpcs = async () => {
-        const response = await fetch("http://localhost:3002/v1/npcs", {
+        const response = await fetch("http://localhost:3002/v1/npc", {
             method: "GET",
         });
         const data = await response.json();

@@ -6,7 +6,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 
-import witchKing from '../assets/witch-king.jpg';
+import lotrOrk from '../assets/lotr-ork.jpg';
 
 const NpcListItem = ({ npc }) => {
     const navigate = useNavigate();
@@ -23,7 +23,7 @@ const NpcListItem = ({ npc }) => {
         <div>
             <ListItemButton onClick={handleGameClick}>
                 <ListItemAvatar>
-                    <Avatar src={witchKing}>
+                    <Avatar src={lotrOrk}>
                     </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={npc.name} secondary={getDescription(npc)} />

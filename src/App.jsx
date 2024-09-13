@@ -9,7 +9,7 @@ const App = () => {
   return (
     <Routes>
       <Route path="/" element={<NpcList />} />
-      <Route path="/view/:id" element={<NpcView />} />
+      <Route path="/view/:npcId" element={<NpcView />} />
       <Route path="/creation" element={<NpcCreation />} />
     </Routes>
   );

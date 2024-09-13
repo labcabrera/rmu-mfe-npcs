@@ -1,26 +1,32 @@
 import React from "react";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import Stack from '@mui/material/Stack';
 
 const NpcViewActions = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { gameId } = useParams();
+    const { npcId } = useParams();
     const game = location.state?.game;
 
-    const deleteGame = async () => {
-        console.log("delete game " + gameId);
-        const response = await fetch("http://localhost:3001/v1/tactical-games/" + gameId, {
+    const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+
+    const deleteNpc = async () => {
+        console.log("deleting npc " + npcId);
+        const response = await fetch("http://localhost:3002/v1/npc/" + npcId, {
             method: "DELETE",
         });
         const deleteResponse = await response;
         if (deleteResponse.status == 200) {
-            navigate("/tactical");
+            navigate("/npc");
         } else {
             //TODO display error
-            console.log("delete data: " + data);
         }
     };
 
@@ -28,7 +34,16 @@ const NpcViewActions = () => {
     }
 
     const handleDeleteClick = () => {
-        deleteGame();
+        setDeleteDialogOpen(true);
+    }
+
+    const handleDialogDeleteClose = () => {
+        setDeleteDialogOpen(false);
+    }
+
+    const handleDialogDelete = () => {
+        deleteNpc();
+        setDeleteDialogOpen(false);
     }
 
     return (
@@ -39,6 +54,23 @@ const NpcViewActions = () => {
             }}>
                 <Button variant="contained" onClick={handleEditClick}>Edit</Button>
                 <Button variant="contained" onClick={handleDeleteClick}>Delete</Button>
+                <Dialog
+                    open={deleteDialogOpen}
+                    onClose={handleDialogDeleteClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Delete NPC?"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Lorem ipsum
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleDialogDeleteClose}>Cancel</Button>
+                        <Button onClick={handleDialogDelete} autoFocus>Delete</Button>
+                    </DialogActions>
+                </Dialog>
             </Stack>
         </div>
     );
