@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
+import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 
 import NpcListItem from "./NpcListItem";
 
+import { API_NPC_URL } from "../constants/environment";
+
 const NpcList = () => {
+
     const navigate = useNavigate();
     const [npcs, setNpcs] = useState([]);
 
     const getNpcs = async () => {
-        const response = await fetch("http://localhost:3002/v1/npc", {
-            method: "GET",
-        });
+        const url = `${API_NPC_URL}/npc`;
+        const response = await fetch(url, { method: "GET" });
         const data = await response.json();
         setNpcs(data);
     };
