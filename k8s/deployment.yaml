@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rmu-fe-npc
+  labels:
+    app: rmu-fe-npc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rmu-fe-npc
+  template:
+    metadata:
+      labels:
+        app: rmu-fe-npc
+    spec:
+      containers:
+      - name: rmu-fe-npc
+        image: labcabrera/rmu-fe-npc:latest
+        ports:
+        - containerPort: 8084
+        env:
+        - name: RMU_API_NPC_URL
+          valueFrom:
+            configMapKeyRef:
+              name: rmu-shared-configmap
+              key: RMU_API_NPC_URL
+        - name: RMU_API_CORE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: rmu-shared-configmap
+              key: RMU_API_CORE_URL
+
