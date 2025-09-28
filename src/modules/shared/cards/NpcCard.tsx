@@ -7,13 +7,11 @@ const NpcCard: FC<{
   npc: Npc;
   onClick?: () => void;
 }> = ({ npc, onClick }) => {
-  if (!npc) return <p>Loading...</p>;
-
   return (
     <CardListItem
       title={npc.name}
       subtitle={t(npc.category)}
-      image="/static/images/npcs/unknown.png"
+      image={npc.imageUrl || '/static/images/npcs/unknown.png'}
       onClick={onClick}
     />
   );

@@ -4,8 +4,10 @@ import { Grid } from '@mui/material';
 import { useError } from '../../../ErrorContext';
 import { fetchNpc } from '../../api/npc';
 import { Npc } from '../../api/npc.dto';
+import { fetchRealm } from '../../api/realm';
 import NpcAvatar from '../../shared/avatars/NpcAvatar';
 import NpcViewActions from './NpcViewActions';
+import NpcViewAttributes from './NpcViewAttributes';
 import NpcViewResume from './NpcViewResume';
 
 const NpcView: FC = () => {
@@ -13,6 +15,15 @@ const NpcView: FC = () => {
   const { showError } = useError();
   const { npcId } = useParams<{ npcId?: string }>();
   const [npc, setNpc] = useState<Npc | null>(null);
+  const [realm, setRealm] = useState(null);
+
+  useEffect(() => {
+    if (npc) {
+      fetchRealm(npc.realmId)
+        .then((response) => setRealm(response))
+        .catch((err) => showError(err.message));
+    }
+  }, [npc]);
 
   useEffect(() => {
     if (location.state && location.state.npc) {
@@ -34,7 +45,9 @@ const NpcView: FC = () => {
           <NpcAvatar npc={npc} onNpcUpdated={setNpc} />
           <NpcViewResume npc={npc} />
         </Grid>
-        <Grid size={8}></Grid>
+        <Grid size={10}>
+          <NpcViewAttributes npc={npc} />
+        </Grid>
       </Grid>
       <pre>{JSON.stringify(npc, null, 2)}</pre>
     </>

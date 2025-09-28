@@ -58,6 +58,9 @@ export const getGenericImages = () => {
     '/static/images/races/sauron.png',
     '/static/images/races/unknown.png',
     '/static/images/npcs/wolf.png',
+    '/static/images/npcs/warg.png',
+    '/static/images/npcs/bear.png',
+    '/static/images/npcs/dog.png',
     '/static/images/npcs/unknown.png',
   ];
 };

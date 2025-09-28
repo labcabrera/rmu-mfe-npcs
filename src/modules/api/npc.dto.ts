@@ -4,6 +4,7 @@ export interface Npc {
   category: string;
   name: string;
   level: number;
+  hp: number;
   bd: number;
   at: number;
   initiative: number;
@@ -21,6 +22,7 @@ export type UpdateNpcDto = Partial<Omit<CreateNpcDto, 'id' | 'realmId' | 'owner'
 
 export interface NpcSkill {
   skillId: string;
+  ranks: number | undefined;
   bonus: number;
 }
 

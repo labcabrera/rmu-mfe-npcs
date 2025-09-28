@@ -91,9 +91,9 @@ module.exports = (_, argv) => ({
     new ModuleFederationPlugin({
       name: 'npcs',
       filename: 'npcs-app.js',
-      remotes: {
-        shell: 'shell@http://localhost:8080/shell.js',
-      },
+      // remotes: {
+      //   shell: 'shell@http://localhost:8080/shell.js',
+      // },
       exposes: {
         './NpcsApp': './src/App.tsx',
       },

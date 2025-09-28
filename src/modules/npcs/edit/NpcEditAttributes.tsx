@@ -28,6 +28,17 @@ const NpcEditAttributes: FC<{
       </Grid>
       <Grid size={2}>
         <NumericInput
+          label={t('hp')}
+          name="hp"
+          value={formData.hp}
+          onChange={(e) => setFormData({ ...formData, hp: e })}
+          integer
+          min={1}
+          max={1000}
+        />
+      </Grid>
+      <Grid size={2}>
+        <NumericInput
           label={t('at')}
           name="at"
           value={formData.at}

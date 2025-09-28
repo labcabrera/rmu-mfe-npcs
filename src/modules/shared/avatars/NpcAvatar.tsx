@@ -10,6 +10,7 @@ const NpcAvatar: FC<{
   npc: Npc;
   size?: number;
   enableImageChange?: boolean;
+  // eslint-disable-next-line no-unused-vars
   onNpcUpdated?: (npc: Npc) => void;
 }> = ({ npc, size = 300, enableImageChange = true, onNpcUpdated }) => {
   const { showError } = useError();
