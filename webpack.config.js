@@ -92,7 +92,7 @@ module.exports = (_, argv) => ({
       name: 'npcs',
       filename: 'npcs-app.js',
       remotes: {
-        host: 'host@http://localhost:8080/host.js',
+        shell: 'shell@http://localhost:8080/shell.js',
       },
       exposes: {
         './NpcsApp': './src/App.tsx',

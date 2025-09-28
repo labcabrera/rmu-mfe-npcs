@@ -3,22 +3,22 @@ import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { Box, Breadcrumbs, Link, Stack } from '@mui/material';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
-import { fetchRealms } from '../../api/realm';
-import { Realm } from '../../api/realm.dto';
 import AddButton from '../../shared/buttons/AddButton';
 import RefreshButton from '../../shared/buttons/RefreshButton';
+import { Npc } from '../../api/npc.dto';
+import { fetchNpcs } from '../../api/npc';
 
-const NpcListActions: FC<{ setRealms: Dispatch<SetStateAction<Realm[]>> }> = ({ setRealms }) => {
+const NpcListActions: FC<{ setNpcs: Dispatch<SetStateAction<Npc[]>> }> = ({ setNpcs }) => {
   const navigate = useNavigate();
   const { showError } = useError();
 
-  const onAddRealmClick = () => {
-    navigate('/core/realms/create');
+  const onAddNpcClick = () => {
+    navigate('/core/npcs/create');
   };
 
   const onRefreshButtonClick = () => {
-    fetchRealms('', 0, 20)
-      .then((response) => setRealms(response))
+    fetchNpcs('', 0, 20)
+      .then((response) => setNpcs(response))
       .catch((err) => showError(err.message));
   };
 
@@ -30,14 +30,14 @@ const NpcListActions: FC<{ setRealms: Dispatch<SetStateAction<Realm[]>> }> = ({ 
             {t('home')}
           </Link>
           <Link component={RouterLink} color="primary" underline="hover" to="/core">
-            {t('core')}
+            {t('npcs')}
           </Link>
-          <span>{t('realms')}</span>
+          <span>{t('list')}</span>
         </Breadcrumbs>
       </Box>
       <Stack spacing={1} direction="row">
         <RefreshButton onClick={() => onRefreshButtonClick()} />
-        <AddButton onClick={() => onAddRealmClick()} />
+        <AddButton onClick={() => onAddNpcClick()} />
       </Stack>
     </Stack>
   );

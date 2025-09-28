@@ -1,32 +1,38 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Grid } from '@mui/material';
 import { useError } from '../../../ErrorContext';
-import { fetchRealms } from '../../api/realm';
-import { Realm } from '../../api/realm.dto';
-import RealmCard from '../../shared/cards/RealmCard';
+import NpcCard from '../../shared/cards/NpcCard';
 import NpcListActions from './NpcListActions';
+import { fetchNpcs } from '../../api/npc';
+import { Npc } from '../../api/npc.dto';
+import { useNavigate } from 'react-router-dom';
 
 const NpcList: FC = () => {
+  const navigate = useNavigate();
   const { showError } = useError();
-  const [realms, setRealms] = useState<Realm[]>([]);
+  const [npcs, setNpcs] = useState<Npc[]>([]);
+
+  const onCardClick = (npc: Npc) => {
+    navigate(`/npcs/npcs/view/${npc.id}`, { state: { npc } });
+  };
 
   useEffect(() => {
-    fetchRealms('', 0, 20)
-      .then((response) => setRealms(response))
+    fetchNpcs('', 0, 20)
+      .then((response) => setNpcs(response))
       .catch((err) => showError(err.message));
   }, [showError]);
 
   return (
     <>
-      <NpcListActions setRealms={setRealms} />
+      <NpcListActions setNpcs={setNpcs} />
       <Grid container spacing={2} mb={2} alignItems="center">
         <Grid size={12}>
           <Box mb={2} display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
-            {realms.map((realm) => (
-              <RealmCard key={realm.id} realm={realm} />
+            {npcs.map((npc) => (
+              <NpcCard key={npc.id} onClick={() => onCardClick(npc)} npc={npc} />
             ))}
           </Box>
-          {realms.length === 0 ? <p>No realms found.</p> : null}
+          {npcs.length === 0 ? <p>No npcs found.</p> : null}
         </Grid>
       </Grid>
     </>
