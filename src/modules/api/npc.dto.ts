@@ -32,5 +32,22 @@ export interface NpcItem {
 
 export interface NpcAttack {
   name: string;
+  attackTable: string;
   bo: number;
+  fumble: number;
 }
+
+export const CREATE_NPC_TEMPLATE = {
+  realmId: null,
+  category: null,
+  name: null,
+  level: 1,
+  bd: 0,
+  at: 1,
+  initiative: 0,
+  skills: [],
+  items: [],
+  attacks: [],
+  imageUrl: null,
+  description: null,
+} as CreateNpcDto;
