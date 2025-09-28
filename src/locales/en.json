@@ -1,4 +1,18 @@
 {
+  "at": "Armor Type",
+  "bd": "Defense Bonus",
+  "category": "Category",
+  "category-is-required": "Category is required",
+  "create": "Create",
+  "description": "Description",
+  "edit": "Edit",
+  "home": "Home",
+  "initiative": "Initiative",
+  "level": "Level",
+  "name": "Name",
+  "name-is-required": "Name is required",
   "npc": "NPC",
-  "npcs": "NPCs"
+  "npcs": "NPCs",
+  "realm": "Realm",
+  "realm-is-required": "Realm is required"
 }

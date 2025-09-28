@@ -3,12 +3,12 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Box, Breadcrumbs, Link, Stack } from '@mui/material';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
+import { deleteNpc, fetchNpc } from '../../api/npc';
+import { Npc } from '../../api/npc.dto';
 import DeleteButton from '../../shared/buttons/DeleteButton';
 import EditButton from '../../shared/buttons/EditButton';
 import RefreshButton from '../../shared/buttons/RefreshButton';
 import DeleteDialog from '../../shared/dialogs/DeleteDialog';
-import { Npc } from '../../api/npc.dto';
-import { deleteNpc, fetchNpc } from '../../api/npc';
 
 const NpcViewActions: FC<{
   npc: Npc;
@@ -20,7 +20,7 @@ const NpcViewActions: FC<{
 
   const onDeleteNpc = () => {
     deleteNpc(npc.id)
-      .then(() => navigate('/npcs/npcs'))
+      .then(() => navigate('/npcs'))
       .catch((err) => showError(err.message));
   };
 
@@ -31,7 +31,7 @@ const NpcViewActions: FC<{
   };
 
   const onEditButtonClick = () => {
-    navigate(`/npcs/npcs/edit/${npc.id}`, { state: { npc } });
+    navigate(`/npcs/edit/${npc.id}`, { state: { npc } });
   };
 
   const onDeleteButtonClick = () => {
@@ -57,7 +57,7 @@ const NpcViewActions: FC<{
             <Link color="primary" underline="hover" href="/">
               {t('home')}
             </Link>
-            <Link component={RouterLink} color="primary" underline="hover" to="/npcs/npcs">
+            <Link component={RouterLink} color="primary" underline="hover" to="/npcs">
               {t('npcs')}
             </Link>
             <span>{npc.name}</span>

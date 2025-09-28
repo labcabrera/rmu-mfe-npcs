@@ -1,24 +1,46 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { Grid, TextField } from '@mui/material';
 import { t } from 'i18next';
-import { CreateRealmDto } from '../../api/realm.dto';
+import { CreateNpcDto } from '../../api/npc.dto';
+import { NumericInput } from '../../shared/inputs/NumericInput';
 
 const NpcCreationAttributes: FC<{
-  formData: CreateRealmDto;
-  setFormData: Dispatch<SetStateAction<CreateRealmDto>>;
+  formData: CreateNpcDto;
+  setFormData: Dispatch<SetStateAction<CreateNpcDto>>;
 }> = ({ formData, setFormData }) => {
   return (
     <Grid container spacing={2}>
-      <Grid size={12}>
-        <TextField
-          label={t('description')}
-          variant="standard"
-          name="description"
-          value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          multiline
-          rows={10}
-          fullWidth
+      <Grid size={2}>
+        <NumericInput
+          label={t('bd')}
+          name="bd"
+          value={formData.bd}
+          onChange={(e) => setFormData({ ...formData, bd: e })}
+          integer
+          min={-100}
+          max={1000}
+        />
+      </Grid>
+      <Grid size={2}>
+        <NumericInput
+          label={t('at')}
+          name="at"
+          value={formData.at}
+          onChange={(e) => setFormData({ ...formData, at: e })}
+          integer
+          min={1}
+          max={10}
+        />
+      </Grid>
+      <Grid size={2}>
+        <NumericInput
+          label={t('initiative')}
+          name="initiative"
+          value={formData.initiative}
+          onChange={(e) => setFormData({ ...formData, initiative: e })}
+          integer
+          min={-100}
+          max={100}
         />
       </Grid>
     </Grid>

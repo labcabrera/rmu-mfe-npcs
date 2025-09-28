@@ -21,7 +21,7 @@ const NpcEditActions: FC<{
   const onSaveButtonClick = async () => {
     updateNpc(npc.id, formData)
       .then((data) => {
-        navigate(`/core/npcs/view/${npc.id}`, { state: { npc: data } });
+        navigate(`/npcs/view/${npc.id}`, { state: { npc: data } });
       })
       .catch((err: unknown) => {
         if (err instanceof Error) showError(err.message);
@@ -30,7 +30,7 @@ const NpcEditActions: FC<{
   };
 
   const onCancelButtonClick = () => {
-    navigate(`/core/npcs/view/${npc.id}`, { state: { npc } });
+    navigate(`/npcs/view/${npc.id}`, { state: { npc } });
   };
 
   if (!npc) return <p>Loading...</p>;
@@ -41,13 +41,10 @@ const NpcEditActions: FC<{
         <Link color="primary" underline="hover" href="/">
           {t('home')}
         </Link>
-        <Link component={RouterLink} color="primary" underline="hover" to="/core">
+        <Link component={RouterLink} color="primary" underline="hover" to="/npcs">
           {t('npcs')}
         </Link>
-        <Link component={RouterLink} color="primary" underline="hover" to="/core/npcs">
-          {t('npcs')}
-        </Link>
-        <Link color="primary" underline="hover" component={RouterLink} to={'/core/npcs/view/' + npc.id} state={{ npc }}>
+        <Link color="primary" underline="hover" component={RouterLink} to={`/npcs/view/${npc.id}`} state={{ npc }}>
           {npc.name}
         </Link>
         <Typography sx={{ color: 'text.primary' }}>{t('edit')}</Typography>

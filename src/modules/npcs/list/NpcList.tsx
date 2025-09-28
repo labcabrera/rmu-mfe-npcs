@@ -1,11 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Box, Grid } from '@mui/material';
 import { useError } from '../../../ErrorContext';
-import NpcCard from '../../shared/cards/NpcCard';
-import NpcListActions from './NpcListActions';
 import { fetchNpcs } from '../../api/npc';
 import { Npc } from '../../api/npc.dto';
-import { useNavigate } from 'react-router-dom';
+import NpcCard from '../../shared/cards/NpcCard';
+import NpcListActions from './NpcListActions';
 
 const NpcList: FC = () => {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ const NpcList: FC = () => {
   const [npcs, setNpcs] = useState<Npc[]>([]);
 
   const onCardClick = (npc: Npc) => {
-    navigate(`/npcs/npcs/view/${npc.id}`, { state: { npc } });
+    navigate(`/npcs/view/${npc.id}`, { state: { npc } });
   };
 
   useEffect(() => {

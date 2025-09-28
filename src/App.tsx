@@ -5,8 +5,8 @@ import { ErrorProvider } from './ErrorContext';
 import './i18n';
 import NpcCreation from './modules/npcs/create/NpcCreation';
 import NpcEdit from './modules/npcs/edit/NpcEdit';
-import NpcView from './modules/npcs/view/NpcView';
 import NpcList from './modules/npcs/list/NpcList';
+import NpcView from './modules/npcs/view/NpcView';
 
 const App = () => {
   return (
@@ -14,10 +14,9 @@ const App = () => {
       <Box sx={{ p: 5 }}>
         <Routes>
           <Route path="/" element={<NpcList />} />
-          <Route path="/npcs" element={<NpcList />} />
-          <Route path="/npcs/create" element={<NpcCreation />} />
-          <Route path="/npcs/view/:npcId" element={<NpcView />} />
-          <Route path="/npcs/edit/:npcId" element={<NpcEdit />} />
+          <Route path="/create" element={<NpcCreation />} />
+          <Route path="/view/:npcId" element={<NpcView />} />
+          <Route path="/edit/:npcId" element={<NpcEdit />} />
         </Routes>
       </Box>
     </ErrorProvider>
