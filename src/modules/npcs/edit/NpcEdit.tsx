@@ -2,9 +2,9 @@ import React, { FC, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { Grid } from '@mui/material';
 import { useError } from '../../../ErrorContext';
-import { fetchRealm } from '../../api/realm';
-import { Realm, UpdateRealmDto } from '../../api/realm.dto';
-import GenericAvatar from '../../shared/avatars/GenericAvatar';
+import { fetchNpc } from '../../api/npc';
+import { Npc, UpdateNpcDto } from '../../api/npc.dto';
+import NpcAvatar from '../../shared/avatars/NpcAvatar';
 import NpcEditActions from './NpcEditActions';
 import NpcEditAttributes from './NpcEditAttributes';
 import NpcEditResume from './NpcEditResume';
@@ -12,44 +12,45 @@ import NpcEditResume from './NpcEditResume';
 const NpcEdit: FC = () => {
   const location = useLocation();
   const { showError } = useError();
-  const { realmId } = useParams<{ realmId?: string }>();
-  const [realm, setRealm] = useState<Realm | null>(null);
-  const [formData, setFormData] = useState<UpdateRealmDto | null>(null);
+  const { npcId } = useParams<{ npcId?: string }>();
+  const [npc, setNpc] = useState<Npc | null>(null);
+  const [formData, setFormData] = useState<UpdateNpcDto | null>(null);
 
   useEffect(() => {
-    if (realm) {
+    if (npc) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+      const { id, imageUrl, realmId, ...rest } = npc;
       setFormData({
-        name: realm.name,
-        shortDescription: realm.shortDescription,
-        description: realm.description,
+        ...rest,
       });
     }
-  }, [realm]);
+  }, [npc]);
 
   useEffect(() => {
-    if (location.state && location.state.realm) {
-      setRealm(location.state.realm);
-    } else if (realmId) {
-      fetchRealm(realmId)
-        .then((response) => setRealm(response))
+    if (location.state && location.state.npc) {
+      setNpc(location.state.npc);
+    } else if (npcId) {
+      fetchNpc(npcId)
+        .then((response) => setNpc(response))
         .catch((err) => showError(err.message));
     }
-  }, [location.state, realmId, showError]);
+  }, [location.state, npcId, showError]);
 
-  if (!realm || !formData) return <div>Loading realm...</div>;
+  if (!npc || !formData) return <div>Loading npc...</div>;
 
   return (
     <>
-      <NpcEditActions realm={realm} formData={formData} />
+      <NpcEditActions npc={npc} formData={formData} />
       <Grid container spacing={2}>
         <Grid size={2}>
-          <GenericAvatar imageUrl="/static/images/generic/realm.png" size={300} />
+          <NpcAvatar npc={npc} />
           <NpcEditResume formData={formData!} setFormData={setFormData} />
         </Grid>
         <Grid size={8}>
           <NpcEditAttributes formData={formData} setFormData={setFormData} />
         </Grid>
       </Grid>
+      <pre>{JSON.stringify(formData, null, 2)}</pre>
     </>
   );
 };

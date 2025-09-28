@@ -1,39 +1,40 @@
-import React, { ChangeEvent, Dispatch, FC, SetStateAction } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Typography, Grid, TextField } from '@mui/material';
-import { UpdateRealmDto } from '../../api/realm.dto';
+import React, { Dispatch, FC, SetStateAction } from 'react';
+import { Typography, Grid } from '@mui/material';
+import { t } from 'i18next';
+import { UpdateNpcDto } from '../../api/npc.dto';
+import { NumericInput } from '../../shared/inputs/NumericInput';
 
 const NpcEditAttributes: FC<{
-  formData: UpdateRealmDto;
-  setFormData: Dispatch<SetStateAction<UpdateRealmDto>>;
+  formData: UpdateNpcDto;
+  setFormData: Dispatch<SetStateAction<UpdateNpcDto>>;
 }> = ({ formData, setFormData }) => {
-  const { t } = useTranslation();
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
   return (
     <Grid container spacing={2}>
       <Grid size={12}>
         <Typography variant="h6" color="primary">
-          {t('realm-info')}
+          {t('npc-info')}
         </Typography>
       </Grid>
-      <Grid size={12}>
-        <TextField
-          label={t('description')}
-          name="description"
-          multiline
-          rows={10}
-          value={formData.description}
-          onChange={handleChange}
-          variant="standard"
-          fullWidth
+      <Grid size={2}>
+        <NumericInput
+          label={t('level')}
+          name="level"
+          value={formData.level}
+          onChange={(e) => setFormData({ ...formData, level: e })}
+          integer
+          min={0}
+          max={1000}
+        />
+      </Grid>
+      <Grid size={2}>
+        <NumericInput
+          label={t('at')}
+          name="at"
+          value={formData.at}
+          onChange={(e) => setFormData({ ...formData, at: e })}
+          integer
+          min={1}
+          max={10}
         />
       </Grid>
     </Grid>
