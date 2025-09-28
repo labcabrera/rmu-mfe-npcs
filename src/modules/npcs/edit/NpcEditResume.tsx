@@ -1,11 +1,12 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { Grid, TextField } from '@mui/material';
 import { t } from 'i18next';
-import { UpdateRealmDto } from '../../api/realm.dto';
+import { UpdateNpcDto } from '../../api/npc.dto';
+import SelectNpcCategory from '../../shared/selects/SelectNpcCategory';
 
 const NpcEditResume: FC<{
-  formData: UpdateRealmDto;
-  setFormData: Dispatch<SetStateAction<UpdateRealmDto>>;
+  formData: UpdateNpcDto;
+  setFormData: Dispatch<SetStateAction<UpdateNpcDto>>;
 }> = ({ formData, setFormData }) => {
   return (
     <Grid container spacing={2} mt={3}>
@@ -17,6 +18,14 @@ const NpcEditResume: FC<{
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           variant="standard"
           fullWidth
+        />
+      </Grid>
+      <Grid size={12}>
+        <SelectNpcCategory
+          label={t('category')}
+          value={formData.category}
+          name="category"
+          onChange={(e) => setFormData({ ...formData, category: e })}
         />
       </Grid>
       <Grid size={12}>

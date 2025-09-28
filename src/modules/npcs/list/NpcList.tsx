@@ -20,7 +20,7 @@ const NpcList: FC = () => {
     fetchNpcs('', 0, 20)
       .then((response) => setNpcs(response))
       .catch((err) => showError(err.message));
-  }, [showError]);
+  }, []);
 
   return (
     <>

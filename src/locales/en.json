@@ -12,6 +12,7 @@
   "name": "Name",
   "name-is-required": "Name is required",
   "npc": "NPC",
+  "npc-info": "NPC Information",
   "npcs": "NPCs",
   "realm": "Realm",
   "realm-is-required": "Realm is required"

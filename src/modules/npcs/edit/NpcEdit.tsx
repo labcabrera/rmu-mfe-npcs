@@ -16,6 +16,11 @@ const NpcEdit: FC = () => {
   const [npc, setNpc] = useState<Npc | null>(null);
   const [formData, setFormData] = useState<UpdateNpcDto | null>(null);
 
+  const onImageUpdated = (updatedNpc: Npc) => {
+    setNpc(updatedNpc);
+    setFormData({ ...formData, imageUrl: updatedNpc.imageUrl });
+  };
+
   useEffect(() => {
     if (npc) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
@@ -43,7 +48,7 @@ const NpcEdit: FC = () => {
       <NpcEditActions npc={npc} formData={formData} />
       <Grid container spacing={2}>
         <Grid size={2}>
-          <NpcAvatar npc={npc} />
+          <NpcAvatar npc={npc} onNpcUpdated={onImageUpdated} />
           <NpcEditResume formData={formData!} setFormData={setFormData} />
         </Grid>
         <Grid size={8}>
