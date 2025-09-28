@@ -36,8 +36,9 @@ const NpcView: FC = () => {
           <NpcAvatar npc={npc} />
           <NpcViewResume npc={npc} />
         </Grid>
-        <Grid size={9}></Grid>
+        <Grid size={8}></Grid>
       </Grid>
+      <pre>{JSON.stringify(npc, null, 2)}</pre>
     </>
   );
 };

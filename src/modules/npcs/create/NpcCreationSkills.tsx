@@ -18,6 +18,7 @@ import { useError } from '../../../ErrorContext';
 import { CreateNpcDto, NpcSkill } from '../../api/npc.dto';
 import { fetchSkills } from '../../api/skill';
 import { Skill } from '../../api/skill.dto';
+import AddButton from '../../shared/buttons/AddButton';
 import { NumericInput } from '../../shared/inputs/NumericInput';
 import SelectSkill from '../../shared/selects/SelectSkill';
 
@@ -80,7 +81,7 @@ const NpcCreationSkills: FC<{
         {t('skills')}
       </Typography>
 
-      <TableContainer component={Paper} sx={{ mb: 2 }}>
+      <TableContainer sx={{ mb: 2 }}>
         <Table>
           <TableHead>
             <TableRow>
@@ -170,11 +171,7 @@ const NpcCreationSkills: FC<{
         </Table>
       </TableContainer>
 
-      {!isAdding && editingIndex === null && (
-        <Button variant="contained" startIcon={<Add />} onClick={() => setIsAdding(true)}>
-          {t('add-skill')}
-        </Button>
-      )}
+      {!isAdding && editingIndex === null && <AddButton onClick={() => setIsAdding(true)} />}
     </Box>
   );
 };
