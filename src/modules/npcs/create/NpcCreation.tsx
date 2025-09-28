@@ -8,6 +8,7 @@ import GenericAvatar from '../../shared/avatars/GenericAvatar';
 import NpcCreationActions from './NpcCreationActions';
 import NpcCreationAttributes from './NpcCreationAttributes';
 import NpcCreationResume from './NpcCreationResume';
+import NpcCreationsSkills from './NpcCreationSkills';
 
 const NpcCreation: FC = () => {
   const { showError } = useError();
@@ -39,6 +40,7 @@ const NpcCreation: FC = () => {
         </Grid>
         <Grid size={8}>
           <NpcCreationAttributes formData={formData} setFormData={setFormData} />
+          <NpcCreationsSkills formData={formData} setFormData={setFormData} />
         </Grid>
       </Grid>
       <pre>{JSON.stringify(formData, null, 2)}</pre>
