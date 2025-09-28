@@ -3,35 +3,35 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Box, Breadcrumbs, Link, Stack } from '@mui/material';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
-import { deleteRealm, fetchRealm } from '../../api/realm';
-import { Realm } from '../../api/realm.dto';
 import DeleteButton from '../../shared/buttons/DeleteButton';
 import EditButton from '../../shared/buttons/EditButton';
 import RefreshButton from '../../shared/buttons/RefreshButton';
 import DeleteDialog from '../../shared/dialogs/DeleteDialog';
+import { Npc } from '../../api/npc.dto';
+import { deleteNpc, fetchNpc } from '../../api/npc';
 
 const NpcViewActions: FC<{
-  realm: Realm;
-  setRealm: Dispatch<SetStateAction<Realm | null>>;
-}> = ({ realm, setRealm }) => {
+  npc: Npc;
+  setNpc: Dispatch<SetStateAction<Npc | null>>;
+}> = ({ npc, setNpc }) => {
   const navigate = useNavigate();
   const { showError } = useError();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-  const onDeleteRealm = () => {
-    deleteRealm(realm.id)
-      .then(() => navigate('/core/realms'))
+  const onDeleteNpc = () => {
+    deleteNpc(npc.id)
+      .then(() => navigate('/npcs/npcs'))
       .catch((err) => showError(err.message));
   };
 
   const onRefreshButtonClick = () => {
-    fetchRealm(realm.id)
-      .then((response) => setRealm(response))
+    fetchNpc(npc.id)
+      .then((response) => setNpc(response))
       .catch((err) => showError(err.message));
   };
 
   const onEditButtonClick = () => {
-    navigate(`/core/realms/edit/${realm.id}`, { state: { realm } });
+    navigate(`/npcs/npcs/edit/${npc.id}`, { state: { npc } });
   };
 
   const onDeleteButtonClick = () => {
@@ -43,11 +43,11 @@ const NpcViewActions: FC<{
   };
 
   const onDeleteDialogClick = () => {
-    onDeleteRealm();
+    onDeleteNpc();
     setDeleteDialogOpen(false);
   };
 
-  if (!realm) return <p>Loading realm...</p>;
+  if (!npc) return <p>Loading NPC...</p>;
 
   return (
     <>
@@ -57,13 +57,10 @@ const NpcViewActions: FC<{
             <Link color="primary" underline="hover" href="/">
               {t('home')}
             </Link>
-            <Link component={RouterLink} color="primary" underline="hover" to="/core/">
-              {t('core')}
+            <Link component={RouterLink} color="primary" underline="hover" to="/npcs/npcs">
+              {t('npcs')}
             </Link>
-            <Link component={RouterLink} color="primary" underline="hover" to="/core/realms">
-              {t('realms')}
-            </Link>
-            <span>{realm.name}</span>
+            <span>{npc.name}</span>
           </Breadcrumbs>
         </Box>
         <Stack direction="row" spacing={1}>
@@ -74,7 +71,7 @@ const NpcViewActions: FC<{
       </Stack>
       <DeleteDialog
         open={deleteDialogOpen}
-        message={`Are you sure you want to delete ${realm.name} realm? This action cannot be undone.`}
+        message={`Are you sure you want to delete ${npc.name} NPC? This action cannot be undone.`}
         onDelete={() => onDeleteDialogClick()}
         onClose={() => onCloseDialogClick()}
       />
