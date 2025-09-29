@@ -15,22 +15,29 @@ const NpcViewAttributes: FC<{
             {t('strategic-game-options')}
           </Typography>
           <Box mb={2} display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
+            <NumericCard value={npc.hp} subtitle={t('hp')} image={`/static/images/generic/hp.png`} applyColor={false} />
             <NumericCard
-              value={npc.hp}
-              subtitle={t('hp')}
-              image={`/static/images/generic/experience.png`}
-              applyColor={false}
-            />
-            <NumericCard
-              value={npc.hp}
-              subtitle={t('hp')}
-              image={`/static/images/generic/experience.png`}
-              applyColor={false}
-            />
-            <NumericCard
-              value={npc.bd}
-              subtitle={t('bd')}
+              value={npc.db}
+              subtitle={t('db')}
               image={`/static/images/generic/configuration.png`}
+              applyColor={false}
+            />
+            <NumericCard
+              value={npc.at}
+              subtitle={t('at')}
+              image={`/static/images/generic/armor.png`}
+              applyColor={false}
+            />
+            <NumericCard
+              value={npc.initiative}
+              subtitle={t('initiative')}
+              image={`/static/images/generic/initiative.png`}
+              applyColor={false}
+            />
+            <NumericCard
+              value={npc.endurance}
+              subtitle={t('endurance')}
+              image={`/static/images/generic/endurance.png`}
               applyColor={false}
             />
           </Box>

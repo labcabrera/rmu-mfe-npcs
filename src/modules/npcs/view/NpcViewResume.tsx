@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Grid, Typography } from '@mui/material';
+import { Grid, Link, Typography } from '@mui/material';
 import { t } from 'i18next';
 import { Npc } from '../../api/npc.dto';
 import { Realm } from '../../api/realm.dto';
@@ -16,7 +16,9 @@ const NpcViewResume: FC<{
             {npc.name}
           </Typography>
           <Typography variant="body1" gutterBottom>
-            {realm?.name || 'Loading realm...'}
+            <Link href={`/core/realms/view/${npc.realmId}`} color="textPrimary">
+              {realm?.name || 'Loading realm...'}
+            </Link>
           </Typography>
           <Typography variant="body1" gutterBottom>
             {t(npc.category)}

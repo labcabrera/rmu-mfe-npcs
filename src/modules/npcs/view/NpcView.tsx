@@ -43,7 +43,7 @@ const NpcView: FC = () => {
       <Grid container spacing={2}>
         <Grid size={2}>
           <NpcAvatar npc={npc} onNpcUpdated={setNpc} />
-          <NpcViewResume npc={npc} />
+          <NpcViewResume npc={npc} realm={realm} />
         </Grid>
         <Grid size={10}>
           <NpcViewAttributes npc={npc} />
