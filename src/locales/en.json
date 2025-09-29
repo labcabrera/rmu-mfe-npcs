@@ -1,12 +1,12 @@
 {
   "actions": "Actions",
   "at": "Armor type",
-  "bd": "Defense bonus",
   "bo": "BO",
   "bonus": "Bonus",
   "category": "Category",
   "category-is-required": "Category is required",
   "create": "Create",
+  "db": "Defensive bonus",
   "description": "Description",
   "edit": "Edit",
   "endurance": "Endurance",

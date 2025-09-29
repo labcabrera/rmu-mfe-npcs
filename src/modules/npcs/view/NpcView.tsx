@@ -9,6 +9,7 @@ import NpcAvatar from '../../shared/avatars/NpcAvatar';
 import NpcViewActions from './NpcViewActions';
 import NpcViewAttributes from './NpcViewAttributes';
 import NpcViewResume from './NpcViewResume';
+import NpcViewSkills from './NpcViewSkills';
 
 const NpcView: FC = () => {
   const location = useLocation();
@@ -47,6 +48,7 @@ const NpcView: FC = () => {
         </Grid>
         <Grid size={10}>
           <NpcViewAttributes npc={npc} />
+          <NpcViewSkills npc={npc} />
         </Grid>
       </Grid>
       <pre>{JSON.stringify(npc, null, 2)}</pre>

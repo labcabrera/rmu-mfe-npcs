@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
-import { CreateNpcDto, EMPTY_NPC_SKILL, NpcSkill } from '../../api/npc.dto';
+import { CreateNpcDto, EMPTY_NPC_SKILL, NpcSkill, UpdateNpcDto } from '../../api/npc.dto';
 import { fetchSkills } from '../../api/skill';
 import { Skill } from '../../api/skill.dto';
 import AddButton from '../../shared/buttons/AddButton';
@@ -23,9 +23,9 @@ import SaveButton from '../../shared/buttons/SaveButton';
 import { NumericInput } from '../../shared/inputs/NumericInput';
 import SelectSkill from '../../shared/selects/SelectSkill';
 
-const NpcCreationSkills: FC<{
-  formData: CreateNpcDto;
-  setFormData: Dispatch<SetStateAction<CreateNpcDto>>;
+const NpcSkills: FC<{
+  formData: CreateNpcDto | UpdateNpcDto;
+  setFormData: Dispatch<SetStateAction<CreateNpcDto | UpdateNpcDto>>;
 }> = ({ formData, setFormData }) => {
   const { showError } = useError();
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -72,7 +72,7 @@ const NpcCreationSkills: FC<{
     fetchSkills()
       .then((data) => setSkills(data))
       .catch((err) => showError(err.message));
-  }, []);
+  }, [showError]);
 
   if (!skills) return <p>Loading skills...</p>;
 
@@ -200,4 +200,4 @@ const NpcCreationSkills: FC<{
   );
 };
 
-export default NpcCreationSkills;
+export default NpcSkills;

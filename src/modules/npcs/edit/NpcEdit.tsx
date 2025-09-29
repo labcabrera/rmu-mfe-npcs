@@ -5,6 +5,7 @@ import { useError } from '../../../ErrorContext';
 import { fetchNpc } from '../../api/npc';
 import { Npc, UpdateNpcDto } from '../../api/npc.dto';
 import NpcAvatar from '../../shared/avatars/NpcAvatar';
+import NpcSkills from '../shared/NpcSkills';
 import NpcEditActions from './NpcEditActions';
 import NpcEditAttributes from './NpcEditAttributes';
 import NpcEditResume from './NpcEditResume';
@@ -53,6 +54,7 @@ const NpcEdit: FC = () => {
         </Grid>
         <Grid size={8}>
           <NpcEditAttributes formData={formData} setFormData={setFormData} />
+          <NpcSkills formData={formData} setFormData={setFormData} />
         </Grid>
       </Grid>
       <pre>{JSON.stringify(formData, null, 2)}</pre>

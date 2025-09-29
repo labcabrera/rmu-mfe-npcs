@@ -48,6 +48,15 @@ const NpcEditAttributes: FC<{
           max={10}
         />
       </Grid>
+      <Grid size={2}>
+        <NumericInput
+          label={t('endurance')}
+          name="endurance"
+          value={formData.endurance}
+          onChange={(e) => setFormData({ ...formData, endurance: e })}
+          integer
+        />
+      </Grid>
     </Grid>
   );
 };

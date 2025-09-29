@@ -5,10 +5,10 @@ import { CREATE_NPC_TEMPLATE, CreateNpcDto } from '../../api/npc.dto';
 import { fetchRealms } from '../../api/realm';
 import { Realm } from '../../api/realm.dto';
 import GenericAvatar from '../../shared/avatars/GenericAvatar';
+import NpcCreationsSkills from '../shared/NpcSkills';
 import NpcCreationActions from './NpcCreationActions';
 import NpcCreationAttributes from './NpcCreationAttributes';
 import NpcCreationResume from './NpcCreationResume';
-import NpcCreationsSkills from './NpcCreationSkills';
 
 const NpcCreation: FC = () => {
   const { showError } = useError();
