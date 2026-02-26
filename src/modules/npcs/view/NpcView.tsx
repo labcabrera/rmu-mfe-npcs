@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { Grid } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import { useError } from '../../../ErrorContext';
 import { fetchNpc } from '../../api/npc';
 import { Npc } from '../../api/npc.dto';

@@ -127,16 +127,18 @@ export default (_env: unknown, argv: { mode?: string }): Configuration => {
       new HtmlWebPackPlugin({
         template: './src/index.html',
       }),
-      // new Dotenv({
-      //   path: `./.env.${argv.mode || 'development'}`,
-      //   safe: false,
-      //   systemvars: true,
-      //   silent: false,
-      //   defaults: './.env',
-      // }),
-      // new webpack.DefinePlugin({
-      //   'process.env.RMU_API_CORE_URL': JSON.stringify(process.env.RMU_API_CORE_URL || ''),
-      // }),
+      new Dotenv({
+        path: `./.env.${argv.mode || 'development'}`,
+        safe: false,
+        systemvars: true,
+        silent: false,
+        defaults: './.env',
+      }),
+      new webpack.DefinePlugin({
+        'process.env.RMU_API_CORE_URL': JSON.stringify(process.env.RMU_API_CORE_URL || ''),
+        'process.env.RMU_API_NPCS_URL': JSON.stringify(process.env.RMU_API_NPCS_URL || ''),
+        'process.env.RMU_MFE_NPCS_PUBLIC_PATH': JSON.stringify(process.env.RMU_MFE_NPCS_PUBLIC_PATH || ''),
+      }),
     ],
   };
 };

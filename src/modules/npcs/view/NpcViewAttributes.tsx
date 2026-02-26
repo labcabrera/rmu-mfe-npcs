@@ -4,6 +4,8 @@ import { t } from 'i18next';
 import { Npc } from '../../api/npc.dto';
 import NumericCard from '../../shared/cards/NumericCard';
 
+const imageBaseUrl = process.env.RMU_MFE_ASSETS!;
+
 const NpcViewAttributes: FC<{
   npc: Npc;
 }> = ({ npc }) => {
@@ -15,29 +17,34 @@ const NpcViewAttributes: FC<{
             {t('strategic-game-options')}
           </Typography>
           <Box mb={2} display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
-            <NumericCard value={npc.hp} subtitle={t('hp')} image={`/static/images/generic/hp.png`} applyColor={false} />
+            <NumericCard
+              value={npc.hp}
+              subtitle={t('hp')}
+              image={`${imageBaseUrl}images/generic/hp.png`}
+              applyColor={false}
+            />
             <NumericCard
               value={npc.db}
               subtitle={t('db')}
-              image={`/static/images/generic/configuration.png`}
+              image={`${imageBaseUrl}images/generic/configuration.png`}
               applyColor={false}
             />
             <NumericCard
               value={npc.at}
               subtitle={t('at')}
-              image={`/static/images/generic/armor.png`}
+              image={`${imageBaseUrl}images/generic/armor.png`}
               applyColor={false}
             />
             <NumericCard
               value={npc.initiative}
               subtitle={t('initiative')}
-              image={`/static/images/generic/initiative.png`}
+              image={`${imageBaseUrl}images/generic/initiative.png`}
               applyColor={false}
             />
             <NumericCard
               value={npc.endurance}
               subtitle={t('endurance')}
-              image={`/static/images/generic/endurance.png`}
+              image={`${imageBaseUrl}images/generic/endurance.png`}
               applyColor={false}
             />
           </Box>
