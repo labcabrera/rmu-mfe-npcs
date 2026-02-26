@@ -9,6 +9,7 @@ import NpcAvatar from '../../shared/avatars/NpcAvatar';
 import NpcViewActions from './NpcViewActions';
 import NpcViewAttributes from './NpcViewAttributes';
 import NpcViewResume from './NpcViewResume';
+import NpcViewAttacks from './attacks/NpcViewAttacks';
 import NpcViewSkills from './skills/NpcViewSkills';
 
 const NpcView: FC = () => {
@@ -48,6 +49,7 @@ const NpcView: FC = () => {
         </Grid>
         <Grid size={10}>
           <NpcViewAttributes npc={npc} />
+          <NpcViewAttacks npc={npc} setNpc={setNpc} />
           <NpcViewSkills npc={npc} setNpc={setNpc} />
         </Grid>
       </Grid>
