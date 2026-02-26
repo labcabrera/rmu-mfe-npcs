@@ -3,6 +3,7 @@ import { Box, Grid, Typography } from '@mui/material';
 import { t } from 'i18next';
 import { Npc } from '../../api/npc.dto';
 import NumericCard from '../../shared/cards/NumericCard';
+import TextCard from '../../shared/cards/TextCard';
 
 const imageBaseUrl = process.env.RMU_MFE_ASSETS!;
 
@@ -14,9 +15,15 @@ const NpcViewAttributes: FC<{
       <Grid container spacing={2}>
         <Grid size={12}>
           <Typography variant="h6" color="primary" sx={{ mb: 2 }}>
-            {t('strategic-game-options')}
+            {t('attributes')}
           </Typography>
           <Box mb={2} display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
+            <NumericCard
+              value={npc.level}
+              subtitle={t('level')}
+              image={`${imageBaseUrl}images/generic/experience.png`}
+              applyColor={false}
+            />
             <NumericCard
               value={npc.hp}
               subtitle={t('hp')}
@@ -46,6 +53,11 @@ const NpcViewAttributes: FC<{
               subtitle={t('endurance')}
               image={`${imageBaseUrl}images/generic/endurance.png`}
               applyColor={false}
+            />
+            <TextCard
+              value={npc.outlookType}
+              subtitle={t('outlook-type')}
+              image={`${imageBaseUrl}images/generic/configuration.png`}
             />
           </Box>
         </Grid>
