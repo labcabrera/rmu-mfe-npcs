@@ -20,6 +20,7 @@ import { fetchSkills } from '../../../api/skill';
 import { fetchSkillCategories } from '../../../api/skill-category';
 import { SkillCategory } from '../../../api/skill-category.dto';
 import { Skill } from '../../../api/skill.dto';
+import { NumericInput } from '../../../shared/inputs/NumericInput';
 import AddSkillSpecialization from './AddSkillSpecialization';
 
 const AddSkillDialog: FC<{
@@ -166,17 +167,35 @@ const AddSkillDialog: FC<{
             )}
           </Grid>
           <Grid size={4}>
-            {selectedSkill && selectedSkill.specialization && (
+            {selectedSkill && (
               <>
-                <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                  {t('specialization')}
-                </Typography>
+                <Grid container spacing={2}>
+                  <Grid size={12} mt={2}>
+                    <NumericInput
+                      label={t('ranks')}
+                      value={0}
+                      onChange={function (value: number | null): void {
+                        throw new Error('Function not implemented.');
+                      }}
+                    />
+                  </Grid>
+                  <Grid size={12} mt={2}>
+                    <NumericInput label={t('bonus')} value={0} onChange={() => {}} />
+                  </Grid>
+                </Grid>
+                {selectedSkill.specialization && (
+                  <>
+                    <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                      {t('specialization')}
+                    </Typography>
 
-                <AddSkillSpecialization
-                  skill={selectedSkill}
-                  specialization={selectedSpecialization}
-                  setSpecialization={setSelectedSpecialization}
-                />
+                    <AddSkillSpecialization
+                      skill={selectedSkill}
+                      specialization={selectedSpecialization}
+                      setSpecialization={setSelectedSpecialization}
+                    />
+                  </>
+                )}
               </>
             )}
           </Grid>

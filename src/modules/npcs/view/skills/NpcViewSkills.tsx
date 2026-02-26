@@ -1,16 +1,16 @@
-import React, { FC, useState } from 'react';
+import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Box, IconButton, Typography, Stack } from '@mui/material';
 import { t } from 'i18next';
 import { useError } from '../../../../ErrorContext';
-import { addNpcSkill } from '../../../api/npc';
+import { addNpcSkill, removeNpcSkill } from '../../../api/npc';
 import { AddSkill, Npc } from '../../../api/npc.dto';
 import AddSkillDialog from './AddSkillDialog';
 import NpcSkillTable from './NpcSkillTable';
 
 const NpcViewSkills: FC<{
   npc: Npc;
-  setNpc: React.Dispatch<React.SetStateAction<Npc | undefined>>;
+  setNpc: Dispatch<SetStateAction<Npc | undefined>>;
 }> = ({ npc, setNpc }) => {
   const [openAddSkillDialog, setOpenAddSkillDialog] = useState(false);
   const { showError } = useError();
@@ -21,6 +21,12 @@ const NpcViewSkills: FC<{
         setNpc(updatedNpc);
         setOpenAddSkillDialog(false);
       })
+      .catch((error: Error) => showError(error.message));
+  };
+
+  const onSkillDeleted = (skillId: string) => {
+    removeNpcSkill(npc.id, skillId)
+      .then((updatedNpc) => setNpc(updatedNpc))
       .catch((error: Error) => showError(error.message));
   };
 
@@ -40,7 +46,7 @@ const NpcViewSkills: FC<{
           </Stack>
         </Stack>
 
-        <NpcSkillTable npc={npc} />
+        <NpcSkillTable npc={npc} onDeleteSkill={(skillId) => onSkillDeleted(skillId)} />
       </Box>
       <AddSkillDialog
         open={openAddSkillDialog}

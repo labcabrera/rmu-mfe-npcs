@@ -59,11 +59,23 @@ export async function updateNpc(NpcId: string, dto: UpdateNpcDto): Promise<Npc> 
 }
 
 export async function addNpcSkill(npcId: string, dto: AddSkill): Promise<Npc> {
-  const url = `${process.env.RMU_API_NPCS_URL}/npcs/${npcId}`;
+  const url = `${process.env.RMU_API_NPCS_URL}/npcs/${npcId}/skills`;
   const response = await fetch(url, {
-    method: 'PATCH',
+    method: 'POST',
     headers: mergeJsonHeaders(),
     body: JSON.stringify(dto),
+  });
+  if (response.status !== 200) {
+    throw await buildErrorFromResponse(response, url);
+  }
+  return await response.json();
+}
+
+export async function removeNpcSkill(npcId: string, skillId: string): Promise<Npc> {
+  const url = `${process.env.RMU_API_NPCS_URL}/npcs/${npcId}/skills/${skillId}`;
+  const response = await fetch(url, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
   });
   if (response.status !== 200) {
     throw await buildErrorFromResponse(response, url);

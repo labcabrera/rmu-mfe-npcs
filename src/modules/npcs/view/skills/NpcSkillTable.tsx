@@ -2,10 +2,12 @@ import React, { FC } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box, Paper } from '@mui/material';
 import { t } from 'i18next';
 import { Npc } from '../../../api/npc.dto';
+import DeleteButton from '../../../shared/buttons/DeleteButton';
 
 const NpcSkillTable: FC<{
   npc: Npc;
-}> = ({ npc }) => {
+  onDeleteSkill?: (skillId: string) => void;
+}> = ({ npc, onDeleteSkill }) => {
   return (
     <Box sx={{ mt: 2 }}>
       {npc.skills.length > 0 ? (
@@ -38,7 +40,9 @@ const NpcSkillTable: FC<{
                   <TableCell>{t(skill.skillId)}</TableCell>
                   <TableCell align="right">{skill.ranks}</TableCell>
                   <TableCell align="right">{skill.bonus}</TableCell>
-                  <TableCell align="center"></TableCell>
+                  <TableCell align="center">
+                    <DeleteButton onClick={(e) => onDeleteSkill && onDeleteSkill(skill.skillId)} />
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
