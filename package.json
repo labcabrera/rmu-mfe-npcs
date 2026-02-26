@@ -2,7 +2,7 @@
   "name": "rmu-mfe-npcs",
   "version": "0.1.0",
   "scripts": {
-    "build": "webpack --mode production",
+    "build": "rm -rf dist && webpack --mode production",
     "build:dev": "webpack --mode development",
     "build:start": "cd dist && PORT=8084 npx serve",
     "start": "webpack serve --mode development",
