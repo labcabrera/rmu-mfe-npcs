@@ -33,6 +33,8 @@ const AddSkillDialog: FC<{
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
   const [selectedSpecialization, setSelectedSpecialization] = useState<string | null>(null);
+  const [ranks, setRanks] = useState<number | null>(0);
+  const [bonus, setBonus] = useState<number | null>(0);
 
   const [skillCategories, setSkillCategories] = useState<SkillCategory[]>([]);
   const [skills, setSkills] = useState<Skill[]>([]);
@@ -66,6 +68,8 @@ const AddSkillDialog: FC<{
     );
     setSelectedSkill(null);
     setSelectedSpecialization(null);
+    setRanks(0);
+    setBonus(0);
   };
 
   const onAddSkill = async () => {
@@ -76,8 +80,8 @@ const AddSkillDialog: FC<{
     try {
       const skill = {
         skillId: selectedSkill.id,
-        ranks: 0,
-        bonus: 0,
+        ranks: ranks ?? 0,
+        bonus: bonus ?? 0,
       } as AddSkill;
       onSkillAdded(skill);
       handleClose();
@@ -89,6 +93,8 @@ const AddSkillDialog: FC<{
   const handleClose = () => {
     setSelectedSkill(null);
     setSelectedSpecialization(null);
+    setRanks(0);
+    setBonus(0);
     onClose();
   };
 
@@ -171,16 +177,10 @@ const AddSkillDialog: FC<{
               <>
                 <Grid container spacing={2}>
                   <Grid size={12} mt={2}>
-                    <NumericInput
-                      label={t('ranks')}
-                      value={0}
-                      onChange={function (value: number | null): void {
-                        throw new Error('Function not implemented.');
-                      }}
-                    />
+                    <NumericInput label={t('ranks')} value={ranks} onChange={(value) => setRanks(value)} integer />
                   </Grid>
                   <Grid size={12} mt={2}>
-                    <NumericInput label={t('bonus')} value={0} onChange={() => {}} />
+                    <NumericInput label={t('bonus')} value={bonus} onChange={(value) => setBonus(value)} integer />
                   </Grid>
                 </Grid>
                 {selectedSkill.specialization && (
