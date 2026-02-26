@@ -35,8 +35,11 @@ export interface NpcItem {
 }
 
 export interface NpcAttack {
-  name: string;
+  attackName: string;
   attackTable: string;
+  attackType: string;
+  fumbleTable: string;
+  attakSize: number;
   bo: number;
   fumble: number;
 }
@@ -60,3 +63,9 @@ export const CREATE_NPC_TEMPLATE: CreateNpcDto = {
 };
 
 export const EMPTY_NPC_SKILL: NpcSkill = { skillId: null, ranks: null, bonus: null };
+
+export interface AddSkill {
+  skillId: string;
+  ranks: number | undefined;
+  bonus: number;
+}

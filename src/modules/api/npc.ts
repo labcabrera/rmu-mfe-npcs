@@ -1,7 +1,7 @@
 import { getAuthHeaders, mergeJsonHeaders } from '../services/auth-token-service';
 import { buildErrorFromResponse } from './api-errors';
 import { Page } from './common.dto';
-import { CreateNpcDto, Npc, UpdateNpcDto } from './npc.dto';
+import { AddSkill, CreateNpcDto, Npc, UpdateNpcDto } from './npc.dto';
 
 export async function fetchNpc(NpcId: string): Promise<Npc> {
   const url = `${process.env.RMU_API_NPCS_URL}/npcs/${NpcId}`;
@@ -47,6 +47,19 @@ export async function createNpc(Npc: CreateNpcDto): Promise<Npc> {
 
 export async function updateNpc(NpcId: string, dto: UpdateNpcDto): Promise<Npc> {
   const url = `${process.env.RMU_API_NPCS_URL}/npcs/${NpcId}`;
+  const response = await fetch(url, {
+    method: 'PATCH',
+    headers: mergeJsonHeaders(),
+    body: JSON.stringify(dto),
+  });
+  if (response.status !== 200) {
+    throw await buildErrorFromResponse(response, url);
+  }
+  return await response.json();
+}
+
+export async function addNpcSkill(npcId: string, dto: AddSkill): Promise<Npc> {
+  const url = `${process.env.RMU_API_NPCS_URL}/npcs/${npcId}`;
   const response = await fetch(url, {
     method: 'PATCH',
     headers: mergeJsonHeaders(),

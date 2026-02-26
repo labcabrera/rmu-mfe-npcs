@@ -1,29 +1,13 @@
 import React, { FC } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Box,
-  Typography,
-  Paper,
-} from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box, Paper } from '@mui/material';
 import { t } from 'i18next';
-import { Npc } from '../../api/npc.dto';
+import { Npc } from '../../../api/npc.dto';
 
-const NpcViewSkills: FC<{
+const NpcSkillTable: FC<{
   npc: Npc;
 }> = ({ npc }) => {
   return (
     <Box sx={{ mt: 2 }}>
-      <Box display="flex" alignItems="center">
-        <Typography variant="h6" color="primary" display="inline">
-          {t('skills')}
-        </Typography>
-      </Box>
-
       {npc.skills.length > 0 ? (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
           <Table>
@@ -67,4 +51,4 @@ const NpcViewSkills: FC<{
   );
 };
 
-export default NpcViewSkills;
+export default NpcSkillTable;

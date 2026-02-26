@@ -9,13 +9,13 @@ import NpcAvatar from '../../shared/avatars/NpcAvatar';
 import NpcViewActions from './NpcViewActions';
 import NpcViewAttributes from './NpcViewAttributes';
 import NpcViewResume from './NpcViewResume';
-import NpcViewSkills from './NpcViewSkills';
+import NpcViewSkills from './skills/NpcViewSkills';
 
 const NpcView: FC = () => {
   const location = useLocation();
   const { showError } = useError();
   const { npcId } = useParams<{ npcId?: string }>();
-  const [npc, setNpc] = useState<Npc | null>(null);
+  const [npc, setNpc] = useState<Npc>();
   const [realm, setRealm] = useState(null);
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const NpcView: FC = () => {
         </Grid>
         <Grid size={10}>
           <NpcViewAttributes npc={npc} />
-          <NpcViewSkills npc={npc} />
+          <NpcViewSkills npc={npc} setNpc={setNpc} />
         </Grid>
       </Grid>
       <pre>{JSON.stringify(npc, null, 2)}</pre>

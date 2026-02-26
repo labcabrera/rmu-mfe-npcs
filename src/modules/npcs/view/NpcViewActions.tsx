@@ -12,7 +12,7 @@ import DeleteDialog from '../../shared/dialogs/DeleteDialog';
 
 const NpcViewActions: FC<{
   npc: Npc;
-  setNpc: Dispatch<SetStateAction<Npc | null>>;
+  setNpc: Dispatch<SetStateAction<Npc | undefined>>;
 }> = ({ npc, setNpc }) => {
   const navigate = useNavigate();
   const { showError } = useError();
