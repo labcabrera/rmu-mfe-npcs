@@ -39,7 +39,7 @@ export interface NpcAttack {
   attackTable: string;
   attackType: string;
   fumbleTable: string;
-  attakSize: number;
+  attackSize: number;
   bo: number;
   fumble: number;
 }
@@ -68,4 +68,14 @@ export interface AddSkill {
   skillId: string;
   ranks: number | undefined;
   bonus: number;
+}
+
+export interface AddNpcAttack {
+  attackName: string;
+  attackTable: string;
+  attackType: string;
+  fumbleTable: string;
+  attackSize: number;
+  bo: number;
+  fumble: number;
 }

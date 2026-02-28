@@ -1,29 +1,34 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Grid, TextField } from '@mui/material';
 import { t } from 'i18next';
-import { NpcAttack } from '../../../api/npc.dto';
+import { fetchAttackTables } from '../../../api/attack-tables';
+import { AddNpcAttack } from '../../../api/npc.dto';
 import { NumericInput } from '../../../shared/inputs/NumericInput';
+import SelectAttackTable from '../../../shared/selects/SelectAttackTable';
 
 const AddAttackDialog: FC<{
   open: boolean;
   onClose: () => void;
-  onAttackAdded: (attack: NpcAttack) => void;
+  onAttackAdded: (attack: AddNpcAttack) => void;
 }> = ({ open, onClose, onAttackAdded }) => {
+  // const attackTables = fetchAttackTables();
+  const [attackTables, setAttackTables] = useState<string[]>([]);
+
   const [attackName, setAttackName] = useState<string>('');
   const [attackTable, setAttackTable] = useState<string>('');
   const [attackType, setAttackType] = useState<string>('');
   const [fumbleTable, setFumbleTable] = useState<string>('');
-  const [attakSize, setAttakSize] = useState<number | null>(0);
+  const [attackSize, setAttackSize] = useState<number | null>(0);
   const [bo, setBo] = useState<number | null>(0);
   const [fumble, setFumble] = useState<number | null>(0);
 
   const handleAdd = () => {
-    const attack: NpcAttack = {
+    const attack: AddNpcAttack = {
       attackName: attackName,
       attackTable: attackTable,
       attackType: attackType,
       fumbleTable: fumbleTable,
-      attakSize: attakSize ?? 0,
+      attackSize: attackSize ?? 0,
       bo: bo ?? 0,
       fumble: fumble ?? 0,
     };
@@ -33,11 +38,15 @@ const AddAttackDialog: FC<{
     setAttackTable('');
     setAttackType('');
     setFumbleTable('');
-    setAttakSize(0);
+    setAttackSize(0);
     setBo(0);
     setFumble(0);
     onClose();
   };
+
+  useEffect(() => {
+    fetchAttackTables().then((tables) => setAttackTables(tables));
+  }, [open]);
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
@@ -53,11 +62,11 @@ const AddAttackDialog: FC<{
             />
           </Grid>
           <Grid size={6}>
-            <TextField
+            <SelectAttackTable
               label={t('attack-table')}
               value={attackTable}
-              onChange={(e) => setAttackTable(e.target.value)}
-              fullWidth
+              attackTables={attackTables}
+              onChange={(attackTable) => setAttackTable(attackTable)}
             />
           </Grid>
           <Grid size={6}>
@@ -77,7 +86,7 @@ const AddAttackDialog: FC<{
             />
           </Grid>
           <Grid size={6}>
-            <NumericInput label={t('attack-size')} value={attakSize} onChange={(v) => setAttakSize(v)} integer />
+            <NumericInput label={t('attack-size')} value={attackSize} onChange={(v) => setAttackSize(v)} integer />
           </Grid>
           <Grid size={6}>
             <NumericInput label={t('bo')} value={bo} onChange={(v) => setBo(v)} integer />

@@ -1,7 +1,7 @@
 import { getAuthHeaders, mergeJsonHeaders } from '../services/auth-token-service';
 import { buildErrorFromResponse } from './api-errors';
 import { Page } from './common.dto';
-import { AddSkill, CreateNpcDto, Npc, UpdateNpcDto } from './npc.dto';
+import { AddNpcAttack, AddSkill, CreateNpcDto, Npc, UpdateNpcDto } from './npc.dto';
 
 export async function fetchNpc(NpcId: string): Promise<Npc> {
   const url = `${process.env.RMU_API_NPCS_URL}/npcs/${NpcId}`;
@@ -83,8 +83,33 @@ export async function removeNpcSkill(npcId: string, skillId: string): Promise<Np
   return await response.json();
 }
 
-export async function deleteNpc(realmId: string): Promise<void> {
-  const url = `${process.env.RMU_API_NPCS_URL}/npcs/${realmId}`;
+export async function addNpcAttack(npcId: string, dto: AddNpcAttack): Promise<Npc> {
+  const url = `${process.env.RMU_API_NPCS_URL}/npcs/${npcId}/attacks`;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: mergeJsonHeaders(),
+    body: JSON.stringify(dto),
+  });
+  if (response.status !== 200) {
+    throw await buildErrorFromResponse(response, url);
+  }
+  return await response.json();
+}
+
+export async function removeNpcAttack(npcId: string, attackName: string): Promise<Npc> {
+  const url = `${process.env.RMU_API_NPCS_URL}/npcs/${npcId}/attacks/${attackName}`;
+  const response = await fetch(url, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  });
+  if (response.status !== 200) {
+    throw await buildErrorFromResponse(response, url);
+  }
+  return await response.json();
+}
+
+export async function deleteNpc(npcId: string): Promise<void> {
+  const url = `${process.env.RMU_API_NPCS_URL}/npcs/${npcId}`;
   const response = await fetch(url, { method: 'DELETE', headers: getAuthHeaders() });
   if (response.status !== 204) {
     throw await buildErrorFromResponse(response, url);

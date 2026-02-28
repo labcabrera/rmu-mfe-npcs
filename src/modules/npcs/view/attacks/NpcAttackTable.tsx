@@ -6,7 +6,7 @@ import DeleteButton from '../../../shared/buttons/DeleteButton';
 
 const NpcAttackTable: FC<{
   npc: Npc;
-  onDeleteAttack?: (index: number) => void;
+  onDeleteAttack: (attackName: string) => void;
 }> = ({ npc, onDeleteAttack }) => {
   return (
     <Box sx={{ mt: 2 }}>
@@ -49,7 +49,7 @@ const NpcAttackTable: FC<{
                   <TableCell align="right">{attack.bo}</TableCell>
                   <TableCell align="right">{attack.fumble}</TableCell>
                   <TableCell align="center">
-                    <DeleteButton onClick={() => onDeleteAttack && onDeleteAttack(index)} />
+                    <DeleteButton onClick={() => onDeleteAttack && onDeleteAttack(attack.attackName)} />
                   </TableCell>
                 </TableRow>
               ))}

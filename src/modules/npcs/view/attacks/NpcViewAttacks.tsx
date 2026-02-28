@@ -1,30 +1,28 @@
-import React, { FC, useState } from 'react';
+import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Box, IconButton, Stack, Typography } from '@mui/material';
 import { t } from 'i18next';
 import { useError } from '../../../../ErrorContext';
-import { updateNpc } from '../../../api/npc';
-import { Npc, NpcAttack } from '../../../api/npc.dto';
+import { addNpcAttack, removeNpcAttack } from '../../../api/npc';
+import { AddNpcAttack, Npc } from '../../../api/npc.dto';
 import AddAttackDialog from './AddAttackDialog';
 import NpcAttackTable from './NpcAttackTable';
 
 const NpcViewAttacks: FC<{
   npc: Npc;
-  setNpc: React.Dispatch<React.SetStateAction<Npc | undefined>>;
+  setNpc: Dispatch<SetStateAction<Npc>>;
 }> = ({ npc, setNpc }) => {
   const [openAddAttackDialog, setOpenAddAttackDialog] = useState(false);
   const { showError } = useError();
 
-  const onAttackAdded = (attack: NpcAttack) => {
-    const newAttacks = [...(npc.attacks || []), attack];
-    updateNpc(npc.id, { attacks: newAttacks })
+  const onAttackAdded = (attack: AddNpcAttack) => {
+    addNpcAttack(npc.id, attack)
       .then((updated) => setNpc(updated))
       .catch((err) => showError(err.message));
   };
 
-  const onAttackDeleted = (index: number) => {
-    const newAttacks = (npc.attacks || []).filter((_, i) => i !== index);
-    updateNpc(npc.id, { attacks: newAttacks })
+  const onAttackDeleted = (attackName: string) => {
+    removeNpcAttack(npc.id, attackName)
       .then((updated) => setNpc(updated))
       .catch((err) => showError(err.message));
   };
@@ -44,7 +42,7 @@ const NpcViewAttacks: FC<{
         </Stack>
       </Stack>
 
-      <NpcAttackTable npc={npc} onDeleteAttack={(index) => onAttackDeleted(index)} />
+      <NpcAttackTable npc={npc} onDeleteAttack={(attackName) => onAttackDeleted(attackName)} />
 
       <AddAttackDialog
         open={openAddAttackDialog}
