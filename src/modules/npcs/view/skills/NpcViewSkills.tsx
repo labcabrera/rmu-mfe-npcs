@@ -32,7 +32,7 @@ const NpcViewSkills: FC<{
 
   return (
     <>
-      <Box>
+      <Box mt={2}>
         <Stack direction="row" alignItems="center" spacing={1}>
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="h6" color="primary">

@@ -10,6 +10,8 @@ import NpcCreationActions from './NpcCreationActions';
 import NpcCreationAttributes from './NpcCreationAttributes';
 import NpcCreationResume from './NpcCreationResume';
 
+const imageBaseUrl = process.env.RMU_MFE_ASSETS!;
+
 const NpcCreation: FC = () => {
   const { showError } = useError();
   const [realms, setRealms] = useState<Realm[]>([]);
@@ -35,7 +37,7 @@ const NpcCreation: FC = () => {
       <NpcCreationActions formData={formData} isValid={isValid} />
       <Grid container spacing={2}>
         <Grid size={2}>
-          <GenericAvatar imageUrl="/static/images/generic/realm.png" size={300} />
+          <GenericAvatar imageUrl={`${imageBaseUrl}images/npcs/unknown.png`} size={300} />
           <NpcCreationResume formData={formData!} setFormData={setFormData} realms={realms} />
         </Grid>
         <Grid size={8}>

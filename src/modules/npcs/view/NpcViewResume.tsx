@@ -6,7 +6,7 @@ import { Realm } from '../../api/realm.dto';
 
 const NpcViewResume: FC<{
   npc: Npc;
-  realm: Realm | null;
+  realm: Realm | undefined;
 }> = ({ npc, realm }) => {
   return (
     <>

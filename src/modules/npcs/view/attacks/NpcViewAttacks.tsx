@@ -10,7 +10,7 @@ import NpcAttackTable from './NpcAttackTable';
 
 const NpcViewAttacks: FC<{
   npc: Npc;
-  setNpc: Dispatch<SetStateAction<Npc>>;
+  setNpc: Dispatch<SetStateAction<Npc | undefined>>;
 }> = ({ npc, setNpc }) => {
   const [openAddAttackDialog, setOpenAddAttackDialog] = useState(false);
   const { showError } = useError();

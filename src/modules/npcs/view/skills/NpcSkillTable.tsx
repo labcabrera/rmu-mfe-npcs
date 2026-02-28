@@ -22,16 +22,16 @@ const NpcSkillTable: FC<{
               }}
             >
               <TableRow>
-                <TableCell sx={{ width: '40%' }} align="left">
+                <TableCell sx={{ width: '70%' }} align="left">
                   {t('skill')}
                 </TableCell>
-                <TableCell sx={{ width: '20%' }} align="right">
+                <TableCell sx={{ width: '10%' }} align="right">
                   {t('ranks')}
                 </TableCell>
-                <TableCell sx={{ width: '20%' }} align="right">
+                <TableCell sx={{ width: '10%' }} align="right">
                   {t('bonus')}
                 </TableCell>
-                <TableCell sx={{ width: '20%' }} align="center"></TableCell>
+                <TableCell sx={{ width: '10%' }} align="center"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -41,7 +41,7 @@ const NpcSkillTable: FC<{
                   <TableCell align="right">{skill.ranks}</TableCell>
                   <TableCell align="right">{skill.bonus}</TableCell>
                   <TableCell align="center">
-                    <DeleteButton onClick={(e) => onDeleteSkill && onDeleteSkill(skill.skillId)} />
+                    <DeleteButton onClick={() => onDeleteSkill && onDeleteSkill(skill.skillId)} />
                   </TableCell>
                 </TableRow>
               ))}
@@ -49,7 +49,7 @@ const NpcSkillTable: FC<{
           </Table>
         </TableContainer>
       ) : (
-        <p>No skills added.</p>
+        <p>{t('no-skills-added')}</p>
       )}
     </Box>
   );

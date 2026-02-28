@@ -1,10 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Grid, TextField } from '@mui/material';
 import { t } from 'i18next';
-import { fetchAttackTables } from '../../../api/attack-tables';
+import { fetchAttackTables, fetchFumbleTables } from '../../../api/attack-tables';
 import { AddNpcAttack } from '../../../api/npc.dto';
 import { NumericInput } from '../../../shared/inputs/NumericInput';
 import SelectAttackTable from '../../../shared/selects/SelectAttackTable';
+import SelectAttackType from '../../../shared/selects/SelectAttackType';
+import SelectFumbleTable from '../../../shared/selects/SelectFumbleTable';
 
 const AddAttackDialog: FC<{
   open: boolean;
@@ -13,6 +15,7 @@ const AddAttackDialog: FC<{
 }> = ({ open, onClose, onAttackAdded }) => {
   // const attackTables = fetchAttackTables();
   const [attackTables, setAttackTables] = useState<string[]>([]);
+  const [fumbleTables, setFumbleTables] = useState<string[]>([]);
 
   const [attackName, setAttackName] = useState<string>('');
   const [attackTable, setAttackTable] = useState<string>('');
@@ -46,6 +49,7 @@ const AddAttackDialog: FC<{
 
   useEffect(() => {
     fetchAttackTables().then((tables) => setAttackTables(tables));
+    fetchFumbleTables().then((tables) => setFumbleTables(tables));
   }, [open]);
 
   return (
@@ -70,19 +74,18 @@ const AddAttackDialog: FC<{
             />
           </Grid>
           <Grid size={6}>
-            <TextField
+            <SelectAttackType
               label={t('attack-type')}
               value={attackType}
-              onChange={(e) => setAttackType(e.target.value)}
-              fullWidth
+              onChange={(attackType) => setAttackType(attackType)}
             />
           </Grid>
           <Grid size={6}>
-            <TextField
+            <SelectFumbleTable
               label={t('fumble-table')}
               value={fumbleTable}
-              onChange={(e) => setFumbleTable(e.target.value)}
-              fullWidth
+              fumbleTables={fumbleTables}
+              onChange={(fumbleTable) => setFumbleTable(fumbleTable)}
             />
           </Grid>
           <Grid size={6}>

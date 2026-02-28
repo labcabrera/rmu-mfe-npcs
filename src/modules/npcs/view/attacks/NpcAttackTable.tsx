@@ -22,11 +22,17 @@ const NpcAttackTable: FC<{
               }}
             >
               <TableRow>
-                <TableCell sx={{ width: '30%' }} align="left">
+                <TableCell sx={{ width: '20%' }} align="left">
                   {t('attack-name')}
                 </TableCell>
-                <TableCell sx={{ width: '20%' }} align="left">
+                <TableCell sx={{ width: '10%' }} align="left">
+                  {t('attack-type')}
+                </TableCell>
+                <TableCell sx={{ width: '15%' }} align="left">
                   {t('attack-table')}
+                </TableCell>
+                <TableCell sx={{ width: '15%' }} align="left">
+                  {t('fumble-table')}
                 </TableCell>
                 <TableCell sx={{ width: '10%' }} align="right">
                   {t('size')}
@@ -37,15 +43,17 @@ const NpcAttackTable: FC<{
                 <TableCell sx={{ width: '10%' }} align="right">
                   {t('fumble')}
                 </TableCell>
-                <TableCell sx={{ width: '20%' }} align="center"></TableCell>
+                <TableCell sx={{ width: '10%' }} align="center"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {npc.attacks.map((attack, index) => (
                 <TableRow key={index}>
                   <TableCell>{attack.attackName}</TableCell>
-                  <TableCell>{attack.attackTable}</TableCell>
-                  <TableCell align="right">{attack.attakSize}</TableCell>
+                  <TableCell>{t(attack.attackType)}</TableCell>
+                  <TableCell>{t(attack.attackTable)}</TableCell>
+                  <TableCell>{t(attack.fumbleTable)}</TableCell>
+                  <TableCell align="right">{attack.attackSize}</TableCell>
                   <TableCell align="right">{attack.bo}</TableCell>
                   <TableCell align="right">{attack.fumble}</TableCell>
                   <TableCell align="center">
