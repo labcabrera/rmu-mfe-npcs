@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { DeleteButton } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { Npc } from '../../../api/npc.dto';
-import DeleteButton from '../../../shared/buttons/DeleteButton';
 
 const NpcSkillTable: FC<{
   npc: Npc;

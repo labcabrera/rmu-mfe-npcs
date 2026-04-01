@@ -1,14 +1,11 @@
 import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Box, Breadcrumbs, Link, Stack } from '@mui/material';
+import { RefreshButton, EditButton, DeleteButton, DeleteDialog } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
 import { deleteNpc, fetchNpc } from '../../api/npc';
 import { Npc } from '../../api/npc.dto';
-import DeleteButton from '../../shared/buttons/DeleteButton';
-import EditButton from '../../shared/buttons/EditButton';
-import RefreshButton from '../../shared/buttons/RefreshButton';
-import DeleteDialog from '../../shared/dialogs/DeleteDialog';
 
 const NpcViewActions: FC<{
   npc: Npc;

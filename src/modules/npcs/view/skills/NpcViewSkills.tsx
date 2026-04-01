@@ -1,11 +1,10 @@
 import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import { Grid } from '@mui/material';
-import { CategorySeparator } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { AddButton, CategorySeparator } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { useError } from '../../../../ErrorContext';
 import { addNpcSkill, removeNpcSkill } from '../../../api/npc';
 import { AddSkill, Npc } from '../../../api/npc.dto';
-import AddButton from '../../../shared/buttons/AddButton';
 import AddSkillDialog from './AddSkillDialog';
 import NpcSkillTable from './NpcSkillTable';
 

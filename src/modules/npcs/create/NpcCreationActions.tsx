@@ -1,12 +1,11 @@
 import React, { FC } from 'react';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { Box, Breadcrumbs, Stack, Link } from '@mui/material';
+import { CancelButton, SaveButton } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
 import { createNpc } from '../../api/npc';
 import { CreateNpcDto } from '../../api/npc.dto';
-import CancelButton from '../../shared/buttons/CancelButton';
-import SaveButton from '../../shared/buttons/SaveButton';
 
 const NpcCreationActions: FC<{
   formData: CreateNpcDto;
