@@ -1,37 +1,31 @@
-import React, { FC } from 'react';
-import { useTranslation } from 'react-i18next';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { FC, useEffect, useState } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
+import { t } from 'i18next';
+import { useError } from '../../../ErrorContext';
+import { fetchFumbleTables } from '../../api/attack-tables';
 
 const SelectFumbleTable: FC<{
   label: string;
   value: string;
-  fumbleTables: string[];
   onChange: (value: string) => void;
-}> = ({ label, value, fumbleTables, onChange }) => {
-  const { t } = useTranslation();
+}> = ({ label, value, onChange }) => {
+  const { showError } = useError();
+  const [tables, setTables] = useState<string[]>([]);
 
-  const getOptionLabel = (option: string) => {
-    if (option === '') return '';
-    return t(option);
-  };
+  useEffect(() => {
+    fetchFumbleTables()
+      .then((tables) => setTables(tables))
+      .catch((err) => showError(err.message));
+  }, []);
 
   return (
     <Autocomplete
-      options={fumbleTables}
+      options={tables}
       value={value === undefined || value === null ? '' : value}
       onChange={(_, newValue) => onChange(newValue ?? '')}
-      getOptionLabel={getOptionLabel}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label={label}
-          // name={name}
-          variant="standard"
-          fullWidth
-          // error={hasError}
-          // helperText={hasError ? t('fumble-table-is-required') : ''}
-        />
-      )}
+      getOptionLabel={(e) => t(e)}
+      renderInput={(params) => <TextField {...params} label={label} fullWidth error={!value} />}
     />
   );
 };

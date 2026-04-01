@@ -12,6 +12,7 @@ import {
   Box,
   Typography,
 } from '@mui/material';
+import { NumericInput } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { useError } from '../../../../ErrorContext';
 import { Npc } from '../../../api/npc.dto';
@@ -20,7 +21,6 @@ import { fetchSkills } from '../../../api/skill';
 import { fetchSkillCategories } from '../../../api/skill-category';
 import { SkillCategory } from '../../../api/skill-category.dto';
 import { Skill } from '../../../api/skill.dto';
-import { NumericInput } from '../../../shared/inputs/NumericInput';
 import AddSkillSpecialization from './AddSkillSpecialization';
 
 const AddSkillDialog: FC<{
@@ -114,7 +114,7 @@ const AddSkillDialog: FC<{
   }, []);
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth>
+    <Dialog open={open} onClose={handleClose} maxWidth="xl" fullWidth>
       <DialogTitle>{t('add-skill')}</DialogTitle>
       <DialogContent>
         <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -186,7 +186,7 @@ const AddSkillDialog: FC<{
                 {selectedSkill.specialization && (
                   <>
                     <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                      {t('specialization')}
+                      {t('Specialization')}
                     </Typography>
 
                     <AddSkillSpecialization

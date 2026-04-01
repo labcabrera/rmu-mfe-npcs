@@ -1,37 +1,30 @@
-import React, { FC } from 'react';
-import { useTranslation } from 'react-i18next';
+import React, { FC, useEffect, useState } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
+import { t } from 'i18next';
+import { useError } from '../../../ErrorContext';
+import { fetchAttackTables } from '../../api/attack-tables';
 
 const SelectAttackTable: FC<{
   label: string;
   value: string;
-  attackTables: string[];
   onChange: (value: string) => void;
-}> = ({ label, value, attackTables, onChange }) => {
-  const { t } = useTranslation();
+}> = ({ label, value, onChange }) => {
+  const { showError } = useError();
+  const [tables, setTables] = useState<string[]>([]);
 
-  const getOptionLabel = (option: string) => {
-    if (option === '') return '';
-    return t(option);
-  };
+  useEffect(() => {
+    fetchAttackTables()
+      .then((tables) => setTables(tables))
+      .catch((err) => showError(err.message));
+  }, []);
 
   return (
     <Autocomplete
-      options={attackTables}
+      options={tables}
       value={value === undefined || value === null ? '' : value}
       onChange={(_, newValue) => onChange(newValue ?? '')}
-      getOptionLabel={getOptionLabel}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label={label}
-          // name={name}
-          variant="standard"
-          fullWidth
-          // error={hasError}
-          // helperText={hasError ? t('attack-table-is-required') : ''}
-        />
-      )}
+      getOptionLabel={(e) => t(e)}
+      renderInput={(params) => <TextField {...params} label={label} fullWidth error={!value} />}
     />
   );
 };

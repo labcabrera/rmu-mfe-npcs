@@ -1,14 +1,14 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
-import { TechnicalInfo } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { EditableAvatar, TechnicalInfo } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
 import { fetchNpc } from '../../api/npc';
 import { Npc } from '../../api/npc.dto';
 import { fetchRealm } from '../../api/realm';
 import { Realm } from '../../api/realm.dto';
 import { gridSizeMain, gridSizeResume } from '../../services/display';
-import NpcAvatar from '../../shared/avatars/NpcAvatar';
+import { getAvatarImages } from '../../services/image-service';
 import NpcViewActions from './NpcViewActions';
 import NpcViewAttributes from './NpcViewAttributes';
 import NpcViewResume from './NpcViewResume';
@@ -44,7 +44,13 @@ const NpcView: FC = () => {
       <NpcViewActions npc={npc} setNpc={setNpc} />
       <Grid container spacing={1}>
         <Grid size={gridSizeResume}>
-          <NpcAvatar npc={npc} onNpcUpdated={setNpc} />
+          <EditableAvatar
+            imageUrl={npc.imageUrl || ''}
+            images={getAvatarImages()}
+            onImageChange={function (newImageUrl: string): void {
+              throw new Error('Function not implemented.');
+            }}
+          />
           <NpcViewResume npc={npc} realm={realm} />
         </Grid>
         <Grid size={gridSizeMain}>

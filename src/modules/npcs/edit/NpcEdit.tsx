@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { Grid } from '@mui/material';
+import { EditableAvatar } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
 import { fetchNpc } from '../../api/npc';
 import { Npc, UpdateNpcDto } from '../../api/npc.dto';
@@ -48,7 +49,13 @@ const NpcEdit: FC = () => {
       <NpcEditActions npc={npc} formData={formData} />
       <Grid container spacing={2}>
         <Grid size={2}>
-          <NpcAvatar npc={npc} onNpcUpdated={onImageUpdated} />
+          <EditableAvatar
+            imageUrl={''}
+            images={[]}
+            onImageChange={function (newImageUrl: string): void {
+              throw new Error('Function not implemented.');
+            }}
+          />
           <NpcEditResume formData={formData!} setFormData={setFormData} />
         </Grid>
         <Grid size={8}>

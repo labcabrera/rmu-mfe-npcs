@@ -44,11 +44,12 @@ export interface NpcAttack {
   fumble: number;
 }
 
-export const CREATE_NPC_TEMPLATE: CreateNpcDto = {
-  realmId: null,
-  category: null,
-  name: null,
-  outlookType: null,
+export const emptyNpc: Npc = {
+  id: '',
+  realmId: '',
+  category: '',
+  name: '',
+  outlookType: '',
   level: 1,
   hp: 1,
   db: 0,
@@ -58,8 +59,9 @@ export const CREATE_NPC_TEMPLATE: CreateNpcDto = {
   skills: [],
   items: [],
   attacks: [],
-  imageUrl: null,
-  description: null,
+  imageUrl: '',
+  description: '',
+  owner: '',
 };
 
 export const EMPTY_NPC_SKILL: NpcSkill = { skillId: null, ranks: null, bonus: null };

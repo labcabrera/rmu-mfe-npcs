@@ -58,17 +58,7 @@ const SelectNpcOutlookType: FC<{
       value={value === undefined || value === null ? '' : value}
       onChange={(_, newValue) => onChange(newValue)}
       getOptionLabel={getOptionLabel}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label={label}
-          name={name}
-          variant="standard"
-          fullWidth
-          error={hasError}
-          helperText={hasError ? t('category-is-required') : ''}
-        />
-      )}
+      renderInput={(params) => <TextField {...params} label={label} name={name} fullWidth error={hasError} />}
     />
   );
 };

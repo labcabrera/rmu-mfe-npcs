@@ -1,21 +1,16 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
+import { EditableAvatar, TechnicalInfo } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { CREATE_NPC_TEMPLATE, CreateNpcDto } from '../../api/npc.dto';
-import { fetchRealms } from '../../api/realm';
-import { Realm } from '../../api/realm.dto';
-import GenericAvatar from '../../shared/avatars/GenericAvatar';
-import NpcCreationsSkills from '../shared/NpcSkills';
+import { emptyNpc, CreateNpcDto, Npc } from '../../api/npc.dto';
+import { imageBaseUrl } from '../../services/config';
+import { getAvatarImages } from '../../services/image-service';
 import NpcCreationActions from './NpcCreationActions';
 import NpcCreationAttributes from './NpcCreationAttributes';
-import NpcCreationResume from './NpcCreationResume';
-
-const imageBaseUrl = process.env.RMU_MFE_ASSETS!;
 
 const NpcCreation: FC = () => {
   const { showError } = useError();
-  const [realms, setRealms] = useState<Realm[]>([]);
-  const [formData, setFormData] = useState<CreateNpcDto>(CREATE_NPC_TEMPLATE);
+  const [formData, setFormData] = useState<Npc>(emptyNpc);
   const [isValid, setIsValid] = useState(false);
 
   const validateForm = (formData: CreateNpcDto) => {
@@ -25,9 +20,6 @@ const NpcCreation: FC = () => {
 
   useEffect(() => {
     setIsValid(validateForm(formData));
-    fetchRealms('', 0, 100)
-      .then((realms) => setRealms(realms))
-      .catch((err) => showError(err));
   }, [formData, showError]);
 
   if (!formData) return <div>Loading...</div>;
@@ -37,15 +29,19 @@ const NpcCreation: FC = () => {
       <NpcCreationActions formData={formData} isValid={isValid} />
       <Grid container spacing={2}>
         <Grid size={2}>
-          <GenericAvatar imageUrl={`${imageBaseUrl}images/npcs/unknown.png`} size={300} />
-          <NpcCreationResume formData={formData!} setFormData={setFormData} realms={realms} />
+          <EditableAvatar
+            imageUrl={`${imageBaseUrl}images/npcs/unknown.png`}
+            images={getAvatarImages()}
+            onImageChange={(imageUrl) => setFormData({ ...formData, imageUrl: imageUrl })}
+          />
         </Grid>
         <Grid size={8}>
           <NpcCreationAttributes formData={formData} setFormData={setFormData} />
-          <NpcCreationsSkills formData={formData} setFormData={setFormData} />
+          <TechnicalInfo>
+            <pre>{JSON.stringify(formData, null, 2)}</pre>
+          </TechnicalInfo>
         </Grid>
       </Grid>
-      <pre>{JSON.stringify(formData, null, 2)}</pre>
     </>
   );
 };

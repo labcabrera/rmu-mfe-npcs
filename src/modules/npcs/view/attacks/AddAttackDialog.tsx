@@ -1,9 +1,8 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Grid, TextField } from '@mui/material';
+import { NumericInput } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
-import { fetchAttackTables, fetchFumbleTables } from '../../../api/attack-tables';
 import { AddNpcAttack } from '../../../api/npc.dto';
-import { NumericInput } from '../../../shared/inputs/NumericInput';
 import SelectAttackTable from '../../../shared/selects/SelectAttackTable';
 import SelectAttackType from '../../../shared/selects/SelectAttackType';
 import SelectFumbleTable from '../../../shared/selects/SelectFumbleTable';
@@ -13,10 +12,6 @@ const AddAttackDialog: FC<{
   onClose: () => void;
   onAttackAdded: (attack: AddNpcAttack) => void;
 }> = ({ open, onClose, onAttackAdded }) => {
-  // const attackTables = fetchAttackTables();
-  const [attackTables, setAttackTables] = useState<string[]>([]);
-  const [fumbleTables, setFumbleTables] = useState<string[]>([]);
-
   const [attackName, setAttackName] = useState<string>('');
   const [attackTable, setAttackTable] = useState<string>('');
   const [attackType, setAttackType] = useState<string>('');
@@ -47,54 +42,48 @@ const AddAttackDialog: FC<{
     onClose();
   };
 
-  useEffect(() => {
-    fetchAttackTables().then((tables) => setAttackTables(tables));
-    fetchFumbleTables().then((tables) => setFumbleTables(tables));
-  }, [open]);
-
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{t('add-attack')}</DialogTitle>
+    <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
+      <DialogTitle>{t('Add attack')}</DialogTitle>
       <DialogContent>
-        <Grid container spacing={2} sx={{ mt: 1 }}>
-          <Grid size={12}>
+        <Grid container spacing={1}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <TextField
-              label={t('attack-name')}
+              label={t('Attack name')}
               value={attackName}
               onChange={(e) => setAttackName(e.target.value)}
               fullWidth
+              error={!attackName}
             />
           </Grid>
-          <Grid size={6}>
-            <SelectAttackTable
-              label={t('attack-table')}
-              value={attackTable}
-              attackTables={attackTables}
-              onChange={(attackTable) => setAttackTable(attackTable)}
-            />
-          </Grid>
-          <Grid size={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <SelectAttackType
-              label={t('attack-type')}
+              label={t('Attack type')}
               value={attackType}
               onChange={(attackType) => setAttackType(attackType)}
             />
           </Grid>
-          <Grid size={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <SelectAttackTable
+              label={t('Attack table')}
+              value={attackTable}
+              onChange={(attackTable) => setAttackTable(attackTable)}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
             <SelectFumbleTable
-              label={t('fumble-table')}
+              label={t('Fumble table')}
               value={fumbleTable}
-              fumbleTables={fumbleTables}
               onChange={(fumbleTable) => setFumbleTable(fumbleTable)}
             />
           </Grid>
-          <Grid size={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <NumericInput label={t('attack-size')} value={attackSize} onChange={(v) => setAttackSize(v)} integer />
           </Grid>
-          <Grid size={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <NumericInput label={t('bo')} value={bo} onChange={(v) => setBo(v)} integer />
           </Grid>
-          <Grid size={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <NumericInput label={t('fumble')} value={fumble} onChange={(v) => setFumble(v)} integer />
           </Grid>
         </Grid>
@@ -102,7 +91,7 @@ const AddAttackDialog: FC<{
       <DialogActions>
         <Button onClick={onClose}>{t('cancel')}</Button>
         <Button onClick={handleAdd} variant="contained">
-          {t('add')}
+          {t('Add')}
         </Button>
       </DialogActions>
     </Dialog>
