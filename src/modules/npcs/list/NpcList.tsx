@@ -1,10 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
+import { RmuTextCard } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
 import { fetchNpcs } from '../../api/npc';
 import { Npc } from '../../api/npc.dto';
-import NpcCard from '../../shared/cards/NpcCard';
+import { gridSizeMain, gridSizeResume, gridSizeCard } from '../../services/display';
 import NpcListActions from './NpcListActions';
 
 const NpcList: FC = () => {
@@ -25,13 +27,21 @@ const NpcList: FC = () => {
   return (
     <>
       <NpcListActions setNpcs={setNpcs} />
-      <Grid container spacing={2} mb={2} alignItems="center">
-        <Grid size={12}>
-          <Box mb={2} display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
-            {npcs.map((npc) => (
-              <NpcCard key={npc.id} onClick={() => onCardClick(npc)} npc={npc} />
+      <Grid container spacing={1}>
+        <Grid size={gridSizeResume}></Grid>
+        <Grid size={gridSizeMain}>
+          <Grid container spacing={1}>
+            {npcs.map((npc, index) => (
+              <Grid size={gridSizeCard} key={index}>
+                <RmuTextCard
+                  value={npc.name}
+                  subtitle={t(npc.category)}
+                  image={npc.imageUrl || ''}
+                  onClick={() => onCardClick(npc)}
+                />
+              </Grid>
             ))}
-          </Box>
+          </Grid>
           {npcs.length === 0 ? <p>No npcs found.</p> : null}
         </Grid>
       </Grid>

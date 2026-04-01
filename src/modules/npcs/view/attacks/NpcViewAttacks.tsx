@@ -1,6 +1,6 @@
 import React, { Dispatch, FC, SetStateAction, useState } from 'react';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Box, IconButton, Stack, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
+import { AddButton, CategorySeparator } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { useError } from '../../../../ErrorContext';
 import { addNpcAttack, removeNpcAttack } from '../../../api/npc';
@@ -28,28 +28,24 @@ const NpcViewAttacks: FC<{
   };
 
   return (
-    <Box sx={{ mt: 2 }}>
-      <Stack direction="row" alignItems="center" spacing={1}>
-        <Box sx={{ flexGrow: 1 }}>
-          <Typography variant="h6" color="primary">
-            {t('attacks')}
-          </Typography>
-        </Box>
-        <Stack direction="row" spacing={1} sx={{ ml: 'auto' }}>
-          <IconButton aria-label="add-attack" color="primary" onClick={() => setOpenAddAttackDialog(true)}>
-            <AddCircleIcon />
-          </IconButton>
-        </Stack>
-      </Stack>
-
-      <NpcAttackTable npc={npc} onDeleteAttack={(attackName) => onAttackDeleted(attackName)} />
+    <>
+      <Grid container spacing={1}>
+        <Grid size={12}>
+          <CategorySeparator text={t('Attacks')}>
+            <AddButton onClick={() => setOpenAddAttackDialog(true)} />
+          </CategorySeparator>
+        </Grid>
+        <Grid size={12}>
+          <NpcAttackTable npc={npc} onDeleteAttack={(attackName) => onAttackDeleted(attackName)} />
+        </Grid>
+      </Grid>
 
       <AddAttackDialog
         open={openAddAttackDialog}
         onClose={() => setOpenAddAttackDialog(false)}
         onAttackAdded={(a) => onAttackAdded(a)}
       />
-    </Box>
+    </>
   );
 };
 

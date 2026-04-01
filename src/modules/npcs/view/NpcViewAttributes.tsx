@@ -1,65 +1,74 @@
 import React, { FC } from 'react';
-import { Box, Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
+import { CategorySeparator, RmuTextCard } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { Npc } from '../../api/npc.dto';
-import NumericCard from '../../shared/cards/NumericCard';
-import TextCard from '../../shared/cards/TextCard';
-
-const imageBaseUrl = process.env.RMU_MFE_ASSETS!;
+import { imageBaseUrl } from '../../services/config';
+import { gridSizeCard } from '../../services/display';
 
 const NpcViewAttributes: FC<{
   npc: Npc;
 }> = ({ npc }) => {
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container spacing={1}>
         <Grid size={12}>
-          <Typography variant="h6" color="primary" sx={{ mb: 2 }}>
-            {t('attributes')}
-          </Typography>
-          <Box mb={2} display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
-            <NumericCard
-              value={npc.level}
-              subtitle={t('level')}
-              image={`${imageBaseUrl}images/generic/experience.png`}
-              applyColor={false}
-            />
-            <NumericCard
-              value={npc.hp}
-              subtitle={t('hp')}
-              image={`${imageBaseUrl}images/generic/hp.png`}
-              applyColor={false}
-            />
-            <NumericCard
-              value={npc.db}
-              subtitle={t('db')}
-              image={`${imageBaseUrl}images/generic/configuration.png`}
-              applyColor={false}
-            />
-            <NumericCard
-              value={npc.at}
-              subtitle={t('at')}
-              image={`${imageBaseUrl}images/generic/armor.png`}
-              applyColor={false}
-            />
-            <NumericCard
-              value={npc.initiative}
-              subtitle={t('initiative')}
-              image={`${imageBaseUrl}images/generic/initiative.png`}
-              applyColor={false}
-            />
-            <NumericCard
-              value={npc.endurance}
-              subtitle={t('endurance')}
-              image={`${imageBaseUrl}images/generic/endurance.png`}
-              applyColor={false}
-            />
-            <TextCard
-              value={npc.outlookType}
-              subtitle={t('outlook-type')}
-              image={`${imageBaseUrl}images/generic/configuration.png`}
-            />
-          </Box>
+          <CategorySeparator text={t('Attributes')} />
+        </Grid>
+        <Grid size={gridSizeCard}>
+          <RmuTextCard
+            value={npc.level}
+            subtitle={t('level')}
+            image={`${imageBaseUrl}images/generic/experience.png`}
+            applyColor={false}
+          />
+        </Grid>
+        <Grid size={gridSizeCard}>
+          <RmuTextCard
+            value={npc.hp}
+            subtitle={t('hp')}
+            image={`${imageBaseUrl}images/generic/hp.png`}
+            applyColor={false}
+          />
+        </Grid>
+        <Grid size={gridSizeCard}>
+          <RmuTextCard
+            value={npc.db}
+            subtitle={t('db')}
+            image={`${imageBaseUrl}images/generic/configuration.png`}
+            applyColor={false}
+          />
+        </Grid>
+        <Grid size={gridSizeCard}>
+          <RmuTextCard
+            value={npc.at}
+            subtitle={t('at')}
+            image={`${imageBaseUrl}images/generic/armor.png`}
+            applyColor={false}
+          />
+        </Grid>
+        <Grid size={gridSizeCard}>
+          <RmuTextCard
+            value={npc.initiative}
+            subtitle={t('initiative')}
+            image={`${imageBaseUrl}images/generic/initiative.png`}
+            applyColor={false}
+          />
+        </Grid>
+        <Grid size={gridSizeCard}>
+          <RmuTextCard
+            value={npc.endurance}
+            subtitle={t('endurance')}
+            image={`${imageBaseUrl}images/generic/endurance.png`}
+            applyColor={false}
+          />
+        </Grid>
+        <Grid size={gridSizeCard}>
+          <RmuTextCard
+            value={npc.outlookType}
+            subtitle={t('outlook-type')}
+            image={`${imageBaseUrl}images/generic/configuration.png`}
+          />
         </Grid>
       </Grid>
     </>

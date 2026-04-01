@@ -1,13 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Accordion, AccordionSummary, Typography, AccordionDetails } from '@mui/material';
 import Grid from '@mui/material/Grid';
+import { TechnicalInfo } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
 import { fetchNpc } from '../../api/npc';
 import { Npc } from '../../api/npc.dto';
 import { fetchRealm } from '../../api/realm';
 import { Realm } from '../../api/realm.dto';
+import { gridSizeMain, gridSizeResume } from '../../services/display';
 import NpcAvatar from '../../shared/avatars/NpcAvatar';
 import NpcViewActions from './NpcViewActions';
 import NpcViewAttributes from './NpcViewAttributes';
@@ -42,25 +42,20 @@ const NpcView: FC = () => {
   return (
     <>
       <NpcViewActions npc={npc} setNpc={setNpc} />
-      <Grid container spacing={2}>
-        <Grid size={2}>
+      <Grid container spacing={1}>
+        <Grid size={gridSizeResume}>
           <NpcAvatar npc={npc} onNpcUpdated={setNpc} />
           <NpcViewResume npc={npc} realm={realm} />
         </Grid>
-        <Grid size={10}>
+        <Grid size={gridSizeMain}>
           <NpcViewAttributes npc={npc} />
           <NpcViewAttacks npc={npc} setNpc={setNpc} />
           <NpcViewSkills npc={npc} setNpc={setNpc} />
+          <TechnicalInfo>
+            <pre>{JSON.stringify(npc, null, 2)}</pre>
+          </TechnicalInfo>
         </Grid>
       </Grid>
-      <Accordion sx={{ mt: 5 }}>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="npc-debug" id="npc-debug-header">
-          <Typography component="span">Debug</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <pre>{JSON.stringify(npc, null, 2)}</pre>
-        </AccordionDetails>
-      </Accordion>
     </>
   );
 };
