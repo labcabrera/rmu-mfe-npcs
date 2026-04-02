@@ -11,7 +11,7 @@ import SelectNpcCategory from '../../shared/selects/SelectNpcCategory';
 import SelectNpcOutlookType from '../../shared/selects/SelectNpcOutlookType';
 import SelectRealm from '../../shared/selects/SelectRealm';
 
-const NpcCreationAttributes: FC<{
+const NpcForm: FC<{
   formData: Npc;
   setFormData: Dispatch<SetStateAction<Npc>>;
 }> = ({ formData, setFormData }) => {
@@ -78,14 +78,6 @@ const NpcCreationAttributes: FC<{
       </Grid>
 
       <Grid size={{ xs: 12, md: 2 }}>
-        <SelectNpcOutlookType
-          label={t('outlook-type')}
-          value={formData.outlookType}
-          name="outlookType"
-          onChange={(e) => setFormData({ ...formData, outlookType: e! })}
-        />
-      </Grid>
-      <Grid size={{ xs: 12, md: 2 }}>
         <NumericInput
           label={t('db')}
           name="db"
@@ -129,6 +121,14 @@ const NpcCreationAttributes: FC<{
           max={100}
         />
       </Grid>
+      <Grid size={{ xs: 12, md: 4 }}>
+        <SelectNpcOutlookType
+          label={t('outlook-type')}
+          value={formData.outlookType}
+          name="outlookType"
+          onChange={(e) => setFormData({ ...formData, outlookType: e! })}
+        />
+      </Grid>
       <Grid size={12}>
         <TextField
           label={t('description')}
@@ -144,4 +144,4 @@ const NpcCreationAttributes: FC<{
   );
 };
 
-export default NpcCreationAttributes;
+export default NpcForm;

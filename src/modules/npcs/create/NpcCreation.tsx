@@ -5,8 +5,8 @@ import { useError } from '../../../ErrorContext';
 import { emptyNpc, CreateNpcDto, Npc } from '../../api/npc.dto';
 import { imageBaseUrl } from '../../services/config';
 import { getAvatarImages } from '../../services/image-service';
+import NpcForm from './../shared/NpcForm';
 import NpcCreationActions from './NpcCreationActions';
-import NpcCreationAttributes from './NpcCreationAttributes';
 
 const NpcCreation: FC = () => {
   const { showError } = useError();
@@ -36,7 +36,7 @@ const NpcCreation: FC = () => {
           />
         </Grid>
         <Grid size={8}>
-          <NpcCreationAttributes formData={formData} setFormData={setFormData} />
+          <NpcForm formData={formData} setFormData={setFormData} />
           <TechnicalInfo>
             <pre>{JSON.stringify(formData, null, 2)}</pre>
           </TechnicalInfo>

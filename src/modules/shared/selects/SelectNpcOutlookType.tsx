@@ -1,6 +1,9 @@
-import React, { FC } from 'react';
-import { useTranslation } from 'react-i18next';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { FC, useEffect, useState } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
+import { t } from 'i18next';
+import { useError } from '../../../ErrorContext';
+import { fetchEnumerations } from '../../api/enumerations';
 
 const SelectNpcOutlookType: FC<{
   label: string;
@@ -9,46 +12,15 @@ const SelectNpcOutlookType: FC<{
   addAllOption?: boolean;
   required?: boolean;
   onChange: (value: string | null) => void;
-}> = ({ label, value, name, onChange, addAllOption = false, required = false }) => {
-  const { t } = useTranslation();
+}> = ({ label, value, name, onChange, required = false }) => {
+  const { showError } = useError();
+  const [options, setOptions] = useState<string[]>([]);
 
-  const values = [
-    'aggressive',
-    'aloof',
-    'altruistic',
-    'belligerent',
-    'berserk',
-    'carefree',
-    'considerate',
-    'cruel',
-    'crusading',
-    'dominant',
-    'friendly',
-    'greedy',
-    'helpful',
-    'hidden-agenda',
-    'hostile',
-    'hungry',
-    'hunting',
-    'inconsiderate',
-    'inquisitive',
-    'jumpy',
-    'normal',
-    'obssesive',
-    'open',
-    'passive',
-    'playful',
-    'protective',
-    'secretive',
-    'timid',
-  ];
-
-  const options = addAllOption ? ['', ...values] : values;
-
-  const getOptionLabel = (option: string) => {
-    if (option === '') return '';
-    return t(`outlook-type-${option}`);
-  };
+  useEffect(() => {
+    fetchEnumerations('category==outlook-type', 0, 100)
+      .then((response) => setOptions(response.content.map((e) => e.key)))
+      .catch((err) => showError(err.message));
+  }, []);
 
   const hasError = required && (value === undefined || value === null || value === '');
 
@@ -57,7 +29,7 @@ const SelectNpcOutlookType: FC<{
       options={options}
       value={value === undefined || value === null ? '' : value}
       onChange={(_, newValue) => onChange(newValue)}
-      getOptionLabel={getOptionLabel}
+      getOptionLabel={(e) => t(e)}
       renderInput={(params) => <TextField {...params} label={label} name={name} fullWidth error={hasError} />}
     />
   );
