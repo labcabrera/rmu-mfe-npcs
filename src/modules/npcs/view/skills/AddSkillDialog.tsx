@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from '@mui/material';
-import { NumericInput, SkillSelector } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { AddNpcSkill, NumericInput, SkillSelector } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../../ErrorContext';
-import { AddSkill } from '../../../api/npc.dto';
 
 export default function AddSkillDialog({
   open,
@@ -12,20 +11,20 @@ export default function AddSkillDialog({
 }: {
   open: boolean;
   onClose: () => void;
-  onSkillAdded: (addSkill: AddSkill) => void;
+  onSkillAdded: (addSkill: AddNpcSkill) => void;
 }) {
   const { t } = useTranslation();
   const { showError } = useError();
-  const [formData, setFormData] = useState<AddSkill>({} as AddSkill);
+  const [formData, setFormData] = useState<AddNpcSkill>({} as AddNpcSkill);
 
   const handleAdd = () => {
     onSkillAdded(formData);
-    setFormData({} as AddSkill);
+    setFormData({} as AddNpcSkill);
     onClose();
   };
 
   const handleClose = () => {
-    setFormData({} as AddSkill);
+    setFormData({} as AddNpcSkill);
     onClose();
   };
 
