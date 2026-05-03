@@ -1,4 +1,4 @@
-import { imageBaseUrl } from '../services/config';
+import { imageBaseUrl } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 export const defaultNpc = `${imageBaseUrl}images/generic/configuration.png`;
 

@@ -6,15 +6,15 @@ import { useNavigate } from 'react-router-dom';
 import { CircularProgress, Grid } from '@mui/material';
 import {
   AddButton,
+  fetchNpcs,
   LayoutBase,
+  Npc,
   Page,
   RefreshButton,
   RmuPagination,
   RmuTextCard,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { fetchNpcs } from '../../api/npc';
-import { Npc } from '../../api/npc.dto';
 import { gridSizeCard } from '../../services/display';
 
 export default function NpcList() {

@@ -1,7 +1,7 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid, TextField } from '@mui/material';
-import { UpdateNpcDto } from '../../api/npc.dto';
+import { UpdateNpcDto } from '@labcabrera-rmu/rmu-react-shared-lib';
 import SelectNpcCategory from '../../shared/selects/SelectNpcCategory';
 
 const NpcEditResume: FC<{

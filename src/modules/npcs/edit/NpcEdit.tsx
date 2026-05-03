@@ -6,13 +6,14 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   CancelButton,
   EditableAvatar,
+  fetchNpc,
   LayoutBase,
+  Npc,
   SaveButton,
   TechnicalInfo,
+  updateNpc,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { fetchNpc, updateNpc } from '../../api/npc';
-import { Npc } from '../../api/npc.dto';
 import { getAvatarImages } from '../../services/image-service';
 import NpcEditAttributes from './NpcEditAttributes';
 import NpcEditResume from './NpcEditResume';

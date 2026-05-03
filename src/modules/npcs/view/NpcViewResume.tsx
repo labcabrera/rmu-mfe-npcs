@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid, Link, Typography } from '@mui/material';
-import { Realm } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { Npc } from '../../api/npc.dto';
+import { Npc, Realm } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 const NpcViewResume: FC<{
   npc: Npc;

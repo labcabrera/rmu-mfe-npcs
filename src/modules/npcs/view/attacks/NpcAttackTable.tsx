@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box, Paper } from '@mui/material';
-import { DeleteButton } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { Npc } from '../../../api/npc.dto';
+import { DeleteButton, Npc } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 const NpcAttackTable: FC<{
   npc: Npc;
@@ -14,15 +13,8 @@ const NpcAttackTable: FC<{
     <Box sx={{ mt: 2 }}>
       {npc.attacks && npc.attacks.length > 0 ? (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
-          <Table>
-            <TableHead
-              sx={{
-                '& .MuiTableCell-root': {
-                  color: 'primary.main',
-                  fontWeight: 'bold',
-                },
-              }}
-            >
+          <Table size="small">
+            <TableHead>
               <TableRow>
                 <TableCell sx={{ width: '20%' }} align="left">
                   {t('attack-name')}

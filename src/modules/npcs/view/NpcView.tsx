@@ -6,17 +6,19 @@ import { useNavigate, useParams } from 'react-router-dom';
 import {
   DeleteButton,
   DeleteDialog,
+  deleteNpc,
   EditableAvatar,
   EditButton,
+  fetchNpc,
   fetchRealm,
   LayoutBase,
+  Npc,
   Realm,
   RefreshButton,
   TechnicalInfo,
+  updateNpc,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { deleteNpc, fetchNpc } from '../../api/npc';
-import { Npc } from '../../api/npc.dto';
 import { getAvatarImages } from '../../services/image-service';
 import NpcViewAttributes from './NpcViewAttributes';
 import NpcViewResume from './NpcViewResume';
@@ -33,7 +35,12 @@ export default function NpcView() {
   const [npc, setNpc] = useState<Npc>();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-  const updateImage = (imageUrl: string) => {};
+  const updateImage = (imageUrl: string) => {
+    const dto = { imageUrl };
+    updateNpc(npc!.id, dto, auth)
+      .then((response) => setNpc(response))
+      .catch((err) => showError(err.message));
+  };
 
   const bindNpc = (npcId: string) => {
     fetchNpc(npcId, auth)

@@ -1,8 +1,7 @@
 import React, { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Grid, TextField } from '@mui/material';
-import { NumericInput } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { AddNpcAttack } from '../../../api/npc.dto';
+import { AddNpcAttack, NumericInput } from '@labcabrera-rmu/rmu-react-shared-lib';
 import SelectAttackTable from '../../../shared/selects/SelectAttackTable';
 import SelectAttackType from '../../../shared/selects/SelectAttackType';
 import SelectFumbleTable from '../../../shared/selects/SelectFumbleTable';

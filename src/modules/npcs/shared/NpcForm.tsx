@@ -3,9 +3,8 @@ import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Grid, TextField } from '@mui/material';
-import { fetchRealms, NumericInput, Realm } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { fetchRealms, Npc, NumericInput, Realm } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { Npc } from '../../api/npc.dto';
 import SelectNpcCategory from '../../shared/selects/SelectNpcCategory';
 import SelectNpcOutlookType from '../../shared/selects/SelectNpcOutlookType';
 import SelectRealm from '../../shared/selects/SelectRealm';

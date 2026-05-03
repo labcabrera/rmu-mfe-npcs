@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { useNavigate } from 'react-router-dom';
-import { Grid } from '@mui/material';
 import {
   CancelButton,
+  createNpc,
+  CreateNpcDto,
   EditableAvatar,
   LayoutBase,
+  Npc,
   SaveButton,
   TechnicalInfo,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { createNpc } from '../../api/npc';
-import { emptyNpc, CreateNpcDto, Npc } from '../../api/npc.dto';
 import { getAvatarImages } from '../../services/image-service';
 import NpcForm from './../shared/NpcForm';
 
@@ -21,7 +21,7 @@ export default function NpcCreation() {
   const { t } = useTranslation();
   const { showError } = useError();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<Npc>(emptyNpc);
+  const [formData, setFormData] = useState<Npc>({} as Npc);
   const [isValid, setIsValid] = useState(false);
 
   const onSave = () => {

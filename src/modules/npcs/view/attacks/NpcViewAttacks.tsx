@@ -2,10 +2,15 @@ import React, { Dispatch, FC, SetStateAction, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Grid } from '@mui/material';
-import { AddButton, CategorySeparator } from '@labcabrera-rmu/rmu-react-shared-lib';
+import {
+  AddButton,
+  addNpcAttack,
+  AddNpcAttack,
+  CategorySeparator,
+  Npc,
+  removeNpcAttack,
+} from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../../ErrorContext';
-import { addNpcAttack, removeNpcAttack } from '../../../api/npc';
-import { AddNpcAttack, Npc } from '../../../api/npc.dto';
 import AddAttackDialog from './AddAttackDialog';
 import NpcAttackTable from './NpcAttackTable';
 
