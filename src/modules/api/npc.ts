@@ -1,117 +1,65 @@
-import { getAuthHeaders, mergeJsonHeaders } from '../services/auth-token-service';
-import { buildErrorFromResponse } from './api-errors';
-import { Page } from './common.dto';
+import { AuthContextProps } from 'react-oidc-context';
+import { callApi, Page } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { apiNpcUrl } from '../services/config';
 import { AddNpcAttack, AddSkill, CreateNpcDto, Npc, UpdateNpcDto } from './npc.dto';
 
-export async function fetchNpc(NpcId: string): Promise<Npc> {
-  const url = `${process.env.RMU_API_NPCS_URL}/npcs/${NpcId}`;
-  const response = await fetch(url, { method: 'GET', headers: getAuthHeaders() });
-  if (response.status !== 200) {
-    throw await buildErrorFromResponse(response, url);
-  }
-  return await response.json();
+export async function fetchNpc(NpcId: string, auth: AuthContextProps): Promise<Npc> {
+  const url = `${apiNpcUrl}/npcs/${NpcId}`;
+  return await callApi(auth, url, { method: 'GET' });
 }
 
-export async function fetchNpcs(rsql: string, page: number, size: number): Promise<Npc[]> {
-  const url = `${process.env.RMU_API_NPCS_URL}/npcs?q=${rsql}&page=${page}&size=${size}`;
-  const response = await fetch(url, { method: 'GET', headers: getAuthHeaders() });
-  if (response.status !== 200) {
-    throw await buildErrorFromResponse(response, url);
-  }
-  const pageContent = await response.json();
-  return pageContent.content;
+export async function fetchNpcs(rsql: string, page: number, size: number, auth: AuthContextProps): Promise<Page<Npc>> {
+  const url = `${apiNpcUrl}/npcs?q=${rsql}&page=${page}&size=${size}`;
+  return await callApi(auth, url, { method: 'GET' });
 }
 
-export async function fetchPagedNpcs(rsql: string, page: number, size: number): Promise<Page<Npc>> {
-  const url = `${process.env.RMU_API_NPCS_URL}/npcs?q=${rsql}&page=${page}&size=${size}`;
-  const response = await fetch(url, { method: 'GET', headers: getAuthHeaders() });
-  if (response.status !== 200) {
-    throw await buildErrorFromResponse(response, url);
-  }
-  const pageContent = await response.json();
-  return pageContent;
-}
-
-export async function createNpc(Npc: CreateNpcDto): Promise<Npc> {
-  const url = `${process.env.RMU_API_NPCS_URL}/npcs`;
-  const response = await fetch(url, {
+export async function createNpc(Npc: CreateNpcDto, auth: AuthContextProps): Promise<Npc> {
+  const url = `${apiNpcUrl}/npcs`;
+  return await callApi(auth, url, {
     method: 'POST',
-    headers: mergeJsonHeaders(),
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(Npc),
   });
-  if (response.status !== 201) {
-    throw await buildErrorFromResponse(response, url);
-  }
-  return await response.json();
 }
 
-export async function updateNpc(NpcId: string, dto: UpdateNpcDto): Promise<Npc> {
-  const url = `${process.env.RMU_API_NPCS_URL}/npcs/${NpcId}`;
-  const response = await fetch(url, {
+export async function updateNpc(NpcId: string, dto: UpdateNpcDto, auth: AuthContextProps): Promise<Npc> {
+  const url = `${apiNpcUrl}/npcs/${NpcId}`;
+  return await callApi(auth, url, {
     method: 'PATCH',
-    headers: mergeJsonHeaders(),
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(dto),
   });
-  if (response.status !== 200) {
-    throw await buildErrorFromResponse(response, url);
-  }
-  return await response.json();
 }
 
-export async function addNpcSkill(npcId: string, dto: AddSkill): Promise<Npc> {
-  const url = `${process.env.RMU_API_NPCS_URL}/npcs/${npcId}/skills`;
-  const response = await fetch(url, {
+export async function addNpcSkill(npcId: string, dto: AddSkill, auth: AuthContextProps): Promise<Npc> {
+  const url = `${apiNpcUrl}/npcs/${npcId}/skills`;
+  return await callApi(auth, url, {
     method: 'POST',
-    headers: mergeJsonHeaders(),
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(dto),
   });
-  if (response.status !== 200) {
-    throw await buildErrorFromResponse(response, url);
-  }
-  return await response.json();
 }
 
-export async function removeNpcSkill(npcId: string, skillId: string): Promise<Npc> {
-  const url = `${process.env.RMU_API_NPCS_URL}/npcs/${npcId}/skills/${skillId}`;
-  const response = await fetch(url, {
-    method: 'DELETE',
-    headers: getAuthHeaders(),
-  });
-  if (response.status !== 200) {
-    throw await buildErrorFromResponse(response, url);
-  }
-  return await response.json();
+export async function removeNpcSkill(npcId: string, skillId: string, auth: AuthContextProps): Promise<Npc> {
+  const url = `${apiNpcUrl}/npcs/${npcId}/skills/${skillId}`;
+  return await callApi(auth, url, { method: 'DELETE' });
 }
 
-export async function addNpcAttack(npcId: string, dto: AddNpcAttack): Promise<Npc> {
-  const url = `${process.env.RMU_API_NPCS_URL}/npcs/${npcId}/attacks`;
-  const response = await fetch(url, {
+export async function addNpcAttack(npcId: string, dto: AddNpcAttack, auth: AuthContextProps): Promise<Npc> {
+  const url = `${apiNpcUrl}/npcs/${npcId}/attacks`;
+  return await callApi(auth, url, {
     method: 'POST',
-    headers: mergeJsonHeaders(),
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(dto),
   });
-  if (response.status !== 200) {
-    throw await buildErrorFromResponse(response, url);
-  }
-  return await response.json();
 }
 
-export async function removeNpcAttack(npcId: string, attackName: string): Promise<Npc> {
-  const url = `${process.env.RMU_API_NPCS_URL}/npcs/${npcId}/attacks/${attackName}`;
-  const response = await fetch(url, {
-    method: 'DELETE',
-    headers: getAuthHeaders(),
-  });
-  if (response.status !== 200) {
-    throw await buildErrorFromResponse(response, url);
-  }
-  return await response.json();
+export async function removeNpcAttack(npcId: string, attackName: string, auth: AuthContextProps): Promise<Npc> {
+  const url = `${apiNpcUrl}/npcs/${npcId}/attacks/${attackName}`;
+  return await callApi(auth, url, { method: 'DELETE' });
 }
 
-export async function deleteNpc(npcId: string): Promise<void> {
-  const url = `${process.env.RMU_API_NPCS_URL}/npcs/${npcId}`;
-  const response = await fetch(url, { method: 'DELETE', headers: getAuthHeaders() });
-  if (response.status !== 204) {
-    throw await buildErrorFromResponse(response, url);
-  }
+export async function deleteNpc(npcId: string, auth: AuthContextProps): Promise<void> {
+  const url = `${apiNpcUrl}/npcs/${npcId}`;
+  return await callApi(auth, url, { method: 'DELETE' });
 }

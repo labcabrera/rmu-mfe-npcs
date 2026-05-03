@@ -1,13 +1,14 @@
 import React, { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Grid, Link, Typography } from '@mui/material';
-import { t } from 'i18next';
+import { Realm } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { Npc } from '../../api/npc.dto';
-import { Realm } from '../../api/realm.dto';
 
 const NpcViewResume: FC<{
   npc: Npc;
   realm: Realm | undefined;
 }> = ({ npc, realm }) => {
+  const { t } = useTranslation();
   return (
     <>
       <Grid container spacing={2}>

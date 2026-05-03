@@ -1,19 +1,22 @@
 import React, { FC, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from 'react-oidc-context';
 import { Autocomplete, TextField } from '@mui/material';
-import { t } from 'i18next';
+import { fetchAttackTables } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { fetchAttackTables } from '../../api/attack-tables';
 
 const SelectAttackTable: FC<{
   label: string;
   value: string;
   onChange: (value: string) => void;
 }> = ({ label, value, onChange }) => {
+  const auth = useAuth();
+  const { t } = useTranslation();
   const { showError } = useError();
   const [tables, setTables] = useState<string[]>([]);
 
   useEffect(() => {
-    fetchAttackTables()
+    fetchAttackTables(auth)
       .then((tables) => setTables(tables))
       .catch((err) => showError(err.message));
   }, []);

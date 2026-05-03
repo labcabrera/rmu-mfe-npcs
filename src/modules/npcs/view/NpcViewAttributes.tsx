@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Grid } from '@mui/material';
 import { CategorySeparator, RmuTextCard } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { t } from 'i18next';
 import { Npc } from '../../api/npc.dto';
 import { imageBaseUrl } from '../../services/config';
 import { gridSizeCard } from '../../services/display';
@@ -9,6 +9,7 @@ import { gridSizeCard } from '../../services/display';
 const NpcViewAttributes: FC<{
   npc: Npc;
 }> = ({ npc }) => {
+  const { t } = useTranslation();
   return (
     <>
       <Grid container spacing={1}>

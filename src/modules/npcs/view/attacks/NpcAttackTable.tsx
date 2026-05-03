@@ -1,13 +1,15 @@
 import React, { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box, Paper } from '@mui/material';
 import { DeleteButton } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { t } from 'i18next';
 import { Npc } from '../../../api/npc.dto';
 
 const NpcAttackTable: FC<{
   npc: Npc;
   onDeleteAttack: (attackName: string) => void;
 }> = ({ npc, onDeleteAttack }) => {
+  const { t } = useTranslation();
+
   return (
     <Box sx={{ mt: 2 }}>
       {npc.attacks && npc.attacks.length > 0 ? (

@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useEffect, useState } from 'react';
+import { useAuth } from 'react-oidc-context';
 import { Autocomplete, TextField } from '@mui/material';
+import { fetchEnumerations } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
-import { fetchEnumerations } from '../../api/enumerations';
 
 const SelectNpcOutlookType: FC<{
   label: string;
@@ -13,11 +14,12 @@ const SelectNpcOutlookType: FC<{
   required?: boolean;
   onChange: (value: string | null) => void;
 }> = ({ label, value, name, onChange, required = false }) => {
+  const auth = useAuth();
   const { showError } = useError();
   const [options, setOptions] = useState<string[]>([]);
 
   useEffect(() => {
-    fetchEnumerations('category==outlook-type', 0, 100)
+    fetchEnumerations('category==outlook-type', 0, 100, auth)
       .then((response) => setOptions(response.content.map((e) => e.key)))
       .catch((err) => showError(err.message));
   }, []);

@@ -3,7 +3,6 @@ import { Route, Routes } from 'react-router-dom';
 import { Box, ThemeProvider } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { ErrorProvider } from './ErrorContext';
-import './i18n';
 import NpcCreation from './modules/npcs/create/NpcCreation';
 import NpcEdit from './modules/npcs/edit/NpcEdit';
 import NpcList from './modules/npcs/list/NpcList';
@@ -20,7 +19,7 @@ const App = () => {
   return (
     <ThemeProvider theme={useTheme()}>
       <ErrorProvider>
-        <Box padding={2}>
+        <Box>
           <Routes>
             <Route path="/" element={<NpcList />} />
             <Route path="/create" element={<NpcCreation />} />

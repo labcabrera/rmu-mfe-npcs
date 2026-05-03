@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Grid, TextField } from '@mui/material';
 import { NumericInput } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { t } from 'i18next';
 import { AddNpcAttack } from '../../../api/npc.dto';
 import SelectAttackTable from '../../../shared/selects/SelectAttackTable';
 import SelectAttackType from '../../../shared/selects/SelectAttackType';
@@ -12,6 +12,7 @@ const AddAttackDialog: FC<{
   onClose: () => void;
   onAttackAdded: (attack: AddNpcAttack) => void;
 }> = ({ open, onClose, onAttackAdded }) => {
+  const { t } = useTranslation();
   const [attackName, setAttackName] = useState<string>('');
   const [attackTable, setAttackTable] = useState<string>('');
   const [attackType, setAttackType] = useState<string>('');

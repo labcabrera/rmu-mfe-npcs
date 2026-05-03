@@ -1,201 +1,67 @@
-import React, { useState, useEffect, FC } from 'react';
-import EditSquareIcon from '@mui/icons-material/EditSquare';
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  ToggleButton,
-  ToggleButtonGroup,
-  Box,
-  Typography,
-} from '@mui/material';
-import { NumericInput } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { t } from 'i18next';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from '@mui/material';
+import { NumericInput, SkillSelector } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../../ErrorContext';
-import { Npc } from '../../../api/npc.dto';
 import { AddSkill } from '../../../api/npc.dto';
-import { fetchSkills } from '../../../api/skill';
-import { fetchSkillCategories } from '../../../api/skill-category';
-import { SkillCategory } from '../../../api/skill-category.dto';
-import { Skill } from '../../../api/skill.dto';
-import AddSkillSpecialization from './AddSkillSpecialization';
 
-const AddSkillDialog: FC<{
+export default function AddSkillDialog({
+  open,
+  onClose,
+  onSkillAdded,
+}: {
   open: boolean;
-  npc: Npc;
   onClose: () => void;
   onSkillAdded: (addSkill: AddSkill) => void;
-}> = ({ open, npc, onClose, onSkillAdded }) => {
+}) {
+  const { t } = useTranslation();
   const { showError } = useError();
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
-  const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
-  const [selectedSpecialization, setSelectedSpecialization] = useState<string | null>(null);
-  const [ranks, setRanks] = useState<number | null>(0);
-  const [bonus, setBonus] = useState<number | null>(0);
+  const [formData, setFormData] = useState<AddSkill>({} as AddSkill);
 
-  const [skillCategories, setSkillCategories] = useState<SkillCategory[]>([]);
-  const [skills, setSkills] = useState<Skill[]>([]);
-  const [filteredCategories, setFilteredCategories] = useState<SkillCategory[]>([]);
-  const [filteredSkills, setFilteredSkills] = useState<Skill[]>([]);
-
-  const bindSkillCategories = () => {
-    fetchSkillCategories()
-      .then((data) => setSkillCategories(data))
-      .catch((error) => showError(error.message));
-  };
-
-  const bindSkills = () => {
-    fetchSkills()
-      .then((data) => setSkills(data))
-      .catch((error) => showError(error.message));
-  };
-
-  const hasSkill = (skill: Skill): boolean => {
-    if (skill.specialization) {
-      return false;
-    }
-    return npc.skills?.some((s) => s.skillId === skill.id) ?? false;
-  };
-
-  const filterSkills = () => {
-    const notSelectedSkills = skills.filter((s) => !hasSkill(s));
-    setFilteredCategories(skillCategories.filter((c) => notSelectedSkills.some((s) => s.categoryId === c.id)));
-    setFilteredSkills(
-      notSelectedSkills.filter((s) => (selectedCategoryId ? s.categoryId === selectedCategoryId : true))
-    );
-    setSelectedSkill(null);
-    setSelectedSpecialization(null);
-    setRanks(0);
-    setBonus(0);
-  };
-
-  const onAddSkill = async () => {
-    if (!selectedSkill) {
-      showError('Please select a skill');
-      return;
-    }
-    try {
-      const skill = {
-        skillId: selectedSkill.id,
-        ranks: ranks ?? 0,
-        bonus: bonus ?? 0,
-      } as AddSkill;
-      onSkillAdded(skill);
-      handleClose();
-    } catch (error: any) {
-      showError(error.message);
-    }
-  };
-
-  const handleClose = () => {
-    setSelectedSkill(null);
-    setSelectedSpecialization(null);
-    setRanks(0);
-    setBonus(0);
+  const handleAdd = () => {
+    onSkillAdded(formData);
+    setFormData({} as AddSkill);
     onClose();
   };
 
-  const addSkillDisabled = () => {
-    if (!selectedSkill) return true;
-    if (selectedSkill.specialization && !selectedSpecialization) return true;
-    return false;
+  const handleClose = () => {
+    setFormData({} as AddSkill);
+    onClose();
   };
-
-  useEffect(() => {
-    filterSkills();
-  }, [npc, selectedCategoryId, skills]);
-
-  useEffect(() => {
-    bindSkillCategories();
-    bindSkills();
-  }, []);
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="xl" fullWidth>
       <DialogTitle>{t('add-skill')}</DialogTitle>
       <DialogContent>
         <Grid container spacing={2} sx={{ mt: 1 }}>
-          <Grid size={4}>
-            <Typography variant="subtitle1" sx={{ mb: 1 }}>
-              {t('category')}
-            </Typography>
-            <Box sx={{ display: 'flex' }}>
-              <ToggleButtonGroup
-                orientation="vertical"
-                value={selectedCategoryId}
-                exclusive
-                onChange={(_event, newCategoryId) => setSelectedCategoryId(newCategoryId)}
-                fullWidth
-                size="small"
-                aria-label="skill-categories"
-              >
-                {filteredCategories.map((c) => (
-                  <ToggleButton key={c.id} value={c.id} aria-label={c.id} sx={{ justifyContent: 'flex-start' }}>
-                    {t(c.id)}
-                  </ToggleButton>
-                ))}
-              </ToggleButtonGroup>
-            </Box>
+          <Grid size={12}>
+            <SkillSelector
+              onSkillChange={(e) => setFormData({ ...formData, skillId: e! })}
+              onSpecializationChange={(e) => setFormData({ ...formData, specialization: e! })}
+              onError={(e) => showError(e)}
+            />
           </Grid>
-          <Grid size={4}>
-            <Typography variant="subtitle1" sx={{ mb: 1 }}>
-              {t('skill')}
-            </Typography>
-            {selectedCategoryId ? (
-              <Box sx={{ display: 'flex' }}>
-                <ToggleButtonGroup
-                  orientation="vertical"
-                  value={selectedSkill?.id ?? null}
-                  exclusive
-                  onChange={(_event, newSkillId) => {
-                    const skill = filteredSkills.find((s) => s.id === newSkillId) ?? null;
-                    setSelectedSkill(skill);
-                  }}
-                  fullWidth
-                  size="small"
-                  aria-label="skills"
-                >
-                  {filteredSkills.map((s) => (
-                    <ToggleButton key={s.id} value={s.id} aria-label={s.id} sx={{ justifyContent: 'flex-start' }}>
-                      {t(s.id)}
-                      {s.specialization && <EditSquareIcon sx={{ ml: 1, fontSize: '0.8em' }} />}
-                    </ToggleButton>
-                  ))}
-                </ToggleButtonGroup>
-              </Box>
-            ) : (
-              <Typography variant="body2" color="text.secondary">
-                {t('select-skill-category-first')}
-              </Typography>
-            )}
-          </Grid>
-          <Grid size={4}>
-            {selectedSkill && (
+          <Grid size={12}>
+            {formData.skillId && (
               <>
                 <Grid container spacing={2}>
-                  <Grid size={12} mt={2}>
-                    <NumericInput label={t('ranks')} value={ranks} onChange={(value) => setRanks(value)} integer />
+                  <Grid size={12}>
+                    <NumericInput
+                      label={t('ranks')}
+                      value={formData.ranks}
+                      onChange={(e) => setFormData({ ...formData, ranks: e || 0 })}
+                      integer
+                    />
                   </Grid>
-                  <Grid size={12} mt={2}>
-                    <NumericInput label={t('bonus')} value={bonus} onChange={(value) => setBonus(value)} integer />
+                  <Grid size={12}>
+                    <NumericInput
+                      label={t('bonus')}
+                      value={formData.bonus}
+                      onChange={(e) => setFormData({ ...formData, bonus: e || 0 })}
+                      integer
+                    />
                   </Grid>
                 </Grid>
-                {selectedSkill.specialization && (
-                  <>
-                    <Typography variant="subtitle1" sx={{ mb: 1 }}>
-                      {t('Specialization')}
-                    </Typography>
-
-                    <AddSkillSpecialization
-                      skill={selectedSkill}
-                      specialization={selectedSpecialization}
-                      setSpecialization={setSelectedSpecialization}
-                    />
-                  </>
-                )}
               </>
             )}
           </Grid>
@@ -203,12 +69,10 @@ const AddSkillDialog: FC<{
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>{t('close')}</Button>
-        <Button onClick={onAddSkill} variant="contained" disabled={addSkillDisabled()}>
+        <Button onClick={handleAdd} variant="contained" disabled={!formData.skillId}>
           {t('add')}
         </Button>
       </DialogActions>
     </Dialog>
   );
-};
-
-export default AddSkillDialog;
+}

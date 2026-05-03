@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
+import { useAuth } from 'react-oidc-context';
 import { Grid, TextField } from '@mui/material';
-import { NumericInput } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { fetchRealms, NumericInput, Realm } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
 import { Npc } from '../../api/npc.dto';
-import { fetchRealms } from '../../api/realm';
-import { Realm } from '../../api/realm.dto';
 import SelectNpcCategory from '../../shared/selects/SelectNpcCategory';
 import SelectNpcOutlookType from '../../shared/selects/SelectNpcOutlookType';
 import SelectRealm from '../../shared/selects/SelectRealm';
@@ -15,13 +14,14 @@ const NpcForm: FC<{
   formData: Npc;
   setFormData: Dispatch<SetStateAction<Npc>>;
 }> = ({ formData, setFormData }) => {
+  const auth = useAuth();
   const { showError } = useError();
   const [realms, setRealms] = useState<Realm[]>([]);
 
   useEffect(() => {
-    fetchRealms('', 0, 100)
-      .then((realms) => setRealms(realms))
-      .catch((err) => showError(err));
+    fetchRealms('', 0, 100, auth)
+      .then((response) => setRealms(response.content))
+      .catch((err) => showError(err.message));
   }, []);
 
   return (
@@ -82,7 +82,7 @@ const NpcForm: FC<{
           label={t('db')}
           name="db"
           value={formData.db}
-          onChange={(e) => setFormData({ ...formData, db: e })}
+          onChange={(e) => setFormData({ ...formData, db: e || 0 })}
           integer
           min={-100}
           max={1000}
@@ -93,7 +93,7 @@ const NpcForm: FC<{
           label={t('at')}
           name="at"
           value={formData.at}
-          onChange={(e) => setFormData({ ...formData, at: e })}
+          onChange={(e) => setFormData({ ...formData, at: e || 1 })}
           integer
           min={1}
           max={10}
@@ -104,7 +104,7 @@ const NpcForm: FC<{
           label={t('initiative')}
           name="initiative"
           value={formData.initiative}
-          onChange={(e) => setFormData({ ...formData, initiative: e })}
+          onChange={(e) => setFormData({ ...formData, initiative: e || 0 })}
           integer
           min={-100}
           max={100}
@@ -115,7 +115,7 @@ const NpcForm: FC<{
           label={t('endurance')}
           name="endurance"
           value={formData.endurance}
-          onChange={(e) => setFormData({ ...formData, endurance: e })}
+          onChange={(e) => setFormData({ ...formData, endurance: e || 0 })}
           integer
           min={-100}
           max={100}

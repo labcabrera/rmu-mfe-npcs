@@ -1,6 +1,6 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Grid, TextField } from '@mui/material';
-import { t } from 'i18next';
 import { UpdateNpcDto } from '../../api/npc.dto';
 import SelectNpcCategory from '../../shared/selects/SelectNpcCategory';
 
@@ -8,8 +8,10 @@ const NpcEditResume: FC<{
   formData: UpdateNpcDto;
   setFormData: Dispatch<SetStateAction<UpdateNpcDto>>;
 }> = ({ formData, setFormData }) => {
+  const { t } = useTranslation();
+
   return (
-    <Grid container spacing={2} mt={3}>
+    <Grid container spacing={2}>
       <Grid size={12}>
         <TextField
           label={t('name')}

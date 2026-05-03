@@ -1,69 +1,99 @@
-import React, { FC, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Grid from '@mui/material/Grid';
-import { EditableAvatar, TechnicalInfo } from '@labcabrera-rmu/rmu-react-shared-lib';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from 'react-oidc-context';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+  DeleteButton,
+  DeleteDialog,
+  EditableAvatar,
+  EditButton,
+  fetchRealm,
+  LayoutBase,
+  Realm,
+  RefreshButton,
+  TechnicalInfo,
+} from '@labcabrera-rmu/rmu-react-shared-lib';
 import { useError } from '../../../ErrorContext';
-import { fetchNpc } from '../../api/npc';
+import { deleteNpc, fetchNpc } from '../../api/npc';
 import { Npc } from '../../api/npc.dto';
-import { fetchRealm } from '../../api/realm';
-import { Realm } from '../../api/realm.dto';
-import { gridSizeMain, gridSizeResume } from '../../services/display';
 import { getAvatarImages } from '../../services/image-service';
-import NpcViewActions from './NpcViewActions';
 import NpcViewAttributes from './NpcViewAttributes';
 import NpcViewResume from './NpcViewResume';
 import NpcViewAttacks from './attacks/NpcViewAttacks';
 import NpcViewSkills from './skills/NpcViewSkills';
 
-const NpcView: FC = () => {
+export default function NpcView() {
+  const auth = useAuth();
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const { showError } = useError();
   const { npcId } = useParams<{ npcId: string | undefined }>();
-  const [realm, setRealm] = useState<Realm | undefined>(undefined);
+  const [realm, setRealm] = useState<Realm>();
   const [npc, setNpc] = useState<Npc>();
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+  const updateImage = (imageUrl: string) => {};
+
+  const bindNpc = (npcId: string) => {
+    fetchNpc(npcId, auth)
+      .then((response) => setNpc(response))
+      .catch((err) => showError(err.message));
+  };
+
+  const onDelete = () => {
+    deleteNpc(npc!.id, auth)
+      .then(() => navigate('/npcs'))
+      .catch((err) => showError(err.message));
+  };
 
   useEffect(() => {
-    if (npc) {
-      fetchRealm(npc.realmId)
-        .then((response) => setRealm(response))
-        .catch((err) => showError(err.message));
-    }
+    if (!npc) return;
+    fetchRealm(npc.realmId, auth)
+      .then((response) => setRealm(response))
+      .catch((err) => showError(err.message));
   }, [npc]);
 
   useEffect(() => {
-    if (npcId) {
-      fetchNpc(npcId)
-        .then((response) => setNpc(response))
-        .catch((err) => showError(err.message));
-    }
-  }, [npcId, showError]);
+    if (!npcId) return;
+    fetchNpc(npcId, auth)
+      .then((response) => setNpc(response))
+      .catch((err) => showError(err.message));
+  }, [npcId]);
 
   if (!npc) return <p>Loading realm...</p>;
 
   return (
-    <>
-      <NpcViewActions npc={npc} setNpc={setNpc} />
-      <Grid container spacing={1}>
-        <Grid size={gridSizeResume}>
+    <LayoutBase
+      breadcrumbs={[{ name: t('home'), link: '/' }, { name: t('npcs'), link: '/npcs' }, { name: t('view') }]}
+      actions={[
+        <RefreshButton onClick={() => bindNpc(npc.id)} />,
+        <EditButton onClick={() => navigate(`/npcs/edit/${npc.id}`, { state: { npc } })} />,
+        <DeleteButton onClick={() => setDeleteDialogOpen(true)} />,
+      ]}
+      leftPanel={
+        <>
           <EditableAvatar
             imageUrl={npc.imageUrl || ''}
             images={getAvatarImages()}
-            onImageChange={function (newImageUrl: string): void {
-              throw new Error('Function not implemented.');
-            }}
+            onImageChange={(e) => updateImage(e)}
           />
           <NpcViewResume npc={npc} realm={realm} />
-        </Grid>
-        <Grid size={gridSizeMain}>
-          <NpcViewAttributes npc={npc} />
-          <NpcViewAttacks npc={npc} setNpc={setNpc} />
-          <NpcViewSkills npc={npc} setNpc={setNpc} />
-          <TechnicalInfo>
-            <pre>{JSON.stringify(npc, null, 2)}</pre>
-          </TechnicalInfo>
-        </Grid>
-      </Grid>
-    </>
+        </>
+      }
+    >
+      <NpcViewAttributes npc={npc} />
+      <NpcViewAttacks npc={npc} setNpc={setNpc} />
+      <NpcViewSkills npc={npc} setNpc={setNpc} />
+      <DeleteDialog
+        open={deleteDialogOpen}
+        message={`Are you sure you want to delete ${npc.name} NPC? This action cannot be undone.`}
+        onDelete={() => onDelete()}
+        onClose={() => setDeleteDialogOpen(false)}
+      />
+      <TechnicalInfo>
+        <pre>{JSON.stringify(npc, null, 2)}</pre>
+      </TechnicalInfo>
+    </LayoutBase>
   );
-};
-
-export default NpcView;
+}

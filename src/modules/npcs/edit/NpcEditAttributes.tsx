@@ -1,6 +1,6 @@
 import React, { Dispatch, FC, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Typography, Grid } from '@mui/material';
-import { t } from 'i18next';
 import { UpdateNpcDto } from '../../api/npc.dto';
 import { NumericInput } from '../../shared/inputs/NumericInput';
 
@@ -8,6 +8,7 @@ const NpcEditAttributes: FC<{
   formData: UpdateNpcDto;
   setFormData: Dispatch<SetStateAction<UpdateNpcDto>>;
 }> = ({ formData, setFormData }) => {
+  const { t } = useTranslation();
   return (
     <Grid container spacing={2}>
       <Grid size={12}>

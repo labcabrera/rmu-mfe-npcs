@@ -1,7 +1,8 @@
 import React, { Dispatch, FC, SetStateAction, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAuth } from 'react-oidc-context';
 import { Grid } from '@mui/material';
 import { AddButton, CategorySeparator } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { t } from 'i18next';
 import { useError } from '../../../../ErrorContext';
 import { addNpcAttack, removeNpcAttack } from '../../../api/npc';
 import { AddNpcAttack, Npc } from '../../../api/npc.dto';
@@ -12,17 +13,19 @@ const NpcViewAttacks: FC<{
   npc: Npc;
   setNpc: Dispatch<SetStateAction<Npc | undefined>>;
 }> = ({ npc, setNpc }) => {
+  const auth = useAuth();
+  const { t } = useTranslation();
   const [openAddAttackDialog, setOpenAddAttackDialog] = useState(false);
   const { showError } = useError();
 
   const onAttackAdded = (attack: AddNpcAttack) => {
-    addNpcAttack(npc.id, attack)
+    addNpcAttack(npc.id, attack, auth)
       .then((updated) => setNpc(updated))
       .catch((err) => showError(err.message));
   };
 
   const onAttackDeleted = (attackName: string) => {
-    removeNpcAttack(npc.id, attackName)
+    removeNpcAttack(npc.id, attackName, auth)
       .then((updated) => setNpc(updated))
       .catch((err) => showError(err.message));
   };
