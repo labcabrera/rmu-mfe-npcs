@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Grid, TextField } from '@mui/material';
 import { fetchRealms, NumericInput, Realm } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { t } from 'i18next';
 import { useError } from '../../../ErrorContext';
 import { Npc } from '../../api/npc.dto';
 import SelectNpcCategory from '../../shared/selects/SelectNpcCategory';
@@ -15,6 +15,7 @@ const NpcForm: FC<{
   setFormData: Dispatch<SetStateAction<Npc>>;
 }> = ({ formData, setFormData }) => {
   const auth = useAuth();
+  const { t } = useTranslation();
   const { showError } = useError();
   const [realms, setRealms] = useState<Realm[]>([]);
 
