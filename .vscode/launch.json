@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug npcs in the shell (gateway)",
+      "detail": "Stop the container first: `make mfe-dev s=npcs` in rmu-platform",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost/npcs",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "start:live",
+      "sourceMapPathOverrides": {
+        "webpack://npcs/./*": "${workspaceFolder}/*"
+      }
+    },
+    {
+      "name": "Debug npcs standalone (:8084)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:8084",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "start:live",
+      "sourceMapPathOverrides": {
+        "webpack://npcs/./*": "${workspaceFolder}/*"
+      }
+    }
+  ]
+}
