@@ -59,7 +59,7 @@ const NpcAttackTable: FC<{
           </Table>
         </TableContainer>
       ) : (
-        <p>No attacks defined.</p>
+        <p>{t('no-results')}</p>
       )}
     </Box>
   );

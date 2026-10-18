@@ -27,7 +27,7 @@ const NpcSkillTable: FC<{
           </TableRow>
         </TableHead>
         <TableBody>
-          {npc.skills.map((skill, index) => (
+          {(npc.skills ?? []).map((skill, index) => (
             <TableRow key={index}>
               <TableCell>{t(skill.skillId)}</TableCell>
               <TableCell align="right">{skill.ranks}</TableCell>

@@ -1,45 +1,45 @@
-import React, { Dispatch, FC, SetStateAction, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Grid } from '@mui/material';
 import {
   AddButton,
-  addNpcAttack,
   AddNpcAttack,
+  addNpcAttack,
   CategorySeparator,
   Npc,
   removeNpcAttack,
+  useNotify,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { useError } from '../../../../ErrorContext';
 import AddAttackDialog from './AddAttackDialog';
 import NpcAttackTable from './NpcAttackTable';
 
 const NpcViewAttacks: FC<{
   npc: Npc;
-  setNpc: Dispatch<SetStateAction<Npc | undefined>>;
+  setNpc: (npc: Npc) => void;
 }> = ({ npc, setNpc }) => {
   const auth = useAuth();
   const { t } = useTranslation();
   const [openAddAttackDialog, setOpenAddAttackDialog] = useState(false);
-  const { showError } = useError();
+  const notify = useNotify();
 
   const onAttackAdded = (attack: AddNpcAttack) => {
     addNpcAttack(npc.id, attack, auth)
       .then((updated) => setNpc(updated))
-      .catch((err) => showError(err.message));
+      .catch((err) => notify.error(err));
   };
 
   const onAttackDeleted = (attackName: string) => {
     removeNpcAttack(npc.id, attackName, auth)
       .then((updated) => setNpc(updated))
-      .catch((err) => showError(err.message));
+      .catch((err) => notify.error(err));
   };
 
   return (
     <>
       <Grid container spacing={1}>
         <Grid size={12}>
-          <CategorySeparator text={t('Attacks')}>
+          <CategorySeparator text={t('attacks')}>
             <AddButton onClick={() => setOpenAddAttackDialog(true)} />
           </CategorySeparator>
         </Grid>

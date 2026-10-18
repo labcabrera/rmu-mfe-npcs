@@ -17,7 +17,7 @@ const NpcViewResume: FC<{
           </Typography>
           <Typography variant="body1" gutterBottom>
             <Link href={`/core/realms/view/${npc.realmId}`} color="textPrimary">
-              {realm?.name || 'Loading realm...'}
+              {realm?.name || t('loading')}
             </Link>
           </Typography>
           <Typography variant="body1" gutterBottom>

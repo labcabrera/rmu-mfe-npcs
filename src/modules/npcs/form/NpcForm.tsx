@@ -1,27 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Grid, TextField } from '@mui/material';
-import { fetchRealms, Npc, NumericInput, Realm } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { useError } from '../../../ErrorContext';
+import { fetchRealms, Npc, NumericInput, Realm, SelectRealm, useNotify } from '@labcabrera-rmu/rmu-react-shared-lib';
 import SelectNpcCategory from '../../shared/selects/SelectNpcCategory';
 import SelectNpcOutlookType from '../../shared/selects/SelectNpcOutlookType';
-import SelectRealm from '../../shared/selects/SelectRealm';
 
 const NpcForm: FC<{
   formData: Npc;
-  setFormData: Dispatch<SetStateAction<Npc>>;
+  setFormData: (npc: Npc) => void;
 }> = ({ formData, setFormData }) => {
   const auth = useAuth();
   const { t } = useTranslation();
-  const { showError } = useError();
+  const notify = useNotify();
   const [realms, setRealms] = useState<Realm[]>([]);
 
   useEffect(() => {
     fetchRealms('', 0, 100, auth)
       .then((response) => setRealms(response.content))
-      .catch((err) => showError(err.message));
+      .catch((err) => notify.error(err));
   }, []);
 
   return (
@@ -40,7 +38,7 @@ const NpcForm: FC<{
         <SelectRealm
           label={t('realm')}
           value={formData.realmId}
-          onChange={(realm) => setFormData({ ...formData, realmId: realm!.id })}
+          onChange={(realmId) => setFormData({ ...formData, realmId: realmId ?? '' })}
           realms={realms}
           required
         />

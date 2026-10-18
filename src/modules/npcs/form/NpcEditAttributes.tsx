@@ -1,11 +1,11 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Typography, Grid } from '@mui/material';
 import { NumericInput, UpdateNpcDto } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 const NpcEditAttributes: FC<{
   formData: UpdateNpcDto;
-  setFormData: Dispatch<SetStateAction<UpdateNpcDto>>;
+  setFormData: (dto: UpdateNpcDto) => void;
 }> = ({ formData, setFormData }) => {
   const { t } = useTranslation();
   return (
@@ -20,7 +20,7 @@ const NpcEditAttributes: FC<{
           label={t('level')}
           name="level"
           value={formData.level}
-          onChange={(e) => setFormData({ ...formData, level: e })}
+          onChange={(e) => setFormData({ ...formData, level: e ?? undefined })}
           integer
           min={0}
           max={1000}
@@ -31,7 +31,7 @@ const NpcEditAttributes: FC<{
           label={t('hp')}
           name="hp"
           value={formData.hp}
-          onChange={(e) => setFormData({ ...formData, hp: e })}
+          onChange={(e) => setFormData({ ...formData, hp: e ?? undefined })}
           integer
           min={1}
           max={1000}
@@ -42,7 +42,7 @@ const NpcEditAttributes: FC<{
           label={t('at')}
           name="at"
           value={formData.at}
-          onChange={(e) => setFormData({ ...formData, at: e })}
+          onChange={(e) => setFormData({ ...formData, at: e ?? undefined })}
           integer
           min={1}
           max={10}
@@ -53,7 +53,7 @@ const NpcEditAttributes: FC<{
           label={t('endurance')}
           name="endurance"
           value={formData.endurance}
-          onChange={(e) => setFormData({ ...formData, endurance: e })}
+          onChange={(e) => setFormData({ ...formData, endurance: e ?? undefined })}
           integer
         />
       </Grid>

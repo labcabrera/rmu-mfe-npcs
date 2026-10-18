@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid, TextField } from '@mui/material';
 import { UpdateNpcDto } from '@labcabrera-rmu/rmu-react-shared-lib';
@@ -6,7 +6,7 @@ import SelectNpcCategory from '../../shared/selects/SelectNpcCategory';
 
 const NpcEditResume: FC<{
   formData: UpdateNpcDto;
-  setFormData: Dispatch<SetStateAction<UpdateNpcDto>>;
+  setFormData: (dto: UpdateNpcDto) => void;
 }> = ({ formData, setFormData }) => {
   const { t } = useTranslation();
 
@@ -25,9 +25,9 @@ const NpcEditResume: FC<{
       <Grid size={12}>
         <SelectNpcCategory
           label={t('category')}
-          value={formData.category}
+          value={formData.category ?? ''}
           name="category"
-          onChange={(e) => setFormData({ ...formData, category: e })}
+          onChange={(e) => setFormData({ ...formData, category: e ?? undefined })}
         />
       </Grid>
       <Grid size={12}>

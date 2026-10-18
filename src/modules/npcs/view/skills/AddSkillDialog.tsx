@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Grid } from '@mui/material';
-import { AddNpcSkill, NumericInput, RmuDialog, SkillSelector } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { useError } from '../../../../ErrorContext';
+import { AddNpcSkill, NumericInput, RmuDialog, SkillSelector, useNotify } from '@labcabrera-rmu/rmu-react-shared-lib';
+
+/** Skill being added; the API also takes the selected specialization. */
+type AddSkillForm = AddNpcSkill & { specialization?: string };
 
 export default function AddSkillDialog({
   open,
@@ -14,17 +16,17 @@ export default function AddSkillDialog({
   onSkillAdded: (addSkill: AddNpcSkill) => void;
 }) {
   const { t } = useTranslation();
-  const { showError } = useError();
-  const [formData, setFormData] = useState<AddNpcSkill>({} as AddNpcSkill);
+  const notify = useNotify();
+  const [formData, setFormData] = useState<AddSkillForm>({} as AddSkillForm);
 
   const handleAdd = () => {
     onSkillAdded(formData);
-    setFormData({} as AddNpcSkill);
+    setFormData({} as AddSkillForm);
     onClose();
   };
 
   const handleClose = () => {
-    setFormData({} as AddNpcSkill);
+    setFormData({} as AddSkillForm);
     onClose();
   };
 
@@ -45,7 +47,7 @@ export default function AddSkillDialog({
           <SkillSelector
             onSkillChange={(e) => setFormData({ ...formData, skillId: e! })}
             onSpecializationChange={(e) => setFormData({ ...formData, specialization: e! })}
-            onError={(e) => showError(e)}
+            onError={(e) => notify.error(e)}
           />
         </Grid>
         <Grid size={12}>
