@@ -31,7 +31,7 @@ const SelectNpcOutlookType: FC<{
       options={options}
       value={value === undefined || value === null ? '' : value}
       onChange={(_, newValue) => onChange(newValue)}
-      getOptionLabel={(e) => t(e)}
+      getOptionLabel={(e) => (e ? t(`outlook-${e}`) : '')}
       renderInput={(params) => <TextField {...params} label={label} name={name} fullWidth error={hasError} />}
     />
   );

@@ -63,7 +63,7 @@ const NpcViewAttributes: FC<{
         </Grid>
         <Grid size={gridSizeCard}>
           <RmuTextCard
-            value={npc.outlookType}
+            value={npc.outlookType ? t(`outlook-${npc.outlookType}`) : npc.outlookType}
             subtitle={t('outlook-type')}
             image={`${imageBaseUrl}images/generic/configuration.png`}
           />
