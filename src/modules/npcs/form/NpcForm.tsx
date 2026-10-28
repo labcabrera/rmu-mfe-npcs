@@ -3,9 +3,17 @@ import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Grid, TextField } from '@mui/material';
-import { fetchRealms, Npc, NumericInput, Realm, SelectRealm, useNotify } from '@labcabrera-rmu/rmu-react-shared-lib';
-import SelectNpcCategory from '../../shared/selects/SelectNpcCategory';
-import SelectNpcOutlookType from '../../shared/selects/SelectNpcOutlookType';
+import {
+  EnumPicker,
+  fetchRealms,
+  Npc,
+  NumericInput,
+  Realm,
+  RealmPicker,
+  useNotify,
+} from '@labcabrera-rmu/rmu-react-shared-lib';
+import { NPC_CATEGORIES } from '../npc-categories';
+import { useOutlookTypes } from '../outlook-types';
 
 const NpcForm: FC<{
   formData: Npc;
@@ -14,7 +22,8 @@ const NpcForm: FC<{
   const auth = useAuth();
   const { t } = useTranslation();
   const notify = useNotify();
-  const [realms, setRealms] = useState<Realm[]>([]);
+  const [realms, setRealms] = useState<Realm[]>();
+  const outlookTypes = useOutlookTypes();
 
   useEffect(() => {
     fetchRealms('', 0, 100, auth)
@@ -35,8 +44,10 @@ const NpcForm: FC<{
         />
       </Grid>
       <Grid size={{ xs: 12, md: 4 }}>
-        <SelectRealm
+        <RealmPicker
+          variant="select"
           label={t('realm')}
+          name="realm"
           value={formData.realmId}
           onChange={(realmId) => setFormData({ ...formData, realmId: realmId ?? '' })}
           realms={realms}
@@ -44,8 +55,11 @@ const NpcForm: FC<{
         />
       </Grid>
       <Grid size={{ xs: 12, md: 4 }}>
-        <SelectNpcCategory
+        <EnumPicker
+          variant="select"
           label={t('category')}
+          values={NPC_CATEGORIES}
+          labelPrefix="npc-category-"
           value={formData.category}
           name="category"
           onChange={(value) => setFormData({ ...formData, category: value! })}
@@ -120,8 +134,11 @@ const NpcForm: FC<{
         />
       </Grid>
       <Grid size={{ xs: 12, md: 4 }}>
-        <SelectNpcOutlookType
+        <EnumPicker
+          variant="select"
           label={t('outlook-type')}
+          values={outlookTypes ?? []}
+          labelPrefix="outlook-"
           value={formData.outlookType}
           name="outlookType"
           onChange={(e) => setFormData({ ...formData, outlookType: e! })}

@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid, Link, Typography } from '@mui/material';
 import { Npc, Realm } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { npcCategoryLabel } from '../npc-categories';
 
 const NpcViewResume: FC<{
   npc: Npc;
@@ -21,7 +22,7 @@ const NpcViewResume: FC<{
             </Link>
           </Typography>
           <Typography variant="body1" gutterBottom>
-            {t(npc.category)}
+            {npc.category ? npcCategoryLabel(npc.category, t) : ''}
           </Typography>
           <Typography variant="body1" gutterBottom>
             {npc.description}

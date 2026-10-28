@@ -1,8 +1,16 @@
 import React, { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Grid, TextField } from '@mui/material';
-import { AddNpcAttack, NumericInput, SelectAttackTable, SelectFumbleTable } from '@labcabrera-rmu/rmu-react-shared-lib';
-import SelectAttackType from '../../../shared/selects/SelectAttackType';
+import {
+  AddNpcAttack,
+  AttackTablePicker,
+  EnumPicker,
+  FumbleTablePicker,
+  NumericInput,
+} from '@labcabrera-rmu/rmu-react-shared-lib';
+
+/** Kinds of NPC attack, stored in `attackType` and shown as t(<kind>). */
+const ATTACK_TYPES = ['melee', 'ranged'];
 
 const AddAttackDialog: FC<{
   open: boolean;
@@ -55,17 +63,32 @@ const AddAttackDialog: FC<{
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <SelectAttackType
+            <EnumPicker
               label={t('attack-type')}
-              value={attackType}
-              onChange={(attackType) => setAttackType(attackType)}
+              name="attackType"
+              values={ATTACK_TYPES}
+              value={attackType || null}
+              required
+              onChange={(value) => setAttackType(value ?? '')}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <SelectAttackTable value={attackTable} onChange={(table) => setAttackTable(table ?? '')} />
+            <AttackTablePicker
+              variant="select"
+              name="attack-table"
+              value={attackTable || null}
+              required
+              onChange={(table) => setAttackTable(table ?? '')}
+            />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <SelectFumbleTable value={fumbleTable} onChange={(table) => setFumbleTable(table ?? '')} />
+            <FumbleTablePicker
+              variant="select"
+              name="fumble-table"
+              value={fumbleTable || null}
+              required
+              onChange={(table) => setFumbleTable(table ?? '')}
+            />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
             <NumericInput label={t('attack-size')} value={attackSize} onChange={(v) => setAttackSize(v)} integer />
