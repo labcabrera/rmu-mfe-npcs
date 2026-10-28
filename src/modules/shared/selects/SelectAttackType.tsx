@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Autocomplete, TextField } from '@mui/material';
-import { t } from 'i18next';
 
 const values = ['melee', 'ranged'];
 
@@ -9,6 +9,7 @@ const SelectAttackTable: FC<{
   value: string;
   onChange: (value: string) => void;
 }> = ({ label, value, onChange }) => {
+  const { t } = useTranslation();
   return (
     <Autocomplete
       options={values}

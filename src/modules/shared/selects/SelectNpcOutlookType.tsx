@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { FC, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Autocomplete, TextField } from '@mui/material';
 import { fetchEnumerations, useNotify } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { t } from 'i18next';
 
 const SelectNpcOutlookType: FC<{
   label: string;
@@ -13,6 +13,7 @@ const SelectNpcOutlookType: FC<{
   required?: boolean;
   onChange: (value: string | null) => void;
 }> = ({ label, value, name, onChange, required = false }) => {
+  const { t } = useTranslation();
   const auth = useAuth();
   const notify = useNotify();
   const [options, setOptions] = useState<string[]>([]);
