@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid, TextField } from '@mui/material';
-import { UpdateNpcDto } from '@labcabrera-rmu/rmu-react-shared-lib';
-import SelectNpcCategory from '../../shared/selects/SelectNpcCategory';
+import { EnumPicker, UpdateNpcDto } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { NPC_CATEGORIES } from '../npc-categories';
 
 const NpcEditResume: FC<{
   formData: UpdateNpcDto;
@@ -23,9 +23,12 @@ const NpcEditResume: FC<{
         />
       </Grid>
       <Grid size={12}>
-        <SelectNpcCategory
+        <EnumPicker
+          variant="select"
           label={t('category')}
-          value={formData.category ?? ''}
+          values={NPC_CATEGORIES}
+          labelPrefix="npc-category-"
+          value={formData.category ?? null}
           name="category"
           onChange={(e) => setFormData({ ...formData, category: e ?? undefined })}
         />
