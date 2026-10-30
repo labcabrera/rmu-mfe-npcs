@@ -21,9 +21,6 @@ import { TFunction } from 'i18next';
 import { NPC_TYPES } from '../npc-constants';
 import { npcName, npcTypeLabel } from '../npc-format';
 
-/** `catalog`: the public creatures; `mine`: the NPCs of the user (the API only returns those and the public ones). */
-export const NPC_ORIGINS = ['catalog', 'mine'] as const;
-
 const list = (value: string | string[]) => (Array.isArray(value) ? value : [value]);
 const level = (value: string | string[]) => {
   const number = Number(value);
@@ -39,13 +36,6 @@ export const npcFilters = (t: TFunction, realms: Realm[] | undefined): FilterSch
     kind: 'text',
     label: t('name'),
     match: (npc, value) => normalizeText(npcName(npc, t)).includes(normalizeText(String(value).trim())),
-  },
-  origin: {
-    kind: 'single',
-    label: t('npc-origin'),
-    options: NPC_ORIGINS,
-    format: (value) => t(`npc-origin-${value}`),
-    toRsql: (value) => (value === 'catalog' ? 'accessType==public' : 'accessType==private'),
   },
   realm: {
     kind: 'single',
@@ -128,7 +118,6 @@ export default function NpcListFilters({
   });
   // Built outside the JSX: the i18n lint reads string arguments there as visible text.
   const bind = {
-    origin: single('origin'),
     realm: single('realm'),
     category: single('category'),
     type: multiple('type'),
@@ -146,13 +135,6 @@ export default function NpcListFilters({
           name="q"
           value={filters.get('q')}
           onChange={(value) => filters.set('q', value ?? '')}
-        />
-        <EnumPicker
-          {...bind.origin}
-          variant="tiles"
-          label={t('npc-origin')}
-          values={NPC_ORIGINS}
-          labelPrefix="npc-origin-"
         />
       </FilterSection>
       <FilterSection title={t('npc-creature')}>
