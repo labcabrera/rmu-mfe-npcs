@@ -3,26 +3,42 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Alert, Stack } from '@mui/material';
 import {
   createNpc,
   EditableAvatar,
   fetchNpc,
+  fetchRealms,
   FormPage,
   LoadingState,
   Npc,
-  TechnicalInfo,
+  Realm,
   updateNpc,
-  UpdateNpcDto,
   useEntity,
+  useIsAdmin,
   useNotify,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
-import NpcEditAttributes from './NpcEditAttributes';
-import NpcEditResume from './NpcEditResume';
-import NpcForm from './NpcForm';
+import { canChangeNpc, npcImage } from '../npc-format';
+import NpcFormAttacks from './NpcFormAttacks';
+import NpcFormCombat from './NpcFormCombat';
+import NpcFormGeneral from './NpcFormGeneral';
+import NpcFormMovement from './NpcFormMovement';
+import NpcFormProfile from './NpcFormProfile';
+import NpcFormSkills from './NpcFormSkills';
+import {
+  emptyNpcForm,
+  npcCreateRequest,
+  NpcForm,
+  npcFormError,
+  npcToForm,
+  npcUpdateRequest,
+  SetNpcForm,
+} from './npc-form';
 
-/** Create and edit page of an NPC. Create shows the full form; edit keeps the resume/attributes layout. */
+/** Create and edit page of an NPC (spec 054): every field of the combat stat block. */
 export default function NpcFormPage({ mode }: { mode: 'create' | 'edit' }) {
   const auth = useAuth();
+  const admin = useIsAdmin();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,30 +48,43 @@ export default function NpcFormPage({ mode }: { mode: 'create' | 'edit' }) {
     initial: location.state?.npc,
     onError: notify.error,
   });
-  const [formData, setFormData] = useState<Npc>();
-  const [initialData, setInitialData] = useState<string>();
+  const [form, setForm] = useState<NpcForm>();
+  const [initial, setInitial] = useState<string>();
+  const [realms, setRealms] = useState<Realm[]>();
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (formData) return;
-    let data: Npc | undefined;
-    if (mode === 'create') data = {} as Npc;
-    else if (existing.entity) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-      const { id, ...rest } = existing.entity;
-      data = rest as Npc;
-    }
+    fetchRealms('', 0, 100, auth)
+      .then((response) => setRealms(response.content))
+      .catch(notify.error);
+  }, []);
+
+  useEffect(() => {
+    if (form) return;
+    let data: NpcForm | undefined;
+    if (mode === 'create') data = emptyNpcForm();
+    else if (existing.entity) data = npcToForm(existing.entity);
     if (data) {
-      setFormData(data);
-      setInitialData(JSON.stringify(data));
+      setForm(data);
+      setInitial(JSON.stringify(data));
     }
   }, [existing.entity]);
 
-  const toView = (npc: Npc) => navigate(`/npcs/view/${npc.id}`, { state: { npc } });
+  const set: SetNpcForm = (change) => setForm((previous) => (previous ? { ...previous, ...change } : previous));
+
+  const toView = (npc: Npc) => navigate(`/npcs/view/${npc.id}`, { state: { npc }, replace: mode === 'edit' });
 
   const onSave = () => {
-    if (!formData) return;
-    const request = mode === 'create' ? createNpc(formData, auth) : updateNpc(npcId!, formData, auth);
-    request.then(toView).catch(notify.error);
+    if (!form) return;
+    setSaving(true);
+    const request =
+      mode === 'create'
+        ? createNpc(npcCreateRequest(form, admin), auth)
+        : updateNpc(npcId!, npcUpdateRequest(form, existing.entity!.version, admin), auth);
+    request
+      .then(toView)
+      .catch(notify.error)
+      .finally(() => setSaving(false));
   };
 
   const onCancel = () => {
@@ -63,50 +92,41 @@ export default function NpcFormPage({ mode }: { mode: 'create' | 'edit' }) {
     else navigate(`/npcs/view/${npcId}`, { state: { npc: existing.entity } });
   };
 
-  const setDto = (dto: UpdateNpcDto) => setFormData(dto as Npc);
-
-  const breadcrumbs = [
-    { name: t('home'), link: '/' },
-    { name: t('npcs'), link: '/npcs' },
-    { name: t(mode === 'create' ? 'create' : 'edit') },
-  ];
-
-  const avatar = formData && (
-    <EditableAvatar
-      imageUrl={formData.imageUrl || ''}
-      onImageChange={(imageUrl) => setFormData({ ...formData, imageUrl })}
-    />
-  );
+  const error = form ? npcFormError(form) : null;
+  const readOnly = mode === 'edit' && !!existing.entity && !canChangeNpc(auth, existing.entity);
 
   return (
     <FormPage
-      breadcrumbs={breadcrumbs}
+      breadcrumbs={[
+        { name: t('home'), link: '/' },
+        { name: t('npcs'), link: '/npcs' },
+        { name: t(mode === 'create' ? 'create' : 'edit') },
+      ]}
+      entity={mode === 'edit' ? existing : undefined}
       onSave={onSave}
       onCancel={onCancel}
-      saveDisabled={!formData || (mode === 'create' && !formData.name)}
-      dirty={!!formData && JSON.stringify(formData) !== initialData}
+      saveDisabled={!form || !!error || saving || readOnly}
+      dirty={!!form && JSON.stringify(form) !== initial}
       leftPanel={
-        mode === 'create'
-          ? avatar
-          : formData && (
-              <>
-                {avatar}
-                <NpcEditResume formData={formData} setFormData={setDto} />
-              </>
-            )
+        form && (
+          <EditableAvatar
+            imageUrl={npcImage({ ...form, source: existing.entity?.source ?? null })}
+            onImageChange={(imageUrl) => set({ imageUrl })}
+          />
+        )
       }
     >
-      {formData ? (
-        <>
-          {mode === 'create' ? (
-            <NpcForm formData={formData} setFormData={setFormData} />
-          ) : (
-            <NpcEditAttributes formData={formData} setFormData={setDto} />
-          )}
-          <TechnicalInfo>
-            <pre>{JSON.stringify(formData, null, 2)}</pre>
-          </TechnicalInfo>
-        </>
+      {form ? (
+        <Stack spacing={2}>
+          {readOnly && <Alert severity="warning">{t('npc-read-only')}</Alert>}
+          {error && <Alert severity="info">{t(error)}</Alert>}
+          <NpcFormGeneral form={form} set={set} realms={realms} mode={mode} admin={admin} />
+          <NpcFormCombat form={form} set={set} />
+          <NpcFormAttacks form={form} set={set} />
+          <NpcFormMovement form={form} set={set} />
+          <NpcFormSkills form={form} set={set} />
+          <NpcFormProfile form={form} set={set} />
+        </Stack>
       ) : (
         <LoadingState variant="detail" />
       )}
