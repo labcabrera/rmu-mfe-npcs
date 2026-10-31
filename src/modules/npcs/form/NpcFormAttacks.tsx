@@ -40,7 +40,8 @@ const ADDITIONAL_CRITICALS = Object.keys(NPC_ADDITIONAL_CRITICALS);
 
 /**
  * The attacks as structured fields, each with a preview of its stat block notation. Changing an attack drops its
- * printed notation: the saved one is built from the fields.
+ * printed notation: the saved one is built from the fields. The table may be left empty for an attack with no table of
+ * its own (`we`, `rw`, special attacks; spec 060): it is saved as null.
  */
 const NpcFormAttacks: FC<{ form: NpcForm; set: SetNpcForm }> = ({ form, set }) => {
   const auth = useAuth();
@@ -122,9 +123,9 @@ const NpcFormAttacks: FC<{ form: NpcForm; set: SetNpcForm }> = ({ form, set }) =
                   variant="select"
                   name={`attackTable-${index}`}
                   value={attack.attackTable || null}
-                  onChange={(value) => change(index, { attackTable: value ?? '' })}
-                  error={!attack.attackTable}
-                  required
+                  onChange={(value) => change(index, { attackTable: value || null })}
+                  helperText={attack.attackTable ? undefined : t('npc-attack-no-table')}
+                  clearable
                 />
               </Grid>
               <Grid size={{ xs: 12, sm: 6, md: 3 }}>
