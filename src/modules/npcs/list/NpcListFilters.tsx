@@ -161,7 +161,7 @@ export default function NpcListFilters({
         />
       </FilterSection>
       <FilterSection title={t('realm')}>
-        <RealmPicker {...bind.realm} realms={realms} />
+        <RealmPicker {...bind.realm} realms={realms} variant="select" />
       </FilterSection>
     </>
   );
