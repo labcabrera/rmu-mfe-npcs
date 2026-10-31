@@ -68,7 +68,7 @@ export const npcToForm = (npc: Npc): NpcForm => {
 export const newAttack = (): NpcAttack => ({
   ob: 0,
   size: 5,
-  attackTable: '',
+  attackTable: null,
   fumbleTable: null,
   additionalCritical: null,
   sequence: null,
@@ -94,18 +94,19 @@ export const newSkill = (skillId: string, specialization: string | null): NpcSki
 export const npcFormError = (form: NpcForm): string | null => {
   if (!form.name.trim()) return 'npc-error-name';
   if (!form.realmId) return 'npc-error-realm';
-  if (form.attacks.some((attack) => !attack.attackTable)) return 'npc-error-attack-table';
   if (form.encounter && !form.encounter.group.trim()) return 'npc-error-encounter-group';
   if (form.shield && !NPC_SHIELD_TYPES.includes(form.shield.type)) return 'npc-error-shield-type';
   return null;
 };
 
-// An attack changed in the form has no printed notation: it gets the one built from its fields.
+// An attack changed in the form has no printed notation: it gets the one built from its fields. An empty table is
+// saved as null, an attack with no table (spec 060).
 const withNotations = (form: NpcForm): NpcForm => ({
   ...form,
-  attacks: form.attacks.map((attack) =>
-    attack.notation ? attack : { ...attack, notation: npcAttackNotation(attack) }
-  ),
+  attacks: form.attacks.map((attack) => {
+    const withTable = { ...attack, attackTable: attack.attackTable || null };
+    return withTable.notation ? withTable : { ...withTable, notation: npcAttackNotation(withTable) };
+  }),
 });
 
 export const npcCreateRequest = (form: NpcForm, admin: boolean): CreateNpcDto => {
