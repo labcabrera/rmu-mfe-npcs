@@ -3,7 +3,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Alert, Chip } from '@mui/material';
+import CasinoIcon from '@mui/icons-material/Casino';
+import { Alert, Button, Chip } from '@mui/material';
 import {
   EntityCard,
   fetchNpcs,
@@ -89,6 +90,11 @@ export default function NpcListPage() {
       query={query}
       getKey={(npc) => npc.id}
       onAdd={() => navigate('/npcs/create')}
+      actions={[
+        <Button key="encounters" size="small" startIcon={<CasinoIcon />} onClick={() => navigate('/npcs/encounters')}>
+          {t('encounter-title')}
+        </Button>,
+      ]}
       filtersLayout="side"
       filterState={filters}
       filtersStorageKey="npcs.list"
