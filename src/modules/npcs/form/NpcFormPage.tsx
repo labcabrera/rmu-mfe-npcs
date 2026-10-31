@@ -6,7 +6,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Alert, Stack } from '@mui/material';
 import {
   createNpc,
-  EditableAvatar,
+  EntityImage,
   fetchNpc,
   fetchRealms,
   FormPage,
@@ -109,8 +109,8 @@ export default function NpcFormPage({ mode }: { mode: 'create' | 'edit' }) {
       dirty={!!form && JSON.stringify(form) !== initial}
       leftPanel={
         form && (
-          <EditableAvatar
-            imageUrl={npcImage({ ...form, source: existing.entity?.source ?? null })}
+          <EntityImage
+            image={npcImage({ ...form, source: existing.entity?.source ?? null })}
             onImageChange={(imageUrl) => set({ imageUrl })}
           />
         )

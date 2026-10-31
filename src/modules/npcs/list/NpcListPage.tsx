@@ -8,7 +8,6 @@ import {
   EntityCard,
   fetchNpcs,
   fetchRealms,
-  gridSizeShowcase,
   ListPage,
   Npc,
   Realm,
@@ -94,7 +93,7 @@ export default function NpcListPage() {
       filterState={filters}
       filtersStorageKey="npcs.list"
       filters={<NpcListFilters filters={filters} realms={realms} />}
-      collection={{ modes: ['cards'], storageKey: 'npcs.list', cardSize: gridSizeShowcase }}
+      collection={{ modes: ['cards'], storageKey: 'npcs.list' }}
       renderItem={(npc) => {
         const catalog = isCatalogNpc(npc);
         return (
@@ -105,7 +104,6 @@ export default function NpcListPage() {
               .join(' · ')}
             image={npcImage(npc)}
             fallbackImages={['images/npcs/unknown.png']}
-            imageRatio="portrait"
             locked={!catalog}
             lockedLabel={t('npc-origin-mine')}
             chips={
