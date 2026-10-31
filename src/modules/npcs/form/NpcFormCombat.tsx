@@ -1,14 +1,18 @@
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Checkbox, FormControlLabel, FormGroup, Grid, Switch, TextField, Typography } from '@mui/material';
+import { Checkbox, FormControlLabel, FormGroup, Grid, Switch, Typography } from '@mui/material';
 import {
   CREATURE_SIZES,
   creatureSizeLabel,
   CreatureSize,
   EnumPicker,
   NPC_CRITICAL_IMMUNITIES,
+  NPC_SHIELD_TYPE_DB,
+  NPC_SHIELD_TYPES,
   NpcCriticalCodes,
   NpcCriticalImmunity,
+  NpcShield,
+  NpcShieldType,
   NumericInput,
   Panel,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
@@ -28,6 +32,13 @@ const NpcFormCombat: FC<{ form: NpcForm; set: SetNpcForm }> = ({ form, set }) =>
   const codes = form.criticalCodes;
   const setCodes = (change: Partial<NpcCriticalCodes>) => set({ criticalCodes: { ...codes, ...change } });
   const optional = (value: number | null | undefined) => value ?? null;
+  const setShield = (change: Partial<NpcShield>) => set({ shield: { ...form.shield!, ...change } });
+  // A DB left as the one of the old type follows the new type (Table 9-6); a DB typed by hand stays.
+  const setShieldType = (type: NpcShieldType) => {
+    const db = form.shield!.db;
+    const followsType = db === null || db === undefined || db === NPC_SHIELD_TYPE_DB[form.shield!.type];
+    setShield({ type, db: followsType ? NPC_SHIELD_TYPE_DB[type] : db });
+  };
 
   return (
     <Panel title={t('npc-section-combat')}>
@@ -165,38 +176,58 @@ const NpcFormCombat: FC<{ form: NpcForm; set: SetNpcForm }> = ({ form, set }) =>
             control={
               <Switch
                 checked={!!form.shield}
-                onChange={(e) => set({ shield: e.target.checked ? { type: 'normal', ranks: 0, bonus: 0 } : null })}
+                onChange={(e) =>
+                  set({
+                    shield: e.target.checked
+                      ? { type: 'normal', db: NPC_SHIELD_TYPE_DB.normal, ranks: 0, bonus: 0 }
+                      : null,
+                  })
+                }
               />
             }
             label={t('npc-shield')}
           />
           {form.shield && (
             <Grid container spacing={2}>
-              <Grid size={{ xs: 12, sm: 4 }}>
-                <TextField
+              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                <EnumPicker
+                  variant="select"
                   label={t('type')}
                   name="shieldType"
+                  values={NPC_SHIELD_TYPES}
+                  formatLabel={(value) => t(`npc-shield-type-${value}`)}
                   value={form.shield.type}
-                  onChange={(e) => set({ shield: { ...form.shield!, type: e.target.value } })}
-                  fullWidth
+                  onChange={(value) => setShieldType((value ?? 'normal') as NpcShieldType)}
+                  required
                 />
               </Grid>
-              <Grid size={{ xs: 6, sm: 4 }}>
+              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                 <NumericInput
-                  label={t('ranks')}
-                  name="shieldRanks"
-                  value={form.shield.ranks}
-                  onChange={(value) => set({ shield: { ...form.shield!, ranks: value ?? 0 } })}
+                  label={t('shield-db')}
+                  name="shieldDb"
+                  value={form.shield.db}
+                  onChange={(value) => setShield({ db: optional(value) })}
+                  placeholder={String(NPC_SHIELD_TYPE_DB[form.shield.type])}
                   integer
                   min={0}
                 />
               </Grid>
-              <Grid size={{ xs: 6, sm: 4 }}>
+              <Grid size={{ xs: 6, md: 3 }}>
                 <NumericInput
-                  label={t('bonus')}
+                  label={t('npc-shield-ranks')}
+                  name="shieldRanks"
+                  value={form.shield.ranks}
+                  onChange={(value) => setShield({ ranks: optional(value) })}
+                  integer
+                  min={0}
+                />
+              </Grid>
+              <Grid size={{ xs: 6, md: 3 }}>
+                <NumericInput
+                  label={t('npc-shield-bonus')}
                   name="shieldBonus"
                   value={form.shield.bonus}
-                  onChange={(value) => set({ shield: { ...form.shield!, bonus: value ?? 0 } })}
+                  onChange={(value) => setShield({ bonus: optional(value) })}
                   integer
                 />
               </Grid>

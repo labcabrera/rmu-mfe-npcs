@@ -3,6 +3,7 @@ import {
   Npc,
   NpcAttack,
   NpcMovement,
+  NPC_SHIELD_TYPES,
   npcAttackNotation,
   NpcSkill,
   UpdateNpcDto,
@@ -95,7 +96,7 @@ export const npcFormError = (form: NpcForm): string | null => {
   if (!form.realmId) return 'npc-error-realm';
   if (form.attacks.some((attack) => !attack.attackTable)) return 'npc-error-attack-table';
   if (form.encounter && !form.encounter.group.trim()) return 'npc-error-encounter-group';
-  if (form.shield && !form.shield.type.trim()) return 'npc-error-shield-type';
+  if (form.shield && !NPC_SHIELD_TYPES.includes(form.shield.type)) return 'npc-error-shield-type';
   return null;
 };
 
