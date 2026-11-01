@@ -78,6 +78,7 @@ export default function AddToTacticalGameDialog({ open, onClose, npcId, count, d
       open={open}
       title={t('encounter-add-to-game')}
       maxWidth="sm"
+      onDismiss={busy ? undefined : onClose}
       buttons={
         <>
           <Button onClick={onClose} disabled={busy}>
