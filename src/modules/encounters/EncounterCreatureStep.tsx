@@ -5,13 +5,15 @@ import { useAuth } from 'react-oidc-context';
 import CasinoIcon from '@mui/icons-material/Casino';
 import ReplayIcon from '@mui/icons-material/Replay';
 import UndoIcon from '@mui/icons-material/Undo';
-import { Alert, Box, Button, Chip, CircularProgress, Stack, Typography } from '@mui/material';
+import { Alert, Box, Button, Chip, Stack, Typography } from '@mui/material';
 import {
   D100,
+  EmptyState,
   EncounterNextRoll,
   EncounterPathStep,
   EncounterTableSummary,
   formatBonus,
+  LoadingState,
   OPEN_D100,
   Panel,
   resolveEncounter,
@@ -134,7 +136,7 @@ export default function EncounterCreatureStep({ situation, tables, onNewEncounte
                 fullWidth
               />
             )}
-            {busy && <CircularProgress size={24} aria-label={t('loading')} />}
+            {busy && <LoadingState variant="inline" />}
             {error && !busy && <Alert severity="error">{t('encounter-resolve-error')}</Alert>}
             {clamped && <Alert severity="info">{t('encounter-clamped')}</Alert>}
           </Stack>
@@ -144,9 +146,7 @@ export default function EncounterCreatureStep({ situation, tables, onNewEncounte
             <EncounterResultCard result={result} partyLevels={situation.partyLevels} />
           ) : (
             <Panel title={t('encounter-result')}>
-              <Typography variant="body2" color="text.secondary">
-                {t('encounter-result-pending')}
-              </Typography>
+              <EmptyState dense title={t('encounter-result-pending')} />
             </Panel>
           )}
         </Box>

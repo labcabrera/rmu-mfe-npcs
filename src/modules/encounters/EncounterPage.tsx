@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { useSearchParams } from 'react-router-dom';
-import { Alert, Button, Stack, Step, StepButton, Stepper } from '@mui/material';
+import { Alert, Button, Stack } from '@mui/material';
 import {
   EncounterCheckResult,
   EncounterSettings,
@@ -12,6 +12,8 @@ import {
   ErrorState,
   fetchEncounterSettings,
   fetchEncounterTables,
+  FlowStep,
+  FlowSteps,
   LayoutBase,
   LoadingState,
   RollValue,
@@ -23,6 +25,7 @@ import EncounterSituationStep from './EncounterSituationStep';
 import { EncounterSituation, missingValues, readSituation, writeSituation } from './encounter-situation';
 
 const STEPS = ['encounter-step-situation', 'encounter-step-check', 'encounter-step-creature'];
+const CHECK_STEP = 1;
 
 /**
  * Creature Law encounter rolls (spec 061): the situation (kept in the URL), the avoidance and activity check
@@ -65,12 +68,6 @@ export default function EncounterPage() {
 
   const missing = settings ? missingValues(situation, settings.modifiers) : [];
   const situationReady = !!situation.tableId && (situation.skipCheck || missing.length === 0);
-  const canOpen = (index: number) => {
-    if (index === 0) return true;
-    if (!situationReady) return false;
-    if (index === 1) return !situation.skipCheck;
-    return situation.skipCheck || !!check;
-  };
   const goCreature = () => {
     setRun((count) => count + 1);
     setStep(2);
@@ -82,90 +79,92 @@ export default function EncounterPage() {
     setStep(situation.skipCheck ? 2 : 1);
   };
 
+  const stepContent = (index: number): React.ReactNode => {
+    if (!tables || !settings) return null;
+    if (index === 0)
+      return (
+        <Stack spacing={2}>
+          <EncounterSituationStep situation={situation} onChange={setSituation} tables={tables} settings={settings} />
+          {!situation.tableId && <Alert severity="info">{t('encounter-pick-table')}</Alert>}
+          {missing.length > 0 && !situation.skipCheck && (
+            <Alert severity="warning">
+              {t('encounter-missing-values', {
+                modifiers: missing.map((key) => t(`encounter-mod-${key}`)).join(', '),
+              })}
+            </Alert>
+          )}
+          <Stack direction="row" sx={{ justifyContent: 'flex-end' }}>
+            <Button
+              variant="contained"
+              disabled={!situationReady}
+              onClick={() => (situation.skipCheck ? goCreature() : setStep(1))}
+            >
+              {t(situation.skipCheck ? 'encounter-go-creature' : 'next')}
+            </Button>
+          </Stack>
+        </Stack>
+      );
+    if (index === 1)
+      return (
+        <Stack spacing={2}>
+          <EncounterCheckStep
+            situation={situation}
+            tables={tables}
+            settings={settings}
+            rolls={checkRolls}
+            onRollsChange={setCheckRolls}
+            result={check}
+            onResult={setCheck}
+          />
+          <Stack direction="row" sx={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: 1 }}>
+            <Button onClick={() => setStep(0)}>{t('back')}</Button>
+            <Stack direction="row" sx={{ gap: 1, flexWrap: 'wrap' }}>
+              <Button
+                onClick={() => {
+                  setCheckRolls({});
+                  setCheck(null);
+                }}
+                disabled={!checkRolls.avoidance && !checkRolls.activity}
+              >
+                {t('encounter-reroll-check')}
+              </Button>
+              <Button
+                variant={check?.encounter === false ? 'outlined' : 'contained'}
+                disabled={!check}
+                onClick={goCreature}
+              >
+                {t(check?.encounter === false ? 'encounter-go-creature-anyway' : 'encounter-go-creature')}
+              </Button>
+            </Stack>
+          </Stack>
+        </Stack>
+      );
+    return (
+      <Stack spacing={2}>
+        {check && !situation.skipCheck && !check.encounter && (
+          <Alert severity="info">{t('encounter-check-none')}</Alert>
+        )}
+        <EncounterCreatureStep key={run} situation={situation} tables={tables} onNewEncounter={newEncounter} />
+        <Stack direction="row">
+          <Button onClick={() => setStep(situation.skipCheck ? 0 : 1)}>{t('back')}</Button>
+        </Stack>
+      </Stack>
+    );
+  };
+  const flowSteps: FlowStep[] = STEPS.map((label, index) => ({ index, label }))
+    .filter(({ index }) => index !== CHECK_STEP || !situation.skipCheck)
+    .map(({ index, label }) => ({ id: label, label: t(label), content: stepContent(index) }));
+
   let content: React.ReactNode;
   if (error && (!tables || !settings)) content = <ErrorState error={error} onRetry={() => setReloads((n) => n + 1)} />;
   else if (!tables || !settings) content = <LoadingState variant="detail" />;
   else
     content = (
-      <Stack spacing={3}>
-        <Stepper nonLinear activeStep={step} alternativeLabel>
-          {STEPS.map((label, index) => (
-            <Step key={label} completed={index < step} disabled={!canOpen(index)}>
-              <StepButton onClick={() => setStep(index)}>{t(label)}</StepButton>
-            </Step>
-          ))}
-        </Stepper>
-
-        {step === 0 && (
-          <Stack spacing={2}>
-            <EncounterSituationStep situation={situation} onChange={setSituation} tables={tables} settings={settings} />
-            {!situation.tableId && <Alert severity="info">{t('encounter-pick-table')}</Alert>}
-            {missing.length > 0 && !situation.skipCheck && (
-              <Alert severity="warning">
-                {t('encounter-missing-values', {
-                  modifiers: missing.map((key) => t(`encounter-mod-${key}`)).join(', '),
-                })}
-              </Alert>
-            )}
-            <Stack direction="row" sx={{ justifyContent: 'flex-end' }}>
-              <Button
-                variant="contained"
-                disabled={!situationReady}
-                onClick={() => (situation.skipCheck ? goCreature() : setStep(1))}
-              >
-                {t(situation.skipCheck ? 'encounter-go-creature' : 'next')}
-              </Button>
-            </Stack>
-          </Stack>
-        )}
-
-        {step === 1 && (
-          <Stack spacing={2}>
-            <EncounterCheckStep
-              situation={situation}
-              tables={tables}
-              settings={settings}
-              rolls={checkRolls}
-              onRollsChange={setCheckRolls}
-              result={check}
-              onResult={setCheck}
-            />
-            <Stack direction="row" sx={{ justifyContent: 'space-between', flexWrap: 'wrap', gap: 1 }}>
-              <Button onClick={() => setStep(0)}>{t('back')}</Button>
-              <Stack direction="row" sx={{ gap: 1, flexWrap: 'wrap' }}>
-                <Button
-                  onClick={() => {
-                    setCheckRolls({});
-                    setCheck(null);
-                  }}
-                  disabled={!checkRolls.avoidance && !checkRolls.activity}
-                >
-                  {t('encounter-reroll-check')}
-                </Button>
-                <Button
-                  variant={check?.encounter === false ? 'outlined' : 'contained'}
-                  disabled={!check}
-                  onClick={goCreature}
-                >
-                  {t(check?.encounter === false ? 'encounter-go-creature-anyway' : 'encounter-go-creature')}
-                </Button>
-              </Stack>
-            </Stack>
-          </Stack>
-        )}
-
-        {step === 2 && (
-          <Stack spacing={2}>
-            {check && !situation.skipCheck && !check.encounter && (
-              <Alert severity="info">{t('encounter-check-none')}</Alert>
-            )}
-            <EncounterCreatureStep key={run} situation={situation} tables={tables} onNewEncounter={newEncounter} />
-            <Stack direction="row">
-              <Button onClick={() => setStep(situation.skipCheck ? 0 : 1)}>{t('back')}</Button>
-            </Stack>
-          </Stack>
-        )}
-      </Stack>
+      <FlowSteps
+        steps={flowSteps}
+        activeIndex={flowSteps.findIndex((flowStep) => flowStep.id === STEPS[step])}
+        onReview={(id) => id && setStep(STEPS.indexOf(id))}
+      />
     );
 
   return (

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
-import { Alert, Box, CircularProgress, Stack, Typography } from '@mui/material';
+import { Alert, Box, Stack, Typography } from '@mui/material';
 import {
   EncounterCheckResult,
   EncounterCode,
@@ -10,6 +10,7 @@ import {
   EncounterSide,
   EncounterTableSummary,
   formatBonus,
+  LoadingState,
   OPEN_D100,
   Panel,
   resolveEncounter,
@@ -114,7 +115,7 @@ export default function EncounterCheckStep({
       <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', md: 'repeat(2, minmax(0, 1fr))' } }}>
         {ENCOUNTER_SIDES.map(rollPanel)}
       </Box>
-      {busy && <CircularProgress size={24} aria-label={t('loading')} />}
+      {busy && <LoadingState variant="inline" />}
       {result && !busy && (
         <Panel title={t('encounter-check-result')}>
           <Stack spacing={1.5}>
