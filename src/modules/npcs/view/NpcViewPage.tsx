@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import DiamondOutlinedIcon from '@mui/icons-material/DiamondOutlined';
 import EmojiObjectsIcon from '@mui/icons-material/EmojiObjects';
 import PersonIcon from '@mui/icons-material/Person';
 import SportsMmaIcon from '@mui/icons-material/SportsMma';
@@ -26,6 +27,7 @@ import {
   useNotify,
   useSectionParam,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
+import NpcTreasureDialog, { npcTreasureCodes } from '../../treasure/NpcTreasureDialog';
 import { canChangeNpc, isCatalogNpc, npcImage, npcName, npcTypeLabel } from '../npc-format';
 import DuplicateNpcDialog from './DuplicateNpcDialog';
 import { NpcViewProfile, NpcViewTalents } from './NpcViewSections';
@@ -58,6 +60,7 @@ export default function NpcViewPage() {
   const [realms, setRealms] = useState<Realm[]>();
   const [imageDialogOpen, setImageDialogOpen] = useState(false);
   const [duplicateOpen, setDuplicateOpen] = useState(false);
+  const [treasureOpen, setTreasureOpen] = useState(false);
   const [section, setSection] = useSectionParam(SECTIONS);
   const canChange = canChangeNpc(auth, npc);
   // The filters of the list it was opened from.
@@ -97,7 +100,18 @@ export default function NpcViewPage() {
       ]}
       entity={state}
       technicalInfo={false}
-      actions={() => [
+      actions={(entity) => [
+        ...(auth.isAuthenticated && npcTreasureCodes(entity.details?.treasure)
+          ? [
+              <RmuIconButton
+                key="treasure"
+                Icon={DiamondOutlinedIcon}
+                tooltip="treasure-roll"
+                ariaLabel="treasure-roll"
+                onClick={() => setTreasureOpen(true)}
+              />,
+            ]
+          : []),
         <RmuIconButton
           key="duplicate"
           Icon={ContentCopyIcon}
@@ -167,6 +181,11 @@ export default function NpcViewPage() {
             open={duplicateOpen}
             onClose={() => setDuplicateOpen(false)}
             onCreated={onDuplicated}
+          />
+          <NpcTreasureDialog
+            open={treasureOpen}
+            onClose={() => setTreasureOpen(false)}
+            codes={npcTreasureCodes(entity.details?.treasure)}
           />
         </Stack>
       )}
