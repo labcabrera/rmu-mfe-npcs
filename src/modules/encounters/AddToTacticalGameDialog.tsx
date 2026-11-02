@@ -2,24 +2,16 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
-import {
-  Alert,
-  Button,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  MenuItem,
-  Stack,
-  TextField,
-} from '@mui/material';
+import { Alert, Button, MenuItem, Stack, TextField } from '@mui/material';
 import {
   addTacticalGameNpcs,
+  EmptyState,
   ENVIRONMENT_FACTION_ID,
   fetchTacticalGames,
   isAdmin,
+  LoadingState,
   NumericInput,
+  RmuDialog,
   TacticalGame,
   useNotify,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
@@ -82,49 +74,53 @@ export default function AddToTacticalGameDialog({ open, onClose, npcId, count, d
   };
 
   return (
-    <Dialog open={open} onClose={busy ? undefined : onClose} fullWidth maxWidth="xs">
-      <DialogTitle>{t('encounter-add-to-game')}</DialogTitle>
-      <DialogContent>
-        <Stack spacing={2} sx={{ pt: 1 }}>
-          {!games && <CircularProgress size={24} aria-label={t('loading')} />}
-          {games && games.length === 0 && <Alert severity="info">{t('encounter-no-created-games')}</Alert>}
-          {games && games.length > 0 && (
-            <>
-              <TextField
-                select
-                fullWidth
-                label={t('tactical-game')}
-                value={gameId}
-                onChange={(event) => setGameId(event.target.value)}
-              >
-                {games.map((game) => (
-                  <MenuItem key={game.id} value={game.id}>
-                    {game.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <NumericInput
-                label={t('encounter-number')}
-                value={amount}
-                onChange={setAmount}
-                integer
-                min={1}
-                error={!amount || amount < 1}
-              />
-              <TextField fullWidth label={t('name')} value={name} onChange={(event) => setName(event.target.value)} />
-              <Alert severity="info">{t('encounter-add-to-game-help')}</Alert>
-            </>
-          )}
-        </Stack>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} disabled={busy}>
-          {t('cancel')}
-        </Button>
-        <Button variant="contained" onClick={onAdd} disabled={!valid || busy}>
-          {t('add')}
-        </Button>
-      </DialogActions>
-    </Dialog>
+    <RmuDialog
+      open={open}
+      title={t('encounter-add-to-game')}
+      maxWidth="sm"
+      onDismiss={busy ? undefined : onClose}
+      buttons={
+        <>
+          <Button onClick={onClose} disabled={busy}>
+            {t('cancel')}
+          </Button>
+          <Button variant="contained" onClick={onAdd} disabled={!valid || busy}>
+            {t('add')}
+          </Button>
+        </>
+      }
+    >
+      <Stack spacing={2}>
+        {!games && <LoadingState variant="inline" />}
+        {games && games.length === 0 && <EmptyState dense title={t('encounter-no-created-games')} />}
+        {games && games.length > 0 && (
+          <>
+            <TextField
+              select
+              fullWidth
+              label={t('tactical-game')}
+              value={gameId}
+              onChange={(event) => setGameId(event.target.value)}
+            >
+              {games.map((game) => (
+                <MenuItem key={game.id} value={game.id}>
+                  {game.name}
+                </MenuItem>
+              ))}
+            </TextField>
+            <NumericInput
+              label={t('encounter-number')}
+              value={amount}
+              onChange={setAmount}
+              integer
+              min={1}
+              error={!amount || amount < 1}
+            />
+            <TextField fullWidth label={t('name')} value={name} onChange={(event) => setName(event.target.value)} />
+            <Alert severity="info">{t('encounter-add-to-game-help')}</Alert>
+          </>
+        )}
+      </Stack>
+    </RmuDialog>
   );
 }

@@ -2,11 +2,12 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Stack } from '@mui/material';
 import {
+  bindSingle,
   biomeLabel,
-  ClearableTextField,
   CREATURE_SIZES,
   EnumPicker,
   FilterSchema,
+  FilterSearchField,
   FilterSection,
   ListFilters,
   normalizeText,
@@ -99,11 +100,7 @@ export default function NpcListFilters({
   realms: Realm[] | undefined;
 }) {
   const { t } = useTranslation();
-  const single = (key: string) => ({
-    value: filters.get(key) || null,
-    onChange: (id: string | null) => filters.set(key, id),
-    allowAll: true,
-  });
+  const single = (key: string) => bindSingle(filters, key);
   const multiple = (key: string) => ({
     mode: 'multiple' as const,
     value: filters.getAll(key),
@@ -130,12 +127,7 @@ export default function NpcListFilters({
   return (
     <>
       <FilterSection title={t('search')} collapsible={false}>
-        <ClearableTextField
-          label={t('name')}
-          name="q"
-          value={filters.get('q')}
-          onChange={(value) => filters.set('q', value ?? '')}
-        />
+        <FilterSearchField filters={filters} filter="q" label={t('name')} />
       </FilterSection>
       <FilterSection title={t('npc-creature')}>
         <EnumPicker {...bind.category} label={t('category')} values={NPC_CATEGORIES} labelPrefix="npc-category-" />

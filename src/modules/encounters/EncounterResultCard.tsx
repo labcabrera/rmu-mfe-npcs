@@ -6,28 +6,17 @@ import { Link as RouterLink } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import CasinoIcon from '@mui/icons-material/Casino';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import {
-  Alert,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  CircularProgress,
-  IconButton,
-  Link,
-  MenuItem,
-  Stack,
-  TextField,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import { Alert, Box, Button, IconButton, Link, MenuItem, Stack, TextField, Tooltip, Typography } from '@mui/material';
 import {
   EncounterResult,
   EntityImage,
   fetchNpc,
+  LoadingState,
   Npc,
   NumericInput,
+  Panel,
   rollEncounterDice,
+  SectionLabel,
   StatPill,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { npcImage, npcName, npcTypeLabel } from '../npcs/npc-format';
@@ -52,9 +41,7 @@ export default function EncounterResultCard({ result, partyLevels }: Props) {
     case 'race':
       body = (
         <Stack spacing={1}>
-          <Typography variant="overline" color="text.secondary">
-            {t('race')}
-          </Typography>
+          <SectionLabel>{t('race')}</SectionLabel>
           {entry.raceId ? (
             <Link component={RouterLink} to={`/core/races/view/${entry.raceId}`} variant="h6">
               {entry.label}
@@ -68,9 +55,7 @@ export default function EncounterResultCard({ result, partyLevels }: Props) {
     case 'event':
       body = (
         <Stack spacing={1}>
-          <Typography variant="overline" color="text.secondary">
-            {t('encounter-result-event')}
-          </Typography>
+          <SectionLabel>{t('encounter-result-event')}</SectionLabel>
           <Typography variant="h6">{t(`encounter-event-${entry.key}`, { defaultValue: entry.label })}</Typography>
         </Stack>
       );
@@ -78,9 +63,7 @@ export default function EncounterResultCard({ result, partyLevels }: Props) {
     case 'text':
       body = (
         <Stack spacing={1}>
-          <Typography variant="overline" color="text.secondary">
-            {t('encounter-result-text')}
-          </Typography>
+          <SectionLabel>{t('encounter-result-text')}</SectionLabel>
           <Typography variant="h6">{entry.label}</Typography>
           <Typography variant="body2" color="text.secondary">
             {t('encounter-result-text-help')}
@@ -91,9 +74,7 @@ export default function EncounterResultCard({ result, partyLevels }: Props) {
     case 'special':
       body = (
         <Stack spacing={1}>
-          <Typography variant="overline" color="text.secondary">
-            {t('encounter-result-special')}
-          </Typography>
+          <SectionLabel>{t('encounter-result-special')}</SectionLabel>
           <Typography variant="body1">
             {result.special ? t(`encounter-special-${result.special.key}`) : t('encounter-result-special-help')}
           </Typography>
@@ -105,16 +86,14 @@ export default function EncounterResultCard({ result, partyLevels }: Props) {
   }
 
   return (
-    <Card variant="outlined">
-      <CardContent>
-        <Stack spacing={2}>
-          {result.conditionUnmet && (
-            <Alert severity="warning">{t(`encounter-condition-unmet-${result.conditionUnmet}`)}</Alert>
-          )}
-          {body}
-        </Stack>
-      </CardContent>
-    </Card>
+    <Panel variant="outlined">
+      <Stack spacing={2}>
+        {result.conditionUnmet && (
+          <Alert severity="warning">{t(`encounter-condition-unmet-${result.conditionUnmet}`)}</Alert>
+        )}
+        {body}
+      </Stack>
+    </Panel>
   );
 }
 
@@ -186,7 +165,7 @@ function NpcResult({ npcIds, label, partyLevels }: { npcIds: string[]; label: st
           ))}
         </TextField>
       )}
-      {loading && <CircularProgress size={24} aria-label={t('loading')} />}
+      {loading && <LoadingState variant="inline" />}
       {!loading && !npc && <Alert severity="warning">{t('encounter-npc-not-found', { name: label })}</Alert>}
       {npc && (
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ alignItems: { sm: 'flex-start' } }}>

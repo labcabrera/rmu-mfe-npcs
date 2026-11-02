@@ -1,7 +1,15 @@
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, Box, Chip, Stack, Typography } from '@mui/material';
-import { KeyValuePanel, KeyValueRow, Npc, Panel, Realm, StatBonusGrid } from '@labcabrera-rmu/rmu-react-shared-lib';
+import {
+  EmptyState,
+  KeyValuePanel,
+  KeyValueRow,
+  Npc,
+  Panel,
+  Realm,
+  StatBonusGrid,
+} from '@labcabrera-rmu/rmu-react-shared-lib';
 import { npcTypeLabel } from '../npc-format';
 
 const DETAIL_KEYS = ['variants', 'height', 'armorDescription', 'treasure', 'magicRealm', 'misc'] as const;
@@ -36,13 +44,7 @@ export const NpcViewProfile: FC<{ npc: Npc; realm: Realm | undefined }> = ({ npc
     >
       <KeyValuePanel title={t('npc-info')} rows={rows} />
       <Panel title={t('stats')}>
-        {npc.stats ? (
-          <StatBonusGrid stats={npc.stats} dense />
-        ) : (
-          <Typography variant="body2" color="text.secondary">
-            {t('npc-no-stats')}
-          </Typography>
-        )}
+        {npc.stats ? <StatBonusGrid stats={npc.stats} dense /> : <EmptyState dense title={t('npc-no-stats')} />}
       </Panel>
       {details.length > 0 && <KeyValuePanel title={t('details')} rows={details} />}
       {npc.description && (
@@ -65,9 +67,7 @@ export const NpcViewTalents: FC<{ npc: Npc }> = ({ npc }) => {
         {t('npc-talents-not-applied')}
       </Alert>
       {npc.talents.length === 0 ? (
-        <Typography variant="body2" color="text.secondary">
-          {t('npc-no-talents')}
-        </Typography>
+        <EmptyState dense title={t('npc-no-talents')} />
       ) : (
         <Stack divider={<Box sx={{ borderBottom: 1, borderColor: 'divider' }} />}>
           {npc.talents.map((talent, index) => (
