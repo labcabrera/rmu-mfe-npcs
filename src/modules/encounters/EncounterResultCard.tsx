@@ -5,6 +5,7 @@ import { useAuth } from 'react-oidc-context';
 import { Link as RouterLink } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
 import CasinoIcon from '@mui/icons-material/Casino';
+import DiamondOutlinedIcon from '@mui/icons-material/DiamondOutlined';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { Alert, Box, Button, IconButton, Link, MenuItem, Stack, TextField, Tooltip, Typography } from '@mui/material';
 import {
@@ -20,6 +21,7 @@ import {
   StatPill,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { npcImage, npcName, npcTypeLabel } from '../npcs/npc-format';
+import NpcTreasureDialog, { npcTreasureCodes } from '../treasure/NpcTreasureDialog';
 import AddToTacticalGameDialog from './AddToTacticalGameDialog';
 
 type Props = {
@@ -105,7 +107,9 @@ function NpcResult({ npcIds, label, partyLevels }: { npcIds: string[]; label: st
   const [npcId, setNpcId] = useState(npcIds[0]);
   const [count, setCount] = useState<number | null>(null);
   const [addOpen, setAddOpen] = useState(false);
+  const [treasureOpen, setTreasureOpen] = useState(false);
   const npc = npcs[npcId];
+  const treasureCodes = npcTreasureCodes(npc?.details?.treasure);
   const key = npcIds.join(',');
 
   useEffect(() => {
@@ -236,6 +240,11 @@ function NpcResult({ npcIds, label, partyLevels }: { npcIds: string[]; label: st
                   {t('encounter-add-to-game')}
                 </Button>
               )}
+              {auth.isAuthenticated && treasureCodes && (
+                <Button size="small" startIcon={<DiamondOutlinedIcon />} onClick={() => setTreasureOpen(true)}>
+                  {t('treasure-roll')}
+                </Button>
+              )}
             </Stack>
           </Stack>
         </Stack>
@@ -248,6 +257,9 @@ function NpcResult({ npcIds, label, partyLevels }: { npcIds: string[]; label: st
           count={count}
           defaultName={name}
         />
+      )}
+      {treasureCodes && (
+        <NpcTreasureDialog open={treasureOpen} onClose={() => setTreasureOpen(false)} codes={treasureCodes} />
       )}
     </Stack>
   );
