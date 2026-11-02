@@ -145,6 +145,9 @@ export default function NpcViewPage() {
           ...(entity.outlookType
             ? [<Chip key="outlook" variant="outlined" label={t(`outlook-${entity.outlookType}`)} />]
             : []),
+          ...(entity.frightLevel !== null && entity.frightLevel !== undefined
+            ? [<Chip key="fright" variant="outlined" label={t('fright-level-value', { value: entity.frightLevel })} />]
+            : []),
         ],
         pills: [
           <StatPill key="hits" label={t('npc-hits')} value={entity.hp} />,

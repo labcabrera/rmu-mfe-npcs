@@ -32,6 +32,7 @@ export const emptyNpcForm = (): NpcForm => ({
   level: 1,
   levelSpread: null,
   outlookType: null,
+  frightLevel: null,
   archetype: null,
   movement: [],
   endurance: null,

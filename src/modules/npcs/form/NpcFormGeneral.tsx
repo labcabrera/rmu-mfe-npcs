@@ -100,7 +100,7 @@ const NpcFormGeneral: FC<{
             max={200}
           />
         </Grid>
-        <Grid size={{ xs: 6, sm: 3, md: 3 }}>
+        <Grid size={{ xs: 6, sm: 3, md: 2 }}>
           <EnumPicker
             variant="select"
             label={t('npc-level-spread')}
@@ -124,7 +124,18 @@ const NpcFormGeneral: FC<{
             clearable
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <Grid size={{ xs: 6, sm: 3, md: 2 }}>
+          <NumericInput
+            label={t('fright-level')}
+            name="frightLevel"
+            value={form.frightLevel ?? null}
+            onChange={(value) => set({ frightLevel: value })}
+            integer
+            min={0}
+            max={30}
+          />
+        </Grid>
+        <Grid size={{ xs: 6, sm: 3, md: 3 }}>
           <EnumPicker
             variant="select"
             label={t('archetype')}
