@@ -18,7 +18,7 @@ import {
   useIsAdmin,
   useNotify,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
-import { canChangeNpc, npcImage } from '../npc-format';
+import { canChangeNpc, npcImage, writableRealms } from '../npc-format';
 import NpcFormAttacks from './NpcFormAttacks';
 import NpcFormCombat from './NpcFormCombat';
 import NpcFormGeneral from './NpcFormGeneral';
@@ -120,7 +120,13 @@ export default function NpcFormPage({ mode }: { mode: 'create' | 'edit' }) {
         <Stack spacing={2}>
           {readOnly && <Alert severity="warning">{t('npc-read-only')}</Alert>}
           {error && <Alert severity="info">{t(error)}</Alert>}
-          <NpcFormGeneral form={form} set={set} realms={realms} mode={mode} admin={admin} />
+          <NpcFormGeneral
+            form={form}
+            set={set}
+            realms={mode === 'create' ? writableRealms(realms, auth) : realms}
+            mode={mode}
+            admin={admin}
+          />
           <NpcFormCombat form={form} set={set} />
           <NpcFormAttacks form={form} set={set} />
           <NpcFormMovement form={form} set={set} />

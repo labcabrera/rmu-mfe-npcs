@@ -28,7 +28,7 @@ import {
   useSectionParam,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import NpcTreasureDialog, { npcTreasureCodes } from '../../treasure/NpcTreasureDialog';
-import { canChangeNpc, isCatalogNpc, npcImage, npcName, npcTypeLabel } from '../npc-format';
+import { canChangeNpc, isCatalogNpc, npcImage, npcName, npcTypeLabel, writableRealms } from '../npc-format';
 import DuplicateNpcDialog from './DuplicateNpcDialog';
 import { NpcViewProfile, NpcViewTalents } from './NpcViewSections';
 
@@ -180,7 +180,7 @@ export default function NpcViewPage() {
           )}
           <DuplicateNpcDialog
             npc={entity}
-            realms={realms}
+            realms={writableRealms(realms, auth)}
             open={duplicateOpen}
             onClose={() => setDuplicateOpen(false)}
             onCreated={onDuplicated}
