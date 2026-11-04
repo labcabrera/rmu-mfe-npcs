@@ -129,7 +129,8 @@ export default function NpcViewPage() {
           t('npc-level-value', { level: entity.level }),
           t(`npc-category-${entity.category}`),
           entity.type ? npcTypeLabel(entity.type, t) : null,
-          realm ? t(realm.name) : null,
+          // Spec 073: an NPC without realm is global
+          entity.realmId ? (realm ? t(realm.name) : null) : t('realm-global'),
         ]
           .filter(Boolean)
           .join(' · '),

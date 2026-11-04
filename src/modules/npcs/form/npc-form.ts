@@ -91,10 +91,13 @@ export const newSkill = (skillId: string, specialization: string | null): NpcSki
   note: null,
 });
 
-/** The first problem of the form, as an i18n key, or null when it can be saved. */
-export const npcFormError = (form: NpcForm): string | null => {
+/**
+ * The first problem of the form, as an i18n key, or null when it can be saved. Only an admin leaves the realm empty: a
+ * global NPC, seen from every realm (spec 073).
+ */
+export const npcFormError = (form: NpcForm, admin: boolean): string | null => {
   if (!form.name.trim()) return 'npc-error-name';
-  if (!form.realmId) return 'npc-error-realm';
+  if (!form.realmId && !admin) return 'npc-error-realm';
   if (form.encounter && !form.encounter.group.trim()) return 'npc-error-encounter-group';
   if (form.shield && !NPC_SHIELD_TYPES.includes(form.shield.type)) return 'npc-error-shield-type';
   return null;
@@ -110,8 +113,9 @@ const withNotations = (form: NpcForm): NpcForm => ({
   }),
 });
 
+/** The POST of a new NPC: an empty realm is sent as null (a global NPC, spec 073), and only an admin makes it public. */
 export const npcCreateRequest = (form: NpcForm, admin: boolean): CreateNpcDto => {
-  const request = withNotations(form);
+  const request = { ...withNotations(form), realmId: form.realmId || null };
   return admin ? request : { ...request, accessType: 'private' };
 };
 

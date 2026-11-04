@@ -10,15 +10,16 @@ import {
   Realm,
   RealmPicker,
   RmuDialog,
+  useIsAdmin,
   useNotify,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { npcName } from '../npc-format';
 
 /**
  * The fields of a copy of an NPC as a new private NPC of the user: everything but the identity, the owner, the
- * timestamps and the book source (spec 054).
+ * timestamps and the book source (spec 054). A null realm makes a global NPC, which only an admin creates (spec 073).
  */
-export const npcCopy = (npc: Npc, name: string, realmId: string): CreateNpcDto => {
+export const npcCopy = (npc: Npc, name: string, realmId: string | null): CreateNpcDto => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const { id, version, owner, source, createdAt, updatedAt, accessType, ...rest } = npc;
   return { ...rest, name, realmId, accessType: 'private' };
@@ -35,6 +36,8 @@ const DuplicateNpcDialog: FC<{
   const auth = useAuth();
   const { t } = useTranslation();
   const notify = useNotify();
+  // Spec 073: only an admin copies it without realm (a global NPC)
+  const admin = useIsAdmin();
   const [name, setName] = useState('');
   const [realmId, setRealmId] = useState<string | null>(npc.realmId);
   const [saving, setSaving] = useState(false);
@@ -46,7 +49,7 @@ const DuplicateNpcDialog: FC<{
   }, [open, npc.id]);
 
   const onConfirm = () => {
-    if (!realmId || !name.trim()) return;
+    if ((!realmId && !admin) || !name.trim()) return;
     setSaving(true);
     createNpc(npcCopy(npc, name.trim(), realmId), auth)
       .then(onCreated)
@@ -61,12 +64,19 @@ const DuplicateNpcDialog: FC<{
       maxWidth="sm"
       onCancel={onClose}
       onConfirm={onConfirm}
-      onConfirmDisabled={saving || !realmId || !name.trim()}
+      onConfirmDisabled={saving || (!realmId && !admin) || !name.trim()}
     >
       <Stack spacing={2} sx={{ pt: 1 }}>
         <Alert severity="info">{t('npc-duplicate-help')}</Alert>
         <TextField label={t('name')} name="name" value={name} onChange={(e) => setName(e.target.value)} fullWidth />
-        <RealmPicker variant="select" value={realmId} onChange={setRealmId} realms={realms} required />
+        <RealmPicker
+          variant="select"
+          value={realmId}
+          onChange={setRealmId}
+          realms={realms}
+          required={!admin}
+          helperText={admin && !realmId ? t('realm-global') : undefined}
+        />
       </Stack>
     </RmuDialog>
   );

@@ -92,7 +92,7 @@ export default function NpcFormPage({ mode }: { mode: 'create' | 'edit' }) {
     else navigate(`/npcs/view/${npcId}`, { state: { npc: existing.entity } });
   };
 
-  const error = form ? npcFormError(form) : null;
+  const error = form ? npcFormError(form, admin) : null;
   const readOnly = mode === 'edit' && !!existing.entity && !canChangeNpc(auth, existing.entity);
 
   return (
