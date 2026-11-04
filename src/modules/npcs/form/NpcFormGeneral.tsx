@@ -53,7 +53,9 @@ const NpcFormGeneral: FC<{
             onChange={(realmId) => set({ realmId: realmId ?? '' })}
             realms={realms}
             disabled={mode === 'edit'}
-            required
+            // Spec 073: only an admin leaves it empty (a global NPC)
+            required={!admin}
+            helperText={admin && !form.realmId ? t('realm-global') : undefined}
           />
         </Grid>
         <Grid size={{ xs: 12, sm: 6, md: 4 }}>

@@ -18,7 +18,8 @@ const DETAIL_KEYS = ['variants', 'height', 'armorDescription', 'treasure', 'magi
 export const NpcViewProfile: FC<{ npc: Npc; realm: Realm | undefined }> = ({ npc, realm }) => {
   const { t } = useTranslation();
   const rows: KeyValueRow[] = [
-    { label: t('realm'), value: realm ? t(realm.name) : t('loading') },
+    // Spec 073: an NPC without realm is global
+    { label: t('realm'), value: !npc.realmId ? t('realm-global') : realm ? t(realm.name) : t('loading') },
     { label: t('category'), value: t(`npc-category-${npc.category}`) },
     ...(npc.type ? [{ label: t('type'), value: npcTypeLabel(npc.type, t) }] : []),
     ...(npc.group ? [{ label: t('group'), value: npc.group }] : []),

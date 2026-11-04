@@ -1,13 +1,23 @@
 import type { AuthContextProps } from 'react-oidc-context';
-import { isAdmin, Npc } from '@labcabrera-rmu/rmu-react-shared-lib';
+import { canEditEntity, isAdmin, Npc, Realm } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { TFunction } from 'i18next';
 
 /** A creature of the public catalog (imported from a book), as opposed to an NPC of a user. */
 export const isCatalogNpc = (npc: Pick<Npc, 'accessType'>): boolean => npc.accessType === 'public';
 
-/** Who can change or delete an NPC: an admin, or the owner of a private one (spec 054). */
-export const canChangeNpc = (auth: AuthContextProps, npc: Npc | undefined): boolean =>
-  !!npc && (isAdmin(auth) || (!isCatalogNpc(npc) && npc.owner === auth.user?.profile?.sub));
+/**
+ * Who can change or delete an NPC: with the `access` of the API, who writes in its realm (spec 073). Without it (an API
+ * before spec 073), an admin or the owner of a private one (spec 054).
+ */
+export const canChangeNpc = (auth: AuthContextProps, npc: Npc | undefined): boolean => {
+  if (!npc) return false;
+  if (npc.access) return npc.access === 'write' || npc.access === 'manage';
+  return isAdmin(auth) || (!isCatalogNpc(npc) && npc.owner === auth.user?.profile?.sub);
+};
+
+/** The realms where the user creates NPCs (spec 073): those they write in. */
+export const writableRealms = (realms: Realm[] | undefined, auth: AuthContextProps): Realm[] | undefined =>
+  realms?.filter((realm) => canEditEntity(realm, auth));
 
 /** Name of an NPC: the translated name of a book creature (`creature-<key>`), the stored name otherwise. */
 export const npcName = (npc: Pick<Npc, 'name' | 'source'>, t: TFunction): string =>
