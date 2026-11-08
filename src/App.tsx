@@ -7,7 +7,7 @@ import NpcListPage from './modules/npcs/list/NpcListPage';
 import NpcViewPage from './modules/npcs/view/NpcViewPage';
 
 const App = () => (
-  <MfeRoot>
+  <MfeRoot namespace="npcs">
     <Routes>
       <Route path="/" element={<NpcListPage />} />
       <Route path="/encounters" element={<EncounterPage />} />
