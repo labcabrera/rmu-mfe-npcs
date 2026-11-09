@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Alert, Stack, TextField } from '@mui/material';
@@ -19,8 +19,8 @@ import { npcName } from '../npc-format';
  * The fields of a copy of an NPC as a new private NPC of the user: everything but the identity, the owner, the
  * timestamps and the book source (spec 054). A null realm makes a global NPC, which only an admin creates (spec 073).
  */
-export const npcCopy = (npc: Npc, name: string, realmId: string | null): CreateNpcDto => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+const npcCopy = (npc: Npc, name: string, realmId: string | null): CreateNpcDto => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id, version, owner, source, createdAt, updatedAt, accessType, ...rest } = npc;
   return { ...rest, name, realmId, accessType: 'private' };
 };

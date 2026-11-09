@@ -96,7 +96,7 @@ export function toggleModifier(
 }
 
 /** The checked modifiers of one side, known to the settings. */
-export const checkedModifiers = (
+const checkedModifiers = (
   situation: EncounterSituation,
   settings: EncounterModifierSetting[],
   side: EncounterSide

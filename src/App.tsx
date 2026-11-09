@@ -1,10 +1,12 @@
-import React from 'react';
+import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { MfeRoot, NotFound } from '@labcabrera-rmu/rmu-react-shared-lib';
-import EncounterPage from './modules/encounters/EncounterPage';
-import NpcFormPage from './modules/npcs/form/NpcFormPage';
-import NpcListPage from './modules/npcs/list/NpcListPage';
-import NpcViewPage from './modules/npcs/view/NpcViewPage';
+
+// Workspace spec 091, E1: every page is its own chunk; the Suspense is in MfeRoot / the shell layout.
+const EncounterPage = lazy(() => import('./modules/encounters/EncounterPage'));
+const NpcFormPage = lazy(() => import('./modules/npcs/form/NpcFormPage'));
+const NpcListPage = lazy(() => import('./modules/npcs/list/NpcListPage'));
+const NpcViewPage = lazy(() => import('./modules/npcs/view/NpcViewPage'));
 
 const App = () => (
   <MfeRoot namespace="npcs">

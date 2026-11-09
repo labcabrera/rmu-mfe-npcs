@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Stack } from '@mui/material';
@@ -14,6 +14,7 @@ import {
   StrategicGame,
   TreasureDialog,
   useNotify,
+  fetchFullPage,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 
 type Props = {
@@ -45,7 +46,7 @@ export default function NpcTreasureDialog({ open, onClose, codes }: Props) {
   useEffect(() => {
     if (!open || games) return;
     const sub = auth.user?.profile?.sub;
-    fetchStrategicGames('', 0, 100, auth)
+    fetchFullPage((rsql, page, size) => fetchStrategicGames(rsql, page, size, auth), '')
       .then((page) => {
         const own = page.content.filter((game) => isAdmin(auth) || !game.owner || game.owner === sub);
         setGames(own);
@@ -62,7 +63,7 @@ export default function NpcTreasureDialog({ open, onClose, codes }: Props) {
     setFactionId(null);
     if (!gameId) return;
     let cancelled = false;
-    fetchFactions(`gameId==${gameId}`, 0, 100, auth)
+    fetchFullPage((rsql, page, size) => fetchFactions(rsql, page, size, auth), `gameId==${gameId}`)
       .then((page) => {
         if (cancelled) return;
         setFactions(page.content);
