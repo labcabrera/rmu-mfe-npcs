@@ -14,7 +14,7 @@ export type NpcForm = Omit<Npc, 'id' | 'version' | 'owner' | 'source' | 'created
 
 export type SetNpcForm = (change: Partial<NpcForm>) => void;
 
-export const emptyCriticalCodes = (): NpcForm['criticalCodes'] => ({
+const emptyCriticalCodes = (): NpcForm['criticalCodes'] => ({
   reduceSeverity: false,
   noKnockdown: false,
   stunImmune: false,
@@ -61,7 +61,7 @@ export const emptyNpcForm = (): NpcForm => ({
 
 /** The form of a stored NPC. */
 export const npcToForm = (npc: Npc): NpcForm => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id, version, owner, source, createdAt, updatedAt, ...rest } = npc;
   return { ...emptyNpcForm(), ...rest, criticalCodes: rest.criticalCodes ?? emptyCriticalCodes() };
 };
@@ -121,7 +121,7 @@ export const npcCreateRequest = (form: NpcForm, admin: boolean): CreateNpcDto =>
 
 /** The PATCH of a stored NPC: everything but the realm, with the version read so a stale change is a 409. */
 export const npcUpdateRequest = (form: NpcForm, version: number, admin: boolean): UpdateNpcDto => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { realmId, accessType, ...rest } = withNotations(form);
   return { ...rest, ...(admin ? { accessType } : {}), version };
 };

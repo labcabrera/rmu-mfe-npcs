@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -15,6 +15,7 @@ import {
   useListFilters,
   useLocalPagedQuery,
   useNotify,
+  fetchFullPage,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { isCatalogNpc, npcImage, npcName, npcTypeLabel } from '../npc-format';
 import NpcListFilters, { npcFilters } from './NpcListFilters';
@@ -40,7 +41,7 @@ export default function NpcListPage() {
   const filters = useListFilters(npcFilters(t, realms));
 
   useEffect(() => {
-    fetchRealms('', 0, 100, auth)
+    fetchFullPage((rsql, page, size) => fetchRealms(rsql, page, size, auth), '')
       .then((response) => setRealms(response.content))
       .catch(notify.error);
   }, []);

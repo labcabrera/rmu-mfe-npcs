@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { Alert, Box, Stack, Typography } from '@mui/material';
@@ -38,7 +38,7 @@ type Props = {
 };
 
 /** Text of a Table 15.4b code; null is "--". */
-export const useEncounterCode = () => {
+const useEncounterCode = () => {
   const { t } = useTranslation();
   return (code: EncounterCode | null) => t(code ? `encounter-code-${code}` : 'encounter-code-none');
 };

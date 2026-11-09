@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -17,6 +17,7 @@ import {
   useEntity,
   useIsAdmin,
   useNotify,
+  fetchFullPage,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import { canChangeNpc, npcImage, writableRealms } from '../npc-format';
 import NpcFormAttacks from './NpcFormAttacks';
@@ -54,7 +55,7 @@ export default function NpcFormPage({ mode }: { mode: 'create' | 'edit' }) {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    fetchRealms('', 0, 100, auth)
+    fetchFullPage((rsql, page, size) => fetchRealms(rsql, page, size, auth), '')
       .then((response) => setRealms(response.content))
       .catch(notify.error);
   }, []);

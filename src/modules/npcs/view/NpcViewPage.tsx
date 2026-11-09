@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -26,6 +26,7 @@ import {
   useEntity,
   useNotify,
   useSectionParam,
+  fetchFullPage,
 } from '@labcabrera-rmu/rmu-react-shared-lib';
 import NpcTreasureDialog, { npcTreasureCodes } from '../../treasure/NpcTreasureDialog';
 import { canChangeNpc, isCatalogNpc, npcImage, npcName, npcTypeLabel, writableRealms } from '../npc-format';
@@ -73,7 +74,7 @@ export default function NpcViewPage() {
 
   useEffect(() => {
     if (!duplicateOpen || realms) return;
-    fetchRealms('', 0, 100, auth)
+    fetchFullPage((rsql, page, size) => fetchRealms(rsql, page, size, auth), '')
       .then((response) => setRealms(response.content))
       .catch(notify.error);
   }, [duplicateOpen]);
