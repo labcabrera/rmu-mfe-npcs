@@ -1,26 +1,24 @@
-import React from 'react';
+import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Box } from '@mui/material';
-import { ErrorProvider } from './ErrorContext';
-import './i18n';
-import NpcCreation from './modules/npcs/create/NpcCreation';
-import NpcEdit from './modules/npcs/edit/NpcEdit';
-import NpcList from './modules/npcs/list/NpcList';
-import NpcView from './modules/npcs/view/NpcView';
+import { MfeRoot, NotFound } from '@labcabrera-rmu/rmu-react-shared-lib';
 
-const App = () => {
-  return (
-    <ErrorProvider>
-      <Box sx={{ p: 5 }}>
-        <Routes>
-          <Route path="/" element={<NpcList />} />
-          <Route path="/create" element={<NpcCreation />} />
-          <Route path="/view/:npcId" element={<NpcView />} />
-          <Route path="/edit/:npcId" element={<NpcEdit />} />
-        </Routes>
-      </Box>
-    </ErrorProvider>
-  );
-};
+// Workspace spec 091, E1: every page is its own chunk; the Suspense is in MfeRoot / the shell layout.
+const EncounterPage = lazy(() => import('./modules/encounters/EncounterPage'));
+const NpcFormPage = lazy(() => import('./modules/npcs/form/NpcFormPage'));
+const NpcListPage = lazy(() => import('./modules/npcs/list/NpcListPage'));
+const NpcViewPage = lazy(() => import('./modules/npcs/view/NpcViewPage'));
+
+const App = () => (
+  <MfeRoot namespace="npcs">
+    <Routes>
+      <Route path="/" element={<NpcListPage />} />
+      <Route path="/encounters" element={<EncounterPage />} />
+      <Route path="/create" element={<NpcFormPage mode="create" />} />
+      <Route path="/view/:npcId" element={<NpcViewPage />} />
+      <Route path="/edit/:npcId" element={<NpcFormPage mode="edit" />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  </MfeRoot>
+);
 
 export default App;

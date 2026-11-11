@@ -1,0 +1,127 @@
+import {
+  CreateNpcDto,
+  Npc,
+  NpcAttack,
+  NpcMovement,
+  NPC_SHIELD_TYPES,
+  npcAttackNotation,
+  NpcSkill,
+  UpdateNpcDto,
+} from '@labcabrera-rmu/rmu-react-shared-lib';
+
+/** The editable fields of an NPC: the identity, owner, book source and timestamps are not sent. */
+export type NpcForm = Omit<Npc, 'id' | 'version' | 'owner' | 'source' | 'createdAt' | 'updatedAt'>;
+
+export type SetNpcForm = (change: Partial<NpcForm>) => void;
+
+const emptyCriticalCodes = (): NpcForm['criticalCodes'] => ({
+  reduceSeverity: false,
+  noKnockdown: false,
+  stunImmune: false,
+  bleedImmune: false,
+  immunities: [],
+});
+
+export const emptyNpcForm = (): NpcForm => ({
+  realmId: '',
+  accessType: 'private',
+  name: '',
+  category: 'animal',
+  type: null,
+  group: null,
+  level: 1,
+  levelSpread: null,
+  outlookType: null,
+  frightLevel: null,
+  archetype: null,
+  movement: [],
+  endurance: null,
+  size: 'medium',
+  criticalSize: null,
+  criticalCodes: emptyCriticalCodes(),
+  hp: 10,
+  deathHits: null,
+  at: 1,
+  db: 0,
+  running: null,
+  shield: null,
+  initiative: 0,
+  attacks: [],
+  powerPoints: null,
+  resistances: null,
+  skills: [],
+  encounter: null,
+  stats: null,
+  details: null,
+  talents: [],
+  items: [],
+  description: null,
+  imageUrl: null,
+});
+
+/** The form of a stored NPC. */
+export const npcToForm = (npc: Npc): NpcForm => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { id, version, owner, source, createdAt, updatedAt, ...rest } = npc;
+  return { ...emptyNpcForm(), ...rest, criticalCodes: rest.criticalCodes ?? emptyCriticalCodes() };
+};
+
+export const newAttack = (): NpcAttack => ({
+  ob: 0,
+  size: 5,
+  attackTable: null,
+  fumbleTable: null,
+  additionalCritical: null,
+  sequence: null,
+  cooperation: null,
+  kata: null,
+  alternativeTo: null,
+  poison: null,
+  hand: null,
+  notation: null,
+});
+
+export const newMovement = (): NpcMovement => ({ mode: 'walk', tier: null, baseRate: 20, maxPace: 'dash', note: null });
+
+export const newSkill = (skillId: string, specialization: string | null): NpcSkill => ({
+  skillId,
+  specialization,
+  ranks: null,
+  bonus: 0,
+  note: null,
+});
+
+/**
+ * The first problem of the form, as an i18n key, or null when it can be saved. Only an admin leaves the realm empty: a
+ * global NPC, seen from every realm (spec 073).
+ */
+export const npcFormError = (form: NpcForm, admin: boolean): string | null => {
+  if (!form.name.trim()) return 'npc-error-name';
+  if (!form.realmId && !admin) return 'npc-error-realm';
+  if (form.encounter && !form.encounter.group.trim()) return 'npc-error-encounter-group';
+  if (form.shield && !NPC_SHIELD_TYPES.includes(form.shield.type)) return 'npc-error-shield-type';
+  return null;
+};
+
+// An attack changed in the form has no printed notation: it gets the one built from its fields. An empty table is
+// saved as null, an attack with no table (spec 060).
+const withNotations = (form: NpcForm): NpcForm => ({
+  ...form,
+  attacks: form.attacks.map((attack) => {
+    const withTable = { ...attack, attackTable: attack.attackTable || null };
+    return withTable.notation ? withTable : { ...withTable, notation: npcAttackNotation(withTable) };
+  }),
+});
+
+/** The POST of a new NPC: an empty realm is sent as null (a global NPC, spec 073), and only an admin makes it public. */
+export const npcCreateRequest = (form: NpcForm, admin: boolean): CreateNpcDto => {
+  const request = { ...withNotations(form), realmId: form.realmId || null };
+  return admin ? request : { ...request, accessType: 'private' };
+};
+
+/** The PATCH of a stored NPC: everything but the realm, with the version read so a stale change is a 409. */
+export const npcUpdateRequest = (form: NpcForm, version: number, admin: boolean): UpdateNpcDto => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { realmId, accessType, ...rest } = withNotations(form);
+  return { ...rest, ...(admin ? { accessType } : {}), version };
+};
